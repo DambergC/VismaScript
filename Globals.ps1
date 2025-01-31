@@ -28,6 +28,50 @@ function Get-ScriptDirectory
 	}
 }
 
+function Set-RegistryKey
+{
+	param (
+		[string]$Path,
+		[string]$Name,
+		[Object]$Value,
+		[ValidateSet("String", "DWord", "QWord", "Binary", "MultiString")]
+		[string]$Type = "String"
+	)
+	
+	# Check if the registry path exists, if not, create it
+	if (-not (Test-Path $Path))
+	{
+		New-Item -Path $Path -Force
+	}
+	
+	# Set the registry key value based on the specified type
+	switch ($Type)
+	{
+		"String" {
+			Set-ItemProperty -Path $Path -Name $Name -Value $Value -Type String
+		}
+		"DWord" {
+			Set-ItemProperty -Path $Path -Name $Name -Value [int]$Value -Type DWord
+		}
+		"QWord" {
+			Set-ItemProperty -Path $Path -Name $Name -Value [long]$Value -Type QWord
+		}
+		"Binary" {
+			Set-ItemProperty -Path $Path -Name $Name -Value [byte[]]$Value -Type Binary
+		}
+		"MultiString" {
+			Set-ItemProperty -Path $Path -Name $Name -Value [string[]]$Value -Type MultiString
+		}
+	}
+}
+
+# Example usage
+#Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyStringProperty" -Value "MyStringValue" -Type "String"
+#Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyDwordProperty" -Value 12345 -Type "DWord"
+#Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyBinaryProperty" -Value ([byte[]](0x01, 0x02, 0x03, 0x04)) -Type "Binary"
+#Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyMultiStringProperty" -Value @("String1", "String2") -Type "MultiString"
+
+
 function Update-ListBox
 {
 <#
@@ -170,8 +214,8 @@ function Copy-WithProgress
 	#endregion Robocopy params
 	
 	#region Robocopy Staging
-	$richtextbox1.AppendText("`n")
-	$richtextbox1.AppendText('Analyzing robocopy job ...')
+	$FilebackupWindow.AppendText("`n")
+	$FilebackupWindow.AppendText('Analyzing robocopy job ...')
 	
 	
 	$selectedBackupfolder = $BackupFolderListbox.SelectedItem
@@ -181,28 +225,25 @@ function Copy-WithProgress
 	#$StagingLogPath = '{0}\temp\{1} robocopy staging.log' -f $env:windir, (Get-Date -Format 'yyyy-MM-dd HH-mm-ss');
 	$StagingLogPath = "$InstallDrive\Visma\install\Backup\$selectedBackupfolder\RoboCopyStaging.log"
 	$StagingArgumentList = '"{0}" "{1}" /LOG:"{2}" /L {3}' -f $Source, $Destination, $StagingLogPath, $CommonRobocopyParams;
-	
-	#$richtextbox1.AppendText('Staging arguments: {0}' -f $StagingArgumentList)
-	#$richtextbox1.AppendText("`n")
-	
+
 	
 	Start-Process -Wait -FilePath robocopy.exe -ArgumentList $StagingArgumentList -NoNewWindow;
 	# Get the total number of files that will be copied
 	$StagingContent = Get-Content -Path $StagingLogPath;
 	$TotalFileCount = $StagingContent.Count - 1;
-	$richtextbox1.AppendText("`n")
-	$richtextbox1.AppendText('Total Files to be copied: {0}' -f $TotalFileCount)
+	$FilebackupWindow.AppendText("`n")
+	$FilebackupWindow.AppendText('Total Files to be copied: {0}' -f $TotalFileCount)
 	Write-Log -Level INFO -Message "Total bytes to be copied: {0} -f $TotalFileCount"
-	$richtextbox1.AppendText("`n")
-	$richtextbox1.ScrollToCaret()
+	$FilebackupWindow.AppendText("`n")
+	$FilebackupWindow.ScrollToCaret()
 	
 	# Get the total number of bytes to be copied
 	[RegEx]::Matches(($StagingContent -join "`n"), $RegexBytes) | ForEach-Object { $BytesTotal = 0; } { $BytesTotal += $_.Value; };
-	$richtextbox1.AppendText("`n")
-	$richtextbox1.AppendText('Total bytes to be copied: {0}' -f $BytesTotal)
+	$FilebackupWindow.AppendText("`n")
+	$FilebackupWindow.AppendText('Total bytes to be copied: {0}' -f $BytesTotal)
 	Write-Log -Level INFO -Message "Total bytes to be copied: {0} -f $BytesTotal"
-	$richtextbox1.AppendText("`n")
-	$richtextbox1.ScrollToCaret()
+	$FilebackupWindow.AppendText("`n")
+	$FilebackupWindow.ScrollToCaret()
 	#endregion Robocopy Staging
 	
 	#region Start Robocopy
@@ -310,7 +351,7 @@ Function Write-Log
 		[string]$Message
 	)
 	
-	$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
+	$Stamp = (Get-Date).toString("HH:mm:ss")
 	$Line = "$Stamp $Level $Message"
 	"$Stamp $Level $Message" | Out-File -Encoding utf8 $logfile -Append
 }
@@ -347,12 +388,9 @@ function Set-PermissionCertificate
 	if ($testCert -eq $null)
 	{
 		$richtextbox1.AppendText("`n")
-		$richtextbox1.AppendText("             No Certificate installed on this server")
+		$richtextbox1.AppendText("No Certificate installed on this server")
 		$richtextbox1.ScrollToCaret()
 		
-		Write-Log -Level INFO -Message "******************************************************************************"
-		Write-Log -Level INFO -Message "  Certificate --------------"
-		Write-Log -Level INFO -Message "******************************************************************************"
 		Write-Log -Level INFO -Message "No Certificate installed on this server......."
 		
 	}
@@ -379,12 +417,9 @@ function Set-PermissionCertificate
 		Set-Acl -Path $keyFilePath -AclObject $acl
 		
 		$richtextbox1.AppendText("`n")
-		$richtextbox1.AppendText("             User rights on certificate is set")
+		$richtextbox1.AppendText("User rights on certificate is set")
 		
-		Write-Log -Level INFO -Message "******************************************************************************"
-		Write-Log -Level INFO -Message " Certificate --------------"
-		Write-Log -Level INFO -Message "******************************************************************************"
-		Write-Log -Level INFO -Message "No Certificate installed on this server......."
+		Write-Log -Level INFO -Message "User rights on certificate is set"
 		
 	}
 	
@@ -434,8 +469,56 @@ function Check-LocalGroupMembership
 	
 	return $isMember -ne $null
 }
+
+function Refresh-Mainform
+{
+	$StatusBarMain.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
+}
+
+function Refresh-BigramBackupFolder
+{
+	$StatusbarBigramBackupFolder.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
+}
+
+function Refresh-FileBackup
+{
+	$StatusbarFilebackup.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
+}
+
 #Sample variable that provides the location of the script
 [string]$ScriptDirectory = Get-ScriptDirectory
 
 
+$global:SelectedBigram = 'Select Bigram'
+$global:CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+$global:SelectedBackupfolder = 'Select Folder'
+
+$drives = @()
+
+$drives = (Get-PSProvider filesystem).Drives.root
+
+foreach ($drive in $drives)
+{
+	
+	
+	if (test-path "$drive\visma\install\backup")
+	{
+		$result = $drive.Substring(0, [Math]::Min($drive.Length, 2))
+	}
+}
+
+$date = Get-Date -Format "yyyyMMdd"
+$Global:InstallDrive = $result
+$global:filename = "logfile_$date.log"
+$global:filepath = "$InstallDrive\Visma\Install\backup\"
+$global:logfile = "$filepath\$filename"
+
+$SavePathExistAppsettings = Test-Path -Path "$InstallDrive\visma\install\backup\Appsettings"
+
+if ($SavePathExistAppsettings -eq $false)
+{
+	
+	New-Item -Path "$InstallDrive\visma\install\backup" -ItemType Directory -Name Appsettings
+	
+}
 

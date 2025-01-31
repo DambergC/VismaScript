@@ -3,13 +3,17 @@
   <FileID>11f82b5e-6550-455c-9093-0f5698ec7249</FileID>
   <OpenFolders />
   <OpenFiles>
-    <File>SQLqueries.psf</File>
-    <File>TLScheck.psf</File>
-    <File>Inventory.psf</File>
-    <File>BigramBackupFolder.psf</File>
-    <File>filebackup.psf</File>
-    <File>MainForm.psf</File>
-    <File>Globals.ps1</File>
     <File>Startup.pss</File>
+    <File>filebackup.psf</File>
+    <File>BigramBackupFolder.psf</File>
+    <File>Inventory.psf</File>
+    <File>TLScheck.psf</File>
+    <File>SQLqueries.psf</File>
+    <File>Certificate.psf</File>
+    <File>CleanUp.psf</File>
+    <File>Globals.ps1</File>
+    <File>MainForm.psf</File>
+    <File>Tools.psf</File>
+    <File>Krypt.psf</File>
   </OpenFiles>
 </ProjectState>
