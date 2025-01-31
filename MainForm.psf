@@ -443,9 +443,9 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 # Define the repository and file details
-$repo = "dambergc/VismaScript"
+$repo = "DambergC/VismaScript"
 $file = "CygateScript.ps1"
-$localPath = "$global:InstallDrive\Visma\backup\CygateScript.ps1"
+$localPath = "$global:InstallDrive\Visma\Install\Backup\CygateScript.ps1"
 
 # Function to get the latest release tag from GitHub
 function Get-LatestReleaseTag
@@ -496,7 +496,7 @@ $form.Controls.Add($label)
 # Form load event to check for updates
 $form.Add_Load({
 		$latestTag = Get-LatestReleaseTag -repo $repo
-		$currentVersion = "v1.0.0" # Replace with your current version
+		$currentVersion = "v1.0.2" # Replace with your current version
 		
 		if ($latestTag -ne $currentVersion)
 		{
@@ -510,6 +510,8 @@ $form.Add_Load({
 		}
 	})
 
+# Show the form
+[void]$form.ShowDialog()
 
 
 
