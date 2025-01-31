@@ -467,7 +467,7 @@ function Download-LatestVersion
 		[string]$localPath,
 		[string]$latestTag
 	)
-	$downloadUrl = "https://github.com/$repo/releases/download/$latestTag/$file"
+	$downloadUrl = "https://raw.githubusercontent.com/$repo/$latestTag/$file"
 	Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing
 }
 
