@@ -485,36 +485,6 @@ function Refresh-FileBackup
 	$StatusbarFilebackup.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
 }
 
-function Get-LatestReleaseTag
-{
-	param (
-		[string]$repo
-	)
-	$releasesUrl = "https://api.github.com/repos/$repo/releases/latest"
-	$latestRelease = Invoke-RestMethod -Uri $releasesUrl
-	return $latestRelease.tag_name
-}
-
-function Download-LatestVersion
-{
-	param (
-		[string]$repo,
-		[string]$file,
-		[string]$localPath,
-		[string]$latestTag
-	)
-	$downloadUrl = "https://raw.githubusercontent.com/$repo/$latestTag/$file"
-	Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing
-}
-
-function Restart-Script
-{
-	param (
-		[string]$localPath
-	)
-	Start-Process powershell -ArgumentList "-File $localPath"
-	[System.Windows.Forms.Application]::Exit()
-}
 
 
 #Sample variable that provides the location of the script

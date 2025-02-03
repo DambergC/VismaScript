@@ -437,21 +437,75 @@ TrL8pvQ63oM+U+ZWb4JMQGjCCjaebcyH0vImgj+hrmsuYfX82XtWhnur+RHlISXMv8buA+dDifYR
 +CdUajNy6Q1Ukm7vaL17b2OeAT2kYHmqmESwCEnYC9OHUu0zQncq9/nFbhHfjk0WPnl3dnAx46hd
 etTZZ91lX/vDP0KUiOpFg50v8LFlaPr0PNcSqF0g/P2fX7DlP/7Lvuz+cz7XDrEr2faROFoYruR/
 /cl+H+DPmhuEuuP8uVFGK7wvvw2u/gfriwwIiTkAAA==</Form>
-  <Code><![CDATA[
-$latestTag = Get-LatestReleaseTag -repo $repo
+  <Code><![CDATA[$buttonRunFileBackup.Enabled = $false
+$buttonCleanUp.Enabled = $false
+$buttonInventory.Enabled = $false
+$buttonSQLQueries.Enabled = $false
+$buttonLoadDataRestorefile.Enabled = $false
+$buttonTools.Enabled = $false
+
+$MainForm.Refresh()
+
+if ($global:SelectedBigram -ne 'Select Bigram')
+{
+	
+	$buttonRunFileBackup.Enabled = $true
+}
+
+
+
 $currentVersion = "v1.0.2" # Replace with your current version
+$repo = "DambergC/VismaScript"
+$file = "CygateScript.ps1"
+$localPath = "$global:InstallDrive\Visma\Install\Backup\CygateScript.ps1"
+
+function Get-LatestReleaseTag
+{
+	param (
+		[string]$repo
+	)
+	$releasesUrl = "https://api.github.com/repos/$repo/releases/latest"
+	$latestRelease = Invoke-RestMethod -Uri $releasesUrl
+	return $latestRelease.tag_name
+}
+
+$latestTag = Get-LatestReleaseTag -repo $repo
+
+function Download-LatestVersion
+{
+	param (
+		[string]$repo,
+		[string]$file,
+		[string]$localPath,
+		[string]$latestTag
+	)
+	$downloadUrl = "https://raw.githubusercontent.com/$repo/$latestTag/$file"
+	Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing
+}
+
+function Restart-Script
+{
+	param (
+		[string]$localPath
+	)
+	Start-Process powershell -ArgumentList "-File $localPath"
+	[System.Windows.Forms.Application]::Exit()
+}
+
 
 if ($latestTag -ne $currentVersion)
 {
 	
-	$repo = "DambergC/VismaScript"
-	$file = "CygateScript.ps1"
-	$localPath = "$global:InstallDrive\Visma\Install\Backup\CygateScript.ps1"
+
 	
 	$latestTag = Get-LatestReleaseTag -repo $repo
 	$currentVersion = "v1.0.2" # Replace with your current version
 	
 	Download-LatestVersion -repo $repo -file $file -localPath $localPath -latestTag $latestTag
+	
+	$richtextbox1.AppendText("`n")
+	$richtextbox1.AppendText("New version downloaded, restart script")
+	Write-Log -Level INFO -Message "New version downloaded, restart script"
 	
 	Restart-Script -localPath $localPath
 	
@@ -461,7 +515,9 @@ if ($latestTag -ne $currentVersion)
 else
 {
 	
-	
+	$richtextbox1.AppendText("`n")
+	$richtextbox1.AppendText("Latest version running")
+	Write-Log -Level INFO -Message "Latest version running"
 	
 }
 
@@ -523,6 +579,8 @@ $MainForm_Load={
 			$richtextbox1.AppendText("Backupfolder and script located on $drive")
 			$richtextbox1.AppendText("`n")
 			$richtextbox1.AppendText("Enjoy the script and relax...")
+			$richtextbox1.AppendText("`n")
+			$richtextbox1.AppendText("Bigram: $global:SelectedBigram")
 		}
 	}
 	
@@ -558,6 +616,7 @@ $buttonBigramAndBackupFolde_Click={
 	#TODO: Place custom script here
 	if ((Show-BigramBackupFolder_psf) -eq 'OK')
 	{
+
 		
 	}
 }

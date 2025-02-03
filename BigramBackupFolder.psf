@@ -973,6 +973,7 @@ $BigramBackupFolder_Load={
 
 $BigramListBox_SelectedIndexChanged={
 	#TODO: Place custom script here
+	
 	$buttonSaveBigram.Enabled = $true
 	$file = $BigramListBox.selecteditem
 	
@@ -1008,8 +1009,11 @@ $BigramListBox_SelectedIndexChanged={
 	
 	$global:SelectedBigram = $bigramValue
 	
-	$StatusbarBigramBackupFolder.Text = 'Bigram:'+$global:SelectedBigram +' BackupFolder:' + $global:SelectedBackupfolder	
-}
+	$StatusbarBigramBackupFolder.Text = 'Bigram:' + $global:SelectedBigram + ' BackupFolder:' + $global:SelectedBackupfolder
+	
+	
+	
+	}
 
 $buttonSaveBigram_Click={
 	#TODO: Place custom script here
@@ -1064,7 +1068,8 @@ $buttonSaveBigram_Click={
 $buttonClose_Click={
 	#TODO: Place custom script here
 	
- 	Refresh-Mainform
+	Refresh-Mainform
+	
 	$BigramBackupFolder.Close()
 }
 
@@ -1167,6 +1172,6 @@ $TB_BackupfolderName_TextChanged={
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>1</Mode>
+  <Mode>0</Mode>
   <Assemblies />
 </File>
