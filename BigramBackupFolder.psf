@@ -965,6 +965,7 @@ $BigramBackupFolder_Load={
 	$buttonCreateFolder.Enabled = $false
 	$buttonSaveBigram.Enabled = $false
 	$buttonCreateFolder.Enabled = $false
+	$buttonDeleteBigram.Enabled = $false
 }
 
 
@@ -973,7 +974,7 @@ $BigramBackupFolder_Load={
 
 $BigramListBox_SelectedIndexChanged={
 	#TODO: Place custom script here
-	
+	$buttonDeleteBigram.Enabled = $true
 	$buttonSaveBigram.Enabled = $true
 	$file = $BigramListBox.selecteditem
 	
@@ -1172,6 +1173,6 @@ $TB_BackupfolderName_TextChanged={
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>

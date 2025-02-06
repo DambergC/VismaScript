@@ -48,19 +48,19 @@ function Set-RegistryKey
 	switch ($Type)
 	{
 		"String" {
-			Set-ItemProperty -Path $Path -Name $Name -Value $Value -Type String
+			Set-ItemProperty -Path $Path -Name $Name -Value $Value -Type String -Force
 		}
 		"DWord" {
-			Set-ItemProperty -Path $Path -Name $Name -Value [int]$Value -Type DWord
+			Set-ItemProperty -Path $Path -Name $Name -Value [int]$Value -Type DWord -Force
 		}
 		"QWord" {
-			Set-ItemProperty -Path $Path -Name $Name -Value [long]$Value -Type QWord
+			Set-ItemProperty -Path $Path -Name $Name -Value [long]$Value -Type QWord -Force
 		}
 		"Binary" {
-			Set-ItemProperty -Path $Path -Name $Name -Value [byte[]]$Value -Type Binary
+			Set-ItemProperty -Path $Path -Name $Name -Value [byte[]]$Value -Type Binary -Force
 		}
 		"MultiString" {
-			Set-ItemProperty -Path $Path -Name $Name -Value [string[]]$Value -Type MultiString
+			Set-ItemProperty -Path $Path -Name $Name -Value [string[]]$Value -Type MultiString -Force
 		}
 	}
 }
@@ -387,9 +387,9 @@ function Set-PermissionCertificate
 	
 	if ($testCert -eq $null)
 	{
-		$richtextbox1.AppendText("`n")
-		$richtextbox1.AppendText("No Certificate installed on this server")
-		$richtextbox1.ScrollToCaret()
+		$ToolTextbox.AppendText("`n")
+		$ToolTextbox.AppendText("No Certificate installed on this server")
+		$ToolTextbox.ScrollToCaret()
 		
 		Write-Log -Level INFO -Message "No Certificate installed on this server......."
 		
@@ -416,8 +416,11 @@ function Set-PermissionCertificate
 		$acl.AddAccessRule($rule2)
 		Set-Acl -Path $keyFilePath -AclObject $acl
 		
-		$richtextbox1.AppendText("`n")
-		$richtextbox1.AppendText("User rights on certificate is set")
+		$ToolTextbox.AppendText("`n")
+		
+		$ToolTextbox.AppendText("User rights on certificate is set")
+		
+		$ToolTextbox.ScrollToCaret()
 		
 		Write-Log -Level INFO -Message "User rights on certificate is set"
 		
@@ -480,9 +483,18 @@ function Refresh-BigramBackupFolder
 	$StatusbarBigramBackupFolder.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
 }
 
+function Refresh-SQLQueries
+{
+	$StatusbarSQLQueries.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
+}
 function Refresh-FileBackup
 {
 	$StatusbarFilebackup.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
+}
+
+function Refresh-Inventory
+{
+	$StatusbarInventory.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
 }
 
 

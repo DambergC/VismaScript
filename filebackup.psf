@@ -340,6 +340,16 @@ v5MkAAA=</Form>
 $formFileBackup_Load={
 	#TODO: Initialize Form Controls here
 	Refresh-FileBackup
+	
+	if ($global:SelectedBackupfolder -eq 'Select Folder' -or $global:SelectedBigram -eq 'Select Bigram')
+	{
+		$buttonFileBackup.Enabled = $false
+	}
+	
+	else
+	{
+		$buttonFileBackup.Enabled = $true	
+	}
 }
 
 
@@ -394,6 +404,6 @@ $buttonFileBackup_Click={
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>

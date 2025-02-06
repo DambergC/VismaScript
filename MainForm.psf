@@ -437,27 +437,21 @@ TrL8pvQ63oM+U+ZWb4JMQGjCCjaebcyH0vImgj+hrmsuYfX82XtWhnur+RHlISXMv8buA+dDifYR
 +CdUajNy6Q1Ukm7vaL17b2OeAT2kYHmqmESwCEnYC9OHUu0zQncq9/nFbhHfjk0WPnl3dnAx46hd
 etTZZ91lX/vDP0KUiOpFg50v8LFlaPr0PNcSqF0g/P2fX7DlP/7Lvuz+cz7XDrEr2faROFoYruR/
 /cl+H+DPmhuEuuP8uVFGK7wvvw2u/gfriwwIiTkAAA==</Form>
-  <Code><![CDATA[$buttonRunFileBackup.Enabled = $false
-$buttonCleanUp.Enabled = $false
-$buttonInventory.Enabled = $false
-$buttonSQLQueries.Enabled = $false
-$buttonLoadDataRestorefile.Enabled = $false
-$buttonTools.Enabled = $false
-
-$MainForm.Refresh()
-
-if ($global:SelectedBigram -ne 'Select Bigram')
-{
-	
-	$buttonRunFileBackup.Enabled = $true
-}
-
-
+  <Code><![CDATA[
 
 $currentVersion = "v1.0.2" # Replace with your current version
 $repo = "DambergC/VismaScript"
 $file = "CygateScript.ps1"
 $localPath = "$global:InstallDrive\Visma\Install\Backup\CygateScript.ps1"
+
+# Define your personal access token
+$token = "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"
+
+# Create the headers with the token
+$headers = @{
+	Authorization = "token $token"
+	"User-Agent"  = "PowerShell"
+}
 
 function Get-LatestReleaseTag
 {
@@ -465,7 +459,7 @@ function Get-LatestReleaseTag
 		[string]$repo
 	)
 	$releasesUrl = "https://api.github.com/repos/$repo/releases/latest"
-	$latestRelease = Invoke-RestMethod -Uri $releasesUrl
+	$latestRelease = Invoke-RestMethod -Uri $releasesUrl -Headers $headers -Method Get
 	return $latestRelease.tag_name
 }
 
@@ -480,7 +474,7 @@ function Download-LatestVersion
 		[string]$latestTag
 	)
 	$downloadUrl = "https://raw.githubusercontent.com/$repo/$latestTag/$file"
-	Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing
+	Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing -Headers $headers -Method Get
 }
 
 function Restart-Script
