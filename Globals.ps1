@@ -498,6 +498,12 @@ function Refresh-Inventory
 }
 
 
+function Refresh-StopAndStart
+{
+	$StatusbarstopAndStart.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
+}
+
+
 
 #Sample variable that provides the location of the script
 [string]$ScriptDirectory = Get-ScriptDirectory

@@ -477,7 +477,7 @@ $file = "CygateScript.ps1"
 $localPath = "$global:InstallDrive\Visma\Install\Backup\CygateScript.ps1"
 
 # Define your personal access token
-$token = "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"
+$token = "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"
 
 # Create the headers with the token
 $headers = @{
