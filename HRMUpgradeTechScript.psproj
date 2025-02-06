@@ -18,5 +18,6 @@
     <File Build="0" ReferenceFunction="Show-CleanUp_psf">CleanUp.psf</File>
     <File Build="0" ReferenceFunction="Show-Tools_psf">Tools.psf</File>
     <File Build="0" ReferenceFunction="Show-Krypt_psf">Krypt.psf</File>
+    <File Build="0" ReferenceFunction="Show-StopAndStart_psf">StopAndStart.psf</File>
   </Files>
 </Project>
