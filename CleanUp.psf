@@ -822,10 +822,10 @@ aTx9DC7+C40DcXwJRwAA</Form>
   <Code><![CDATA[
 $formCleanUp_Load={
 	#TODO: Initialize Form Controls here
-	
+	Refresh-StatusBar
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>

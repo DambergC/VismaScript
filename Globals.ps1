@@ -473,36 +473,15 @@ function Check-LocalGroupMembership
 	return $isMember -ne $null
 }
 
-function Refresh-Mainform
+function Refresh-StatusBar
 {
-	$StatusBarMain.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
+	$StatusBar.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
 }
 
-function Refresh-BigramBackupFolder
+function Refresh-StatusBarMain
 {
-	$StatusbarBigramBackupFolder.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
+	$statusBarMain.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
 }
-
-function Refresh-SQLQueries
-{
-	$StatusbarSQLQueries.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
-}
-function Refresh-FileBackup
-{
-	$StatusbarFilebackup.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
-}
-
-function Refresh-Inventory
-{
-	$StatusbarInventory.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
-}
-
-
-function Refresh-StopAndStart
-{
-	$StatusbarstopAndStart.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
-}
-
 
 
 #Sample variable that provides the location of the script
