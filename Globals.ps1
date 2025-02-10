@@ -512,12 +512,12 @@ $global:filename = "logfile_$date.log"
 $global:filepath = "$InstallDrive\Visma\Install\backup\"
 $global:logfile = "$filepath\$filename"
 
-$SavePathExistAppsettings = Test-Path -Path "$InstallDrive\visma\install\backup\Appsettings"
+$SavePathExistAppsettings = Test-Path -Path "$global:InstallDrive\visma\install\backup\Appsettings"
 
 if ($SavePathExistAppsettings -eq $false)
 {
 	
-	New-Item -Path "$InstallDrive\visma\install\backup" -ItemType Directory -Name Appsettings
+	New-Item -Path "$global:InstallDrive\visma\install\backup" -ItemType Directory -Name Appsettings
 	
 }
 
