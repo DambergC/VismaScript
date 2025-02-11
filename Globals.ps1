@@ -2,7 +2,7 @@
 # Declare Global Variables and Functions here
 #--------------------------------------------
 
-
+#requires -version 5.1
 #Sample function that provides the location of the script
 function Get-ScriptDirectory
 {
@@ -225,7 +225,7 @@ function Copy-WithProgress
 	#$StagingLogPath = '{0}\temp\{1} robocopy staging.log' -f $env:windir, (Get-Date -Format 'yyyy-MM-dd HH-mm-ss');
 	$StagingLogPath = "$InstallDrive\Visma\install\Backup\$selectedBackupfolder\RoboCopyStaging.log"
 	$StagingArgumentList = '"{0}" "{1}" /LOG:"{2}" /L {3}' -f $Source, $Destination, $StagingLogPath, $CommonRobocopyParams;
-
+	
 	
 	Start-Process -Wait -FilePath robocopy.exe -ArgumentList $StagingArgumentList -NoNewWindow;
 	# Get the total number of files that will be copied
@@ -473,6 +473,11 @@ function Check-LocalGroupMembership
 	return $isMember -ne $null
 }
 
+$global:SelectedBigram = 'Select Bigram'
+$global:CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+$global:SelectedBackupfolder = 'Select Folder'
+
+
 function Refresh-StatusBar
 {
 	$StatusBar.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
@@ -480,7 +485,7 @@ function Refresh-StatusBar
 
 function Refresh-StatusBarMain
 {
-	$statusBarMain.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
+	$statusBarmain.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
 }
 
 
@@ -488,9 +493,7 @@ function Refresh-StatusBarMain
 [string]$ScriptDirectory = Get-ScriptDirectory
 
 
-$global:SelectedBigram = 'Select Bigram'
-$global:CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
-$global:SelectedBackupfolder = 'Select Folder'
+
 
 $drives = @()
 
@@ -520,4 +523,22 @@ if ($SavePathExistAppsettings -eq $false)
 	New-Item -Path "$global:InstallDrive\visma\install\backup" -ItemType Directory -Name Appsettings
 	
 }
+
+function Test-WebServer
+{
+	# Check if IIS is installed
+	$iisInstalled = Get-WindowsFeature -Name Web-Server -ErrorAction SilentlyContinue
+
+	
+	if ($iisInstalled.Installed)
+	{
+		return $true
+	}
+	else
+	{
+		return $false
+	}
+}
+
+
 

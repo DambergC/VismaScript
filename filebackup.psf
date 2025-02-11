@@ -268,7 +268,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuHR84xv/P1JeII9b
 AtZLAAAAAElFTkSuQmCC</Preview>
-  <Form>xRcW1lPWdSQAACODCAAAAAAABADtWm1zosoS/p6q/AfLD+eLVkDFROsmVjWgq1GM+HaO+XKKICEoQpYXUX/9
+  <Form>tvkZ188xcSQAACODCAAAAAAABADtWm1zosoS/p6q/AfLD+eLVkDFROsmVjWgq1GM+HaO+XKKICEoQpYXUX/9
 7R7MmxLF3JOte28tuzXrKNPzzNPdT8/AXt89zAw98GvnZ5nMddzJBOtn4yY7WPuBsbj403KmbuRf
 NFxvEbf5TNJP+czY8HzLdW6EC57+5DNSaAehZ9w4Rhh4mp3P9MIH29Lbxnrozg3n5uHqSivr5ctC
 tSQYfKWazTjaAmd+RHsNyzZETZ+Hz9mM/mTZUw8HZCXXCTzX9rMMLyLuee6z4QXr7UgIA3ega7Yh
@@ -299,13 +299,12 @@ aDYj6Al4gG1yYg4NRpwpc7nHSMYJK9RwvVcUu9gqN9fc9pH39vH4sefliuaZlpOtCfnM9u/RIV1s
 s7WPrxGODhoEmhf0XN8KLHpALxlOYHg9zTNSvAgYGqsgW6PJMp/NVl+ioe3tHVeb7uL7m7685tht
 L2OOv4/pW/oTTS66q29/LUNYHxjWeIZDL2b2KaIXKsiq6/iurSGs6vM+rfujOq6uxf4oFPOZy6sU
 Q2Ln74JNMTB+jyNcXeUzhSqfYsBQe2g5U2OVrZXSAIuDZD8yuNjNyU6HXqveHeJn/wLHmZ7h+6Lm
-3S0Nz9bW6Do3MrzBk2HbmUEQTi33zd/li+pFsVxM43EntO0XLz9vZ3nQPDeepXCaoz+6rHi5/+rt
-M58lTH2a24r70nDQa5cpvbalO1tDjQhC/0QXJuWtGAaB63x7yj6wadK9Sz3myUIxtSN3pz3Ni0L1
-NC+WU+feSYhGvjG2/FCzB8E6Hia5tutla0MvNJLGv1d4Cb0z3yfib/b9jsr/dwePZLu+cVrcgKM/
-EVGiiwYW+UzfMp/SiL2khb7hjzXbmm7jrqHZfiLXOyNlS7Nds2/4uFQsMpqjG/ZJ1UUo4MaixJ8a
-4oyc1NF9VUaJSiOHb8Gdqgyx2P5DWzz/Ky0ejG3JXTzj4h9sg8b3DZzPsxzz8/D+tvRgoP+ZzIj1
-GQvktyfH60xflVScu1RIU4DieHudL3W0sf+QUkwT0W/hlqbexuH2OZ4PXnvXefno1/4NCI9JsHUk
-AAA=</Form>
+3S0Nz9bW6Do3MrzBk2HbmUEQTi33zd/li+pFsVxM43EntO0XL7+b5fj7t2MOK17uv3j7zGN7E5/m
+suK+LBz02GVKj22pztZQH4LQP9F9STkrhkHgOt+erg9smnTvUY/5sVBM7cbdaU/zolA9zYvl1Hl3
+EqKRb4wtP9TsQbCOh0mu7XrZ2tALjaTx79VdQu/M94n4m32/o/D/3cEj2a5vnBY34OhPRJToooFF
+PtO3zKc0Qi9poW/4Y822ptu4a2i2n8j1zkjZ0mzX7Bs+LhULjObohn1SZREKuKko8aeGOCMndXRf
+lVGi0ojhW3CnKkEstv/QFs//SosHY1tyF8+4+AfboPF9A+fzLMf8PLy/LT0Y6H8mM2J9xurx7cnx
+OtNXJRXnLhXSFKA43l7nSx1t7D+jFNNE9Fu4FVKH2+d4PnjtXeflo1/7N88JNEdxJAAA</Form>
   <Code><![CDATA[
 
 $formFileBackup_Load={
@@ -331,7 +330,7 @@ $buttonClose_Click={
 
 $buttonFileBackup_Click={
 	#TODO: Place custom script here
-	$progressbaroverlay1.TextOverlay = 'Starting backup of programs...'
+	$ProgressBarBackup.TextOverlay = 'Starting backup of programs...'
 	$FilebackupWindow.AppendText("`n")
 	$FilebackupWindow.AppendText("Starting backup of programs...")
 	$FilebackupWindow.AppendText("`n")
@@ -352,7 +351,7 @@ $buttonFileBackup_Click={
 	$richtextbox1.AppendText("Ending backup of programs...         ")
 	$richtextbox1.ScrollToCaret()
 	
-	$progressbaroverlay1.TextOverlay = 'Starting backup of wwwroot...'
+	$ProgressBarBackup.TextOverlay = 'Starting backup of wwwroot...'
 	$FilebackupWindow.AppendText("`n")
 	$FilebackupWindow.AppendText("Starting backup of wwwroot...")
 	$FilebackupWindow.AppendText("`n")

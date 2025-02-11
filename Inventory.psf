@@ -283,8 +283,11 @@ Rwe2KBO+F/qugZAqD1nk6TngxbMyxmP3+PatiG8jzRz0kiijk0qWvHqOejlz1H9DsL90HuoYYRj7
 wfijRVrEkJXFA/X90WnmoBXFUxSDTKr9FLNS5pgdAOcweX61UlExLNPXHPzNv321WPnvzpmeFUU4
 p4W/kjPFYnZlf+n1U5Mmkywk8p4dzmfP6V8bfO7kV0J/gMJvu/zUuGdaPiZxzwrm90lF4vJdodhq
 PH4Mr/4Bo7reql0mAAA=</Form>
-  <Code><![CDATA[
-$formInventory_Load={
+  <Code><![CDATA[#requires -version 5.1
+
+$formInventory_Load = {
+	
+	
 	#TODO: Initialize Form Controls here
 	Refresh-StatusBar
 	
@@ -309,8 +312,8 @@ $buttonSystem_Click={
 	#TODO: Place custom script here
 	$selectedBackupfolder = $global:SelectedBackupfolder
 	$selectedBigram = $global:SelectedBigram
-	$services = "Scheduler", "Ciceron Server Manager", "NeptuneMB_$selectedBigram", "PersonecPBatchManager$selectedBigram", "PersonecPUtdataExportImportService$selectedBigram", "RSPFlexService$selectedBigram", "Visma.P-Background-Service - $selectedBigram", "Visma.PersonecP.PufIa.WinSvc - $selectedBigram"
 	
+	$Services = "Scheduler", "Ciceron Server Manager", "NeptuneMB_$selectedBigram", "PersonecPBatchManager$selectedBigram", "PersonecPUtdataExportImportService$selectedBigram", "RSPFlexService$selectedBigram", "Visma.P-Background-Service - $selectedBigram", "Visma.PersonecP.PufIa.WinSvc - $selectedBigram"
 
 		
 		###################################

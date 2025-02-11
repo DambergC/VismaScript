@@ -1024,6 +1024,7 @@ $buttonClose_Click={
 	
 	Refresh-StatusBarMain
 	
+	
 	$BigramBackupFolder.Close()
 }
 
@@ -1126,6 +1127,6 @@ $TB_BackupfolderName_TextChanged={
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>
