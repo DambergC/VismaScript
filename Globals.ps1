@@ -540,5 +540,70 @@ function Test-WebServer
 	}
 }
 
+function Remove-PersonecFolders
+{
+	param (
+		[string]$Path,
+		[string[]]$ExcludedFolders = @()
+	)
+	
+	$folderexist = (Test-Path $Path)
+	
+	if ($folderexist -eq $true)
+	{
+		# Count folders and files
+		$folderCount = (Get-ChildItem -Path $Path -Directory -Recurse).Count
+		$fileCount = (Get-ChildItem -Path $Path -File -Recurse).Count
+		
+		$CleanUpStatusBar.Maximum = $folderCount
+		$CleanUpStatusBar.Step = 1
+		$CleanUpStatusBar.Value = 0
+		
+		# Remove folders and files, excluding specified folders
+		foreach ($item in Get-ChildItem -Path $Path)
+		{
+			if ($ExcludedFolders -contains $item.Name)
+			{
+				
+				$CleanupTextBox.AppendText("Skipping excluded folder: $($item.FullName)")
+				$CleanupTextBox.AppendText("`n")
+				$cleanupTextBox.ScrollToCaret()
+				continue
+			}
+			
+			try
+			{
+				Remove-Item -Path $item.FullName -Recurse -Force -ErrorAction Stop
+				
+				$CleanupTextBox.AppendText("Successfully removed: $($item.FullName)")
+				$CleanupTextBox.AppendText("`n")
+				$cleanupTextBox.ScrollToCaret()
+				$CleanUpStatusBar.PerformStep()
+				
+			}
+			catch
+			{
+				$CleanupTextBox.AppendText("Failed to remove: $($item.FullName) - $_")
+				$CleanupTextBox.AppendText("`n")
+				$cleanupTextBox.ScrollToCaret()
+				Write-Host "Failed to remove: $($item.FullName) - $_"
+			}
+		}
+		
+	}
+	
+	Else
+	{
+		$CleanupTextBox.AppendText("Folder does not exist!")
+		$CleanupTextBox.AppendText("`n")
+		$cleanupTextBox.ScrollToCaret()
+	
+		
+	}
+	
+	
+	
+}
+
 
 
