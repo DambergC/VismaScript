@@ -71,7 +71,6 @@ function Set-RegistryKey
 #Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyBinaryProperty" -Value ([byte[]](0x01, 0x02, 0x03, 0x04)) -Type "Binary"
 #Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyMultiStringProperty" -Value @("String1", "String2") -Type "MultiString"
 
-
 function Update-ListBox
 {
 <#
@@ -488,12 +487,8 @@ function Refresh-StatusBarMain
 	$statusBarmain.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
 }
 
-
 #Sample variable that provides the location of the script
 [string]$ScriptDirectory = Get-ScriptDirectory
-
-
-
 
 $drives = @()
 
@@ -604,6 +599,43 @@ function Remove-PersonecFolders
 	
 	
 }
+
+function Is-ApplicationInstalled
+{
+	param (
+		[string]$AppName,
+		[string]$Manufacturer
+	)
+	
+	$paths = @(
+		"HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*",
+		"HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
+	)
+	
+	foreach ($path in $paths)
+	{
+		$installedApps = Get-ItemProperty -Path $path |
+		Where-Object { $_.PSObject.Properties['DisplayName'] -and $_.PSObject.Properties['Publisher'] } |
+		Select-Object DisplayName, Publisher
+		
+		foreach ($app in $installedApps)
+		{
+			if ($app.DisplayName -like "*$AppName*" -and $app.Publisher -like "*$Manufacturer*")
+			{
+				return $true
+			}
+		}
+	}
+	
+	return $false
+}
+
+# Example usage:
+#$applicationName = "Chrome"
+#$manufacturerName = "Google"
+#$isInstalled = Is-ApplicationInstalled -AppName $applicationName -Manufacturer $manufacturerName
+#Write-Output $isInstalled
+
 
 
 
