@@ -487,43 +487,11 @@ function Refresh-StatusBarMain
 	$statusBarmain.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
 }
 
-#Sample variable that provides the location of the script
-[string]$ScriptDirectory = Get-ScriptDirectory
-
-$drives = @()
-
-$drives = (Get-PSProvider filesystem).Drives.root
-
-foreach ($drive in $drives)
-{
-	
-	
-	if (test-path "$drive\visma\install\backup")
-	{
-		$result = $drive.Substring(0, [Math]::Min($drive.Length, 2))
-	}
-}
-
-$date = Get-Date -Format "yyyyMMdd"
-$Global:InstallDrive = $result
-$global:filename = "logfile_$date.log"
-$global:filepath = "$InstallDrive\Visma\Install\backup\"
-$global:logfile = "$filepath\$filename"
-
-$SavePathExistAppsettings = Test-Path -Path "$global:InstallDrive\visma\install\backup\Appsettings"
-
-if ($SavePathExistAppsettings -eq $false)
-{
-	
-	New-Item -Path "$global:InstallDrive\visma\install\backup" -ItemType Directory -Name Appsettings
-	
-}
-
 function Test-WebServer
 {
 	# Check if IIS is installed
 	$iisInstalled = Get-WindowsFeature -Name Web-Server -ErrorAction SilentlyContinue
-
+	
 	
 	if ($iisInstalled.Installed)
 	{
@@ -546,13 +514,15 @@ function Remove-PersonecFolders
 	
 	if ($folderexist -eq $true)
 	{
-		# Count folders and files
-		$folderCount = (Get-ChildItem -Path $Path -Directory -Recurse).Count
-		$fileCount = (Get-ChildItem -Path $Path -File -Recurse).Count
 		
-		$CleanUpStatusBar.Maximum = $folderCount
-		$CleanUpStatusBar.Step = 1
-		$CleanUpStatusBar.Value = 0
+		$CleanupTextBox.AppendText("Start cleanup:")
+		Write-Log -Level INFO -Message "Start cleanup:"
+		$CleanupTextBox.AppendText("`n")
+		$CleanupTextBox.AppendText("$Path")
+		Write-Log -Level INFO -Message "$Path"
+		$CleanupTextBox.AppendText("`n")
+		$cleanupTextBox.ScrollToCaret()
+		
 		
 		# Remove folders and files, excluding specified folders
 		foreach ($item in Get-ChildItem -Path $Path)
@@ -560,7 +530,8 @@ function Remove-PersonecFolders
 			if ($ExcludedFolders -contains $item.Name)
 			{
 				
-				$CleanupTextBox.AppendText("Skipping excluded folder: $($item.FullName)")
+				$CleanupTextBox.AppendText("Skipping excluded folder: $($item.name)")
+				Write-Log -Level INFO -Message "Skipping excluded folder: $($item.name)"
 				$CleanupTextBox.AppendText("`n")
 				$cleanupTextBox.ScrollToCaret()
 				continue
@@ -569,35 +540,30 @@ function Remove-PersonecFolders
 			try
 			{
 				Remove-Item -Path $item.FullName -Recurse -Force -ErrorAction Stop
-				
-				$CleanupTextBox.AppendText("Successfully removed: $($item.FullName)")
-				$CleanupTextBox.AppendText("`n")
-				$cleanupTextBox.ScrollToCaret()
-				$CleanUpStatusBar.PerformStep()
-				
 			}
 			catch
 			{
-				$CleanupTextBox.AppendText("Failed to remove: $($item.FullName) - $_")
+				$CleanupTextBox.AppendText("Failed to remove: $($item.name)")
+				Write-Log -Level INFO -Message "Failed to remove: $($item.name)"
 				$CleanupTextBox.AppendText("`n")
 				$cleanupTextBox.ScrollToCaret()
-				Write-Host "Failed to remove: $($item.FullName) - $_"
 			}
-		}
-		
-	}
 	
+		}
+	}
 	Else
 	{
-		$CleanupTextBox.AppendText("Folder does not exist!")
+		
+		$CleanupTextBox.AppendText("Folder does not exist: $Path")
+		Write-Log -Level INFO -Message "Folder does not exist: $path"
 		$CleanupTextBox.AppendText("`n")
 		$cleanupTextBox.ScrollToCaret()
-	
-		
 	}
 	
-	
-	
+	$CleanupTextBox.AppendText("CleanUp Finished")
+	Write-Log -Level INFO -Message "CleanUp Finished"
+	$CleanupTextBox.AppendText("`n")
+	$cleanupTextBox.ScrollToCaret()
 }
 
 function Is-ApplicationInstalled
@@ -635,6 +601,42 @@ function Is-ApplicationInstalled
 #$manufacturerName = "Google"
 #$isInstalled = Is-ApplicationInstalled -AppName $applicationName -Manufacturer $manufacturerName
 #Write-Output $isInstalled
+
+
+
+#Sample variable that provides the location of the script
+[string]$ScriptDirectory = Get-ScriptDirectory
+
+$drives = @()
+
+$drives = (Get-PSProvider filesystem).Drives.root
+
+foreach ($drive in $drives)
+{
+	
+	
+	if (test-path "$drive\visma\install\backup")
+	{
+		$result = $drive.Substring(0, [Math]::Min($drive.Length, 2))
+	}
+}
+
+$date = Get-Date -Format "yyyyMMdd"
+$Global:InstallDrive = $result
+$global:filename = "logfile_$date.log"
+$global:filepath = "$InstallDrive\Visma\Install\backup\"
+$global:logfile = "$filepath\$filename"
+
+$SavePathExistAppsettings = Test-Path -Path "$global:InstallDrive\visma\install\backup\Appsettings"
+
+if ($SavePathExistAppsettings -eq $false)
+{
+	
+	New-Item -Path "$global:InstallDrive\visma\install\backup" -ItemType Directory -Name Appsettings
+	
+}
+
+
 
 
 

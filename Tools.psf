@@ -532,15 +532,16 @@ $buttonDownloadVPBS_Click= {
 	$ToolTextbox.AppendText("Starting download PIN")
 	[XML]$xmlValues = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\$global:SelectedBigram.XML"
 	
-	$VPBSValue = $xmlValues.Configuration.VPBSVersion
+	$VPBSValue_1 = $xmlValues.Configuration.VPBSVersion_1
+	$VPBSValue_2 = $xmlValues.Configuration.VPBSVersion_2
 	
 	Write-Log -Level INFO -Message "Pinversion from XML $VPBSValue"
 	
-	$zip = "VPBSDownload$VPBSValue.zip"
+	$zip = "VPBSDownload$VPBSValue_2.zip"
 	
 	Write-Log -Level INFO -Message "Start downloading $zip"
 	
-	Invoke-WebRequest -Uri "https://visma-pbs.s3.eu-central-1.amazonaws.com/$VPBSValue/$zip" -OutFile "$global:InstallDrive\visma\install\$zip" -Verbose
+	Invoke-WebRequest -Uri "https://visma-pbs.s3.eu-central-1.amazonaws.com/$VPBSValue_1/$zip" -OutFile "$global:InstallDrive\visma\install\$zip" -Verbose
 	$ToolTextbox.AppendText("`n")
 	$ToolTextbox.AppendText("VPBS downloaded")
 	Write-Log -Level INFO -Message "Finished downloading $zip"
@@ -549,9 +550,9 @@ $buttonDownloadVPBS_Click= {
 	Write-Log -Level INFO -Message "Unblock VPBS zip file $zip"
 	Unblock-File -Path "$global:InstallDrive\Visma\Install\$zip" -Verbose
 	$ToolTextbox.AppendText("`n")
-	$ToolTextbox.AppendText("Extracting Zip file to $global:InstallDrive\Visma\Install\VPBSDownload$VPBSValue")
-	Write-Log -Level INFO -Message "Extracting Zip file to $global:InstallDrive\Visma\Install\VPBSDownload$VPBSValue"
-	Expand-Archive -Path "$global:InstallDrive\Visma\Install\$zip" -DestinationPath "$global:InstallDrive\Visma\Install\VPBSDownload$VPBSValue\" -Verbose -force
+	$ToolTextbox.AppendText("Extracting Zip file to $global:InstallDrive\Visma\Install\VPBSDownload$VPBSValue_2")
+	Write-Log -Level INFO -Message "Extracting Zip file to $global:InstallDrive\Visma\Install\VPBSDownload$VPBSValue_2"
+	Expand-Archive -Path "$global:InstallDrive\Visma\Install\$zip" -DestinationPath "$global:InstallDrive\Visma\Install\VPBSDownload$VPBSValue_2\" -Verbose -force
 	Write-Log -Level INFO -Message "Removing $zip"
 	Remove-Item -Path "$global:InstallDrive\Visma\install\$zip" -Force
 	
@@ -612,6 +613,6 @@ $buttonResetWWWPUDPPP_Click={
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>
