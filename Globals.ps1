@@ -178,123 +178,74 @@ function update-config
 	}
 	
 }
-
 function Copy-WithProgress
 {
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string]$Source
-		 ,
+		[string]$Source,
 		[Parameter(Mandatory = $true)]
-		[string]$Destination
-		 ,
-		[int]$Gap = 200
-		 ,
+		[string]$Destination,
+		[int]$Gap = 200,
 		[int]$ReportGap = 2000
 	)
-	# Define regular expression that will gather number of bytes copied
+	
 	$RegexBytes = '(?<=\s+)\d+(?=\s+)'
 	
 	# Initialize the Progress Bar
-	$progressbaroverlay1.Maximum = $files.Count
-	$progressbaroverlay1.Step = 1
-	$progressbaroverlay1.Value = 0
+	$ProgressBarBackup.Maximum = 100
+	$ProgressBarBackup.Step = 1
+	$ProgressBarBackup.Value = 0
 	
-	#region Robocopy params
-	# MIR = Mirror mode
-	# NP  = Don't show progress percentage in log
-	# NC  = Don't log file classes (existing, new file, etc.)
-	# BYTES = Show file sizes in bytes
-	# NJH = Do not display robocopy job header (JH)
-	# NJS = Do not display robocopy job summary (JS)
-	# TEE = Display log in stdout AND in target log file
-	$CommonRobocopyParams = '/MIR /NP /NDL /NC /BYTES /NJH /NJS /xf *.log';
-	#endregion Robocopy params
+	$CommonRobocopyParams = '/MIR /NP /NDL /NC /BYTES /NJH /NJS /xf *.log'
 	
-	#region Robocopy Staging
-	$FilebackupWindow.AppendText("`n")
-	$FilebackupWindow.AppendText('Analyzing robocopy job ...')
-	
+	$FilebackupWindow.AppendText("`nAnalyzing robocopy job ...")
 	
 	$selectedBackupfolder = $BackupFolderListbox.SelectedItem
-	$selectedBigram = $BigramListBox.SelectedItem
 	
-	
-	#$StagingLogPath = '{0}\temp\{1} robocopy staging.log' -f $env:windir, (Get-Date -Format 'yyyy-MM-dd HH-mm-ss');
 	$StagingLogPath = "$InstallDrive\Visma\install\Backup\$selectedBackupfolder\RoboCopyStaging.log"
-	$StagingArgumentList = '"{0}" "{1}" /LOG:"{2}" /L {3}' -f $Source, $Destination, $StagingLogPath, $CommonRobocopyParams;
+	$StagingArgumentList = '"{0}" "{1}" /LOG:"{2}" /L {3}' -f $Source, $Destination, $StagingLogPath, $CommonRobocopyParams
 	
+	Start-Process -Wait -FilePath robocopy.exe -ArgumentList $StagingArgumentList -NoNewWindow
 	
-	Start-Process -Wait -FilePath robocopy.exe -ArgumentList $StagingArgumentList -NoNewWindow;
-	# Get the total number of files that will be copied
-	$StagingContent = Get-Content -Path $StagingLogPath;
-	$TotalFileCount = $StagingContent.Count - 1;
-	$FilebackupWindow.AppendText("`n")
-	$FilebackupWindow.AppendText('Total Files to be copied: {0}' -f $TotalFileCount)
-	Write-Log -Level INFO -Message "Total bytes to be copied: {0} -f $TotalFileCount"
-	$FilebackupWindow.AppendText("`n")
-	$FilebackupWindow.ScrollToCaret()
+	$StagingContent = Get-Content -Path $StagingLogPath
+	$TotalFileCount = $StagingContent.Count - 1
+	$FilebackupWindow.AppendText("`nTotal Files to be copied: {0}" -f $TotalFileCount)
+	Write-Log -Level INFO -Message "Total files to be copied: {0}" $TotalFileCount
 	
-	# Get the total number of bytes to be copied
-	[RegEx]::Matches(($StagingContent -join "`n"), $RegexBytes) | ForEach-Object { $BytesTotal = 0; } { $BytesTotal += $_.Value; };
-	$FilebackupWindow.AppendText("`n")
-	$FilebackupWindow.AppendText('Total bytes to be copied: {0}' -f $BytesTotal)
-	Write-Log -Level INFO -Message "Total bytes to be copied: {0} -f $BytesTotal"
-	$FilebackupWindow.AppendText("`n")
-	$FilebackupWindow.ScrollToCaret()
-	#endregion Robocopy Staging
-	
-	#region Start Robocopy
-	# Begin the robocopy process
+	$BytesTotal = 0
+	[RegEx]::Matches(($StagingContent -join "`n"), $RegexBytes) | ForEach-Object { $BytesTotal += $_.Value }
+	$FilebackupWindow.AppendText("`nTotal bytes to be copied: {0}" -f $BytesTotal)
+	Write-Log -Level INFO -Message "Total bytes to be copied: {0}" $BytesTotal
 	
 	$RobocopyLogPath = "$InstallDrive\Visma\install\Backup\$selectedBackupfolder\RoboCopy.log"
-	#$RobocopyLogPath = '{0}\temp\{1} robocopy.log' -f $env:windir, (Get-Date -Format 'yyyy-MM-dd HH-mm-ss');
-	$ArgumentList = '"{0}" "{1}" /LOG:"{2}" /ipg:{3} {4}' -f $Source, $Destination, $RobocopyLogPath, $Gap, $CommonRobocopyParams;
+	$ArgumentList = '"{0}" "{1}" /LOG:"{2}" /ipg:{3} {4}' -f $Source, $Destination, $RobocopyLogPath, $Gap, $CommonRobocopyParams
 	
-	#$richtextbox1.AppendText('Beginning the robocopy process with arguments: {0}' -f $ArgumentList)
-	#$richtextbox1.AppendText("`n")
-	$Robocopy = Start-Process -FilePath robocopy.exe -ArgumentList $ArgumentList -Verbose -PassThru -NoNewWindow;
-	Start-Sleep -Milliseconds 100;
-	#endregion Start Robocopy
+	$Robocopy = Start-Process -FilePath robocopy.exe -ArgumentList $ArgumentList -Verbose -PassThru -NoNewWindow
+	Start-Sleep -Milliseconds 100
 	
-	$progressbaroverlay1.Maximum = $TotalFileCount
-	$progressbaroverlay1.Step = 1
-	$progressbaroverlay1.Value = 0
-	
-	#region Progress bar loop
 	while (!$Robocopy.HasExited)
 	{
+		Start-Sleep -Milliseconds $ReportGap
+		$BytesCopied = 0
+		$LogContent = Get-Content -Path $RobocopyLogPath
+		[Regex]::Matches($LogContent -join "`n", $RegexBytes) | ForEach-Object { $BytesCopied += $_.Value }
+		$CopiedFileCount = $LogContent.Count - 1
 		
-		
-		Start-Sleep -Milliseconds $ReportGap;
-		$BytesCopied = 0;
-		$LogContent = Get-Content -Path $RobocopyLogPath;
-		$BytesCopied = [Regex]::Matches($LogContent, $RegexBytes) | ForEach-Object -Process { $BytesCopied += $_.Value; } -End { $BytesCopied; };
-		$CopiedFileCount = $LogContent.Count - 1;
-		$progressbaroverlay1.PerformStep()
-		$progressbaroverlay1.Increment($LogContent.count)
-		$progressbaroverlay1.Refresh()
-		$Percentage = 0;
-		
-		
-		
+		$Percentage = 0
 		if ($BytesCopied -gt 0)
 		{
-			$Percentage = (($BytesCopied/$BytesTotal) * 100)
+			$Percentage = (($BytesCopied / $BytesTotal) * 100)
 		}
 		
-		
-		
+		$ProgressBarBackup.Value = [math]::Min($Percentage, 100)
+		$ProgressBarBackup.Refresh()
 	}
-	#endregion Progress loop
 	
-	#region Function output
 	[PSCustomObject]@{
-		BytesCopied = $BytesCopied;
-		FilesCopied = $CopiedFileCount;
-	};
-	#endregion Function output
+		BytesCopied = $BytesCopied
+		FilesCopied = $CopiedFileCount
+	}
 }
 
 function Get-IniFile
@@ -502,8 +453,72 @@ function Test-WebServer
 		return $false
 	}
 }
-
 function Remove-PersonecFolders
+{
+	param (
+		[string]$Path,
+		[string[]]$ExcludedFolders = @()
+	)
+	
+	$folderexist = (Test-Path $Path)
+	
+	if ($folderexist -eq $true)
+	{
+		$CleanupTextBox.AppendText("Start cleanup:")
+		Write-Log -Level INFO -Message "Start cleanup:"
+		$CleanupTextBox.AppendText("`n")
+		$CleanupTextBox.AppendText("$Path")
+		Write-Log -Level INFO -Message "$Path"
+		$CleanupTextBox.AppendText("`n")
+		$cleanupTextBox.ScrollToCaret()
+		
+		# Initialize the Progress Bar
+		$CleanUpProgress.Maximum = (Get-ChildItem -Path $Path | Where-Object { -not ($ExcludedFolders -contains $_.Name) }).Count
+		$CleanUpProgress.Step = 1
+		$CleanUpProgress.Value = 0
+		
+		# Remove folders and files, excluding specified folders
+		foreach ($item in Get-ChildItem -Path $Path)
+		{
+			if ($ExcludedFolders -contains $item.Name)
+			{
+				$CleanupTextBox.AppendText("Skipping excluded folder: $($item.name)")
+				Write-Log -Level INFO -Message "Skipping excluded folder: $($item.name)"
+				$CleanupTextBox.AppendText("`n")
+				$cleanupTextBox.ScrollToCaret()
+				continue
+			}
+			
+			try
+			{
+				Remove-Item -Path $item.FullName -Recurse -Force -ErrorAction Stop
+				$CleanUpProgress.PerformStep()
+				$CleanUpProgress.Refresh()
+			}
+			catch
+			{
+				$CleanupTextBox.AppendText("Failed to remove: $($item.name)")
+				Write-Log -Level INFO -Message "Failed to remove: $($item.name)"
+				$CleanupTextBox.AppendText("`n")
+				$cleanupTextBox.ScrollToCaret()
+			}
+		}
+	}
+	else
+	{
+		$CleanupTextBox.AppendText("Folder does not exist: $Path")
+		Write-Log -Level INFO -Message "Folder does not exist: $path"
+		$CleanupTextBox.AppendText("`n")
+		$cleanupTextBox.ScrollToCaret()
+	}
+	
+	$CleanupTextBox.AppendText("CleanUp Finished")
+	Write-Log -Level INFO -Message "CleanUp Finished"
+	$CleanupTextBox.AppendText("`n")
+	$cleanupTextBox.ScrollToCaret()
+}
+
+function Remove-PersonecFoldersOLD
 {
 	param (
 		[string]$Path,
@@ -635,9 +650,6 @@ if ($SavePathExistAppsettings -eq $false)
 	New-Item -Path "$global:InstallDrive\visma\install\backup" -ItemType Directory -Name Appsettings
 	
 }
-
-
-
 
 
 

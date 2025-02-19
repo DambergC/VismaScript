@@ -330,20 +330,12 @@ $formSQLQueries_Load = {
 	#TODO: Initialize Form Controls here
 	Refresh-StatusBar
 	
-	if ($global:SelectedBackupfolder -eq 'Select Folder' -or $global:SelectedBigram -eq 'Select Bigram')
+	If ($global:SelectedBigram -eq 'Select Bigram' -or $global:SelectedBackupfolder -eq 'Select Folder')
 	{
-		$buttonDBUpgrade.Enabled = $false
-		$buttonNewNA_admin.Enabled = $false
-		$buttonQRRead.Enabled = $false
-		$buttonChangePwdSQL.Enabled = $false
-	}
-	
-	else
-	{
-		$buttonDBUpgrade.Enabled = $true
-		$buttonNewNA_admin.Enabled = $true
-		$buttonQRRead.Enabled = $true
-		$buttonChangePwdSQL.Enabled = $true
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("You Need to select BIGRAM and BackupFolder")
+		$richtextbox1.ScrollToCaret()
+		$formSQLQueries.Close()
 	}
 }
 

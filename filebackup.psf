@@ -311,14 +311,12 @@ $formFileBackup_Load={
 	#TODO: Initialize Form Controls here
 	Refresh-StatusBar
 	
-	if ($global:SelectedBackupfolder -eq 'Select Folder' -or $global:SelectedBigram -eq 'Select Bigram')
+	If ($global:SelectedBigram -eq 'Select Bigram' -or $global:SelectedBackupfolder -eq 'Select Folder')
 	{
-		$buttonFileBackup.Enabled = $false
-	}
-	
-	else
-	{
-		$buttonFileBackup.Enabled = $true	
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("You Need to select BIGRAM and BackupFolder")
+		$richtextbox1.ScrollToCaret()
+		$formFileBackup.Close()
 	}
 }
 
