@@ -1,7 +1,9 @@
 ﻿#--------------------------------------------
 # Declare Global Variables and Functions here
 #--------------------------------------------
-
+$global:SelectedBigram = 'Select Bigram'
+$global:CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+$global:SelectedBackupfolder = 'Select Folder'
 #requires -version 5.1
 #Sample function that provides the location of the script
 function Get-ScriptDirectory
@@ -203,7 +205,7 @@ function Copy-WithProgress
 	
 	$selectedBackupfolder = $BackupFolderListbox.SelectedItem
 	
-	$StagingLogPath = "$InstallDrive\Visma\install\Backup\$selectedBackupfolder\RoboCopyStaging.log"
+	$StagingLogPath = "$global:InstallDrive\Visma\install\Backup\$global:SelectedBackupfolder\RoboCopyStaging.log"
 	$StagingArgumentList = '"{0}" "{1}" /LOG:"{2}" /L {3}' -f $Source, $Destination, $StagingLogPath, $CommonRobocopyParams
 	
 	Start-Process -Wait -FilePath robocopy.exe -ArgumentList $StagingArgumentList -NoNewWindow
@@ -218,7 +220,7 @@ function Copy-WithProgress
 	$FilebackupWindow.AppendText("`nTotal bytes to be copied: {0}" -f $BytesTotal)
 	Write-Log -Level INFO -Message "Total bytes to be copied: {0}" $BytesTotal
 	
-	$RobocopyLogPath = "$InstallDrive\Visma\install\Backup\$selectedBackupfolder\RoboCopy.log"
+	$RobocopyLogPath = "$global:InstallDrive\Visma\install\Backup\$global:SelectedBackupfolder\RoboCopy.log"
 	$ArgumentList = '"{0}" "{1}" /LOG:"{2}" /ipg:{3} {4}' -f $Source, $Destination, $RobocopyLogPath, $Gap, $CommonRobocopyParams
 	
 	$Robocopy = Start-Process -FilePath robocopy.exe -ArgumentList $ArgumentList -Verbose -PassThru -NoNewWindow
