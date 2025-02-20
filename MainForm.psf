@@ -499,16 +499,15 @@ if ($latestTag -ne $currentVersion)
 	Download-LatestVersion -repo $repo -file $file -localPath $localPath -latestTag $latestTag
 	
 	$richtextbox1.AppendText("`n")
-	$richtextbox1.AppendText("New version downloaded, restart script")
+	$richtextbox1.AppendText("New version downloaded, PLEASE restart script")
 	$richtextbox1.ScrollToCaret()
-	Write-Log -Level INFO -Message "New version downloaded, restart script"
+	Write-Log -Level INFO -Message "New version downloaded, PLEASE restart script"
 	
-	#Restart-Script -localPath $localPath
 	
 	
 }
 
-else
+elses
 {
 	
 	$richtextbox1.AppendText("`n")
