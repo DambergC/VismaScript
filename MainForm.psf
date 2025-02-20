@@ -503,7 +503,7 @@ if ($latestTag -ne $currentVersion)
 	$richtextbox1.ScrollToCaret()
 	Write-Log -Level INFO -Message "New version downloaded, restart script"
 	
-	Restart-Script -localPath $localPath
+	#Restart-Script -localPath $localPath
 	
 	
 }
