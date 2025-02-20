@@ -422,47 +422,6 @@ $repo = "DambergC/VismaScript"
 $file = "CygateScript.ps1"
 $localPath = "$global:InstallDrive\Visma\Install\Backup\CygateScript.ps1"
 
-function Restart-Script
-{
-	param (
-		[string]$ScriptPath,
-		[int]$DelayInSeconds = 5
-	)
-	
-	# Function to check if the script is running with elevated privileges
-	function Test-IsAdmin
-	{
-		$currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-		return $currentUser.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-	}
-	
-	# If not running as admin, restart the script with elevation
-	if (-not (Test-IsAdmin))
-	{
-		Write-Output "Restarting script with elevated privileges..."
-		Start-Process -FilePath "powershell.exe" -ArgumentList "-File `"$ScriptPath`"" -Verb RunAs
-		exit
-	}
-	
-	# Get the current script's process ID
-	$currentProcessId = $PID
-	
-	# Stop the current script
-	Write-Output "Stopping script..."
-	Stop-Process -Id $currentProcessId -Force
-	
-	# Wait for the specified delay
-	Start-Sleep -Seconds $DelayInSeconds
-	
-	# Restart the script
-	Write-Output "Restarting script..."
-	Start-Process -FilePath "powershell.exe" -ArgumentList "-File `"$ScriptPath`""
-}
-
-# Example usage
-#Restart-Script -ScriptPath "C:\Path\To\Your\Script.ps1"
-
-
 
 function Get-LatestReleaseTag
 {
@@ -516,6 +475,7 @@ if ($latestTag -ne $currentVersion)
 	Download-LatestVersion -repo $repo -file $file -localPath $localPath -latestTag $latestTag
 	
 	$todoScript = "New version downloaded, PLEASE restart script"
+	$promptRestart = $true
 	Write-Log -Level INFO -Message "New version downloaded, PLEASE restart script"
 	
 	#Restart-Script -ScriptPath $localPath -DelayInSeconds 3
@@ -540,7 +500,7 @@ $MainForm_Load={
 	
 	$group = "Visma Services Trusted Users"
 	$groupMembers = Get-LocalGroupMember -Group $group
-	
+	Write-Log -Level INFO -Message "$currentVersion"
 	
 	if ($groupMembers.Name -contains $currentUser)
 	{
@@ -570,6 +530,33 @@ $MainForm_Load={
 	$richtextbox1.AppendText("`n")
 	$richtextbox1.AppendText("$releaseFound")
 	$richtextbox1.ScrollToCaret()
+	
+	if ($promptRestart -eq $true)
+	{
+		
+		Add-Type -AssemblyName PresentationCore, PresentationFramework
+		$ButtonType = [System.Windows.MessageBoxButton]::OK
+		$MessageIcon = [System.Windows.MessageBoxImage]::Information
+		$MessageBody = "New version of script downloaded, Please restart script!"
+		$MessageTitle = "New Version of Script"
+		
+		$Result = [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon)
+		
+		if ($Result -eq [System.Windows.MessageBoxResult]::OK)
+		{
+			
+		
+			$richtextbox1.AppendText("Script will be restarted")
+			$richtextbox1.AppendText("`n")
+			$richtextbox1.ScrollToCaret()
+			
+			Write-Log -Level INFO -Message "Script will be restarted after new version downloaded"
+
+		}
+		
+		
+		
+	}
 	
 	$richtextbox1.AppendText("`n")
 	$richtextbox1.AppendText("$todoScript")
