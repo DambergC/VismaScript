@@ -422,6 +422,47 @@ $repo = "DambergC/VismaScript"
 $file = "CygateScript.ps1"
 $localPath = "$global:InstallDrive\Visma\Install\Backup\CygateScript.ps1"
 
+function Restart-Script
+{
+	param (
+		[string]$ScriptPath,
+		[int]$DelayInSeconds = 5
+	)
+	
+	# Function to check if the script is running with elevated privileges
+	function Test-IsAdmin
+	{
+		$currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+		return $currentUser.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+	}
+	
+	# If not running as admin, restart the script with elevation
+	if (-not (Test-IsAdmin))
+	{
+		Write-Output "Restarting script with elevated privileges..."
+		Start-Process -FilePath "powershell.exe" -ArgumentList "-File `"$ScriptPath`"" -Verb RunAs
+		exit
+	}
+	
+	# Get the current script's process ID
+	$currentProcessId = $PID
+	
+	# Stop the current script
+	Write-Output "Stopping script..."
+	Stop-Process -Id $currentProcessId -Force
+	
+	# Wait for the specified delay
+	Start-Sleep -Seconds $DelayInSeconds
+	
+	# Restart the script
+	Write-Output "Restarting script..."
+	Start-Process -FilePath "powershell.exe" -ArgumentList "-File `"$ScriptPath`""
+}
+
+# Example usage
+#Restart-Script -ScriptPath "C:\Path\To\Your\Script.ps1"
+
+
 
 function Get-LatestReleaseTag
 {
@@ -436,24 +477,18 @@ function Get-LatestReleaseTag
 		if ($response -and $response.tag_name)
 		{
 			return $response.tag_name
+			$releaseFound = "New Version: $response.tag_name ready to download"
 		}
 		else
 		{
-			Write-Output "No release tag found."
-			
-			$richtextbox1.AppendText("`n")
-			$richtextbox1.AppendText("No release tag found.")
-			$richtextbox1.ScrollToCaret()
+			$releaseFound  = "No release tag found"
 			Write-Log -Level INFO -Message "No release tag found."
 		}
 	}
 	catch
 	{
-		$richtextbox1.AppendText("`n")
-		$richtextbox1.AppendText("Failed to retrieve the latest release. Please check the repository name and try again.")
-		$richtextbox1.ScrollToCaret()
+		$releaseFound = "Could not check for latest release"
 		Write-Log -Level INFO -Message "Failed to retrieve the latest release. Please check the repository name and try again."
-		
 	}
 }
 
@@ -476,29 +511,22 @@ function Download-LatestVersion
 
 if ($latestTag -ne $currentVersion)
 {
-	
-
 	$latestTag = Get-LatestReleaseTag -repo $repo
 	
 	Download-LatestVersion -repo $repo -file $file -localPath $localPath -latestTag $latestTag
 	
-	$richtextbox1.AppendText("`n")
-	$richtextbox1.AppendText("New version downloaded, PLEASE restart script")
-	$richtextbox1.ScrollToCaret()
+	$todoScript = "New version downloaded, PLEASE restart script"
 	Write-Log -Level INFO -Message "New version downloaded, PLEASE restart script"
 	
+	#Restart-Script -ScriptPath $localPath -DelayInSeconds 3
 	
 	
 }
 
 else
 {
-	
-	$richtextbox1.AppendText("`n")
-	$richtextbox1.AppendText("Latest version running")
-	$richtextbox1.ScrollToCaret()
-	Write-Log -Level INFO -Message "Latest version running"
-	
+	$todoScript = "Latest version of CygateScript.ps1 running"
+	Write-Log -Level INFO -Message "Latest version of CygateScript.ps1 running"
 }
 
 
@@ -519,7 +547,6 @@ $MainForm_Load={
 		
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.AppendText("$global:CurrentUser is a member of the $group group.")
-		$richtextbox1.AppendText("`n")
 		$richtextbox1.ScrollToCaret()
 	}
 	else
@@ -540,6 +567,13 @@ $MainForm_Load={
 			
 		}
 	}
+	$richtextbox1.AppendText("`n")
+	$richtextbox1.AppendText("$releaseFound")
+	$richtextbox1.ScrollToCaret()
+	
+	$richtextbox1.AppendText("`n")
+	$richtextbox1.AppendText("$todoScript")
+	$richtextbox1.ScrollToCaret()
 	
 	
 	$drives = @()
@@ -559,8 +593,6 @@ $MainForm_Load={
 			$richtextbox1.AppendText("Backupfolder and script located on $drive")
 			$richtextbox1.AppendText("`n")
 			$richtextbox1.AppendText("Enjoy the script and relax...")
-			$richtextbox1.AppendText("`n")
-			$richtextbox1.AppendText("Bigram: $global:SelectedBigram")
 			$richtextbox1.ScrollToCaret()
 		}
 	}
