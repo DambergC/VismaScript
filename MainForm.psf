@@ -415,21 +415,13 @@ YzaA7lOwPKuYWLAISUiF6UOpdoPQncrdLOwW8eXMYOHjd2d7FzP22qGjzhFrrvDSn88SolhUzyrs
 f/jWP/sf0PcAd888AAA=</Form>
   <Code><![CDATA[#requires -version 5.1
 
-$currentVersion = "v.1.0.3" # Replace with your current version
+$currentVersion = "v1.0.3" # Replace with your current version
 
 $ScriptVersion.Text = $currentVersion
 $repo = "DambergC/VismaScript"
 $file = "CygateScript.ps1"
 $localPath = "$global:InstallDrive\Visma\Install\Backup\CygateScript.ps1"
 
-# Define your personal access token
-$token = "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"
-
-# Create the headers with the token
-$headers = @{
-	Authorization = "token $token"
-	"User-Agent"  = "PowerShell"
-}
 
 function Get-LatestReleaseTag
 {
