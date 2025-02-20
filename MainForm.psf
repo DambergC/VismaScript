@@ -480,15 +480,6 @@ function Download-LatestVersion
 	Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing -Method Get
 }
 
-function Restart-Script
-{
-	param (
-		[string]$localPath
-	)
-	Start-Process powershell -ArgumentList "-File $localPath"
-	[System.Windows.Forms.Application]::Exit()
-}
-
 
 if ($latestTag -ne $currentVersion)
 {
