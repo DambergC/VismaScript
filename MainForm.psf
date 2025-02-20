@@ -498,7 +498,7 @@ if ($latestTag -ne $currentVersion)
 	
 }
 
-elses
+else
 {
 	
 	$richtextbox1.AppendText("`n")
