@@ -429,7 +429,7 @@ function Get-LatestReleaseTag
 		[string]$repo
 	)
 	$releasesUrl = "https://api.github.com/repos/$repo/releases/latest"
-	
+	#$releasesUrl = "https://github.com/$repo/releases/latest/download/$file"
 	try
 	{
 		$response = Invoke-RestMethod -Uri $releasesUrl -Method Get
@@ -467,7 +467,8 @@ function Download-LatestVersion
 		[string]$localPath,
 		[string]$latestTag
 	)
-	$downloadUrl = "https://raw.githubusercontent.com/$repo/$latestTag/$file"
+	#$downloadUrl = "https://raw.githubusercontent.com/$repo/main/$file"
+	$downloadUrl = "https://github.com/$repo/releases/latest/download/$file"
 	#Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing -Headers $headers -Method Get
 	Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing -Method Get
 }
