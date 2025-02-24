@@ -1,4 +1,4 @@
-
+![image](https://github.com/user-attachments/assets/2f708331-c818-488d-94f3-cfe32121a866)
 # CygateScript.ps1
 
 
@@ -71,7 +71,7 @@ Inventering av systemet där följande saker inventeras:
 
 ![Inventering](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Inventory.png)
 
-### system
+### System
 ***Kan köras när som, dock innan avinstallation***
 -	Vad som är installerat och vilka versioner som är kopplade till Visma
 -	Vilka applikationspooler som är igång och med vilka konton som dom körs med – Om det är en webserver.
@@ -119,13 +119,13 @@ Vid byte av lösenord hos kund så är det enklare att köra en SQL querie så b
 ***Skickas till urklipp, ej till fil***
 
 Följande konton byts:
-- MODUL_DashBoardUser
-- MODUL_MenuUser
-- MODUL_NeptuneAdmin
-- MODUL_NeptuneReportUser
-- MODUL_NeptuneUser
-- MODUL_QuickReportAdmin
-- MODUL_QuickReportUser
+- BIGRAM_DashBoardUser
+- BIGRAM_MenuUser
+- BIGRAM_NeptuneAdmin
+- BIGRAM_NeptuneReportUser
+- BIGRAM_NeptuneUser
+- BIGRAM_QuickReportAdmin
+- BIGRAM_QuickReportUser
 - Visma_CurrencyUser
 - Visma_CommonStorageUser
 - Visma_SchedulerUser
