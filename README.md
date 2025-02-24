@@ -20,7 +20,7 @@ Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/downl
   - (visma-pbs.s3.eu-central-1.amazonaws.com/<ins>**251**</ins>/VPBSDownload252.zip)
 - VPBS Version 2 - Används i sökvägen för att ladda ner VPBS från Visma
   - (visma-pbs.s3.eu-central-1.amazonaws.com/251/VPBSDownload<ins>**252**</ins>.zip)
-- Release Version - Används i skapandet av SQL queries, pekar ut sökvägen till Vismas SQL skript. ***Ska inte förväxlas med FDN som inte hanteras i skriptet***.
+- Release Version - Används i skapandet av SQL queries, pekar ut sökvägen till Vismas SQL skript. ***Ska inte förväxlas med FDN Version som inte hanteras i skriptet***.
 - PPP Version - Används vid skapandet av SQL Queries
 - PUD Version - Används vid skapandet av SQL Queries
 - PFH Version - Används vid skapandet av SQL Queries
@@ -52,6 +52,9 @@ De funktioner i skriptet är framtagna för att standardisera och effektivisera 
 ![Funktioner](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Funktioner.png)
 
 ### FileBackup 
+> [!IMPORTANT]
+> Kör ALLTID en backup innan uppgradering.
+
 Filbackup är ett krav och MÅSTE köras inför varje uppgradering oavsett Major eller Minor och har man fler BIGRAM så räcker det att köra backupen en gång.
 
 Det som kopieras undan är allt under wwwroot och programs med undantag av *.log filer som exkluderas pga storleken.
@@ -68,20 +71,24 @@ Inventering av systemet där följande saker inventeras:
 ![Inventering](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Inventory.png)
 
 ### System
-***Kan köras när som, dock innan avinstallation***
+> [!NOTE]
+> Kan köras när som, dock innan avinstallation.
+
 -	Vad som är installerat och vilka versioner som är kopplade till Visma
 -	Vilka applikationspooler som är igång och med vilka konton som dom körs med – Om det är en webserver.
 -	Vilka tjänster som är igång och hur dom är konfigurerade. Ibland så kör kunden t.ex. Batchtjänsten med ett AD-konto vilket kunden behöver information om att återställa efter uppgraderingen.
 
 ### Password
-***Kan bara köras efter att backup är genomförd***
+> [!NOTE]
+> Kan bara köras efter att backup är genomförd.
 
 Lösenorden till vissa utpekade konton som vi ibland kan ha behov att ha tillgång till inventeras från den backup som körts. Att detta ska fungera så måste följande vara uppfyllt.
 -	Backup körd och BackupFolder vald
 -	Avkryptering av Backupen gjord
 
 ### Settings
-***Kan bara köras efter att backup är genomförd***
+> [!NOTE]
+> Kan bara köras efter att backup är genomförd.
 
 Följande inventeras just nu av Settings
 -	Om värdet useSSO är true eller false
@@ -97,22 +104,22 @@ Här skapas SQL Queries som underlättar vårt arbete. Viktigt är att rätt vä
 ![SQL queries](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/SQLqueries.png)
 
 ### DBupgrade
-
 SQL Queries för att uppgradera PPP PUD och PUF.
-
-***Textfil sparas under backupmappen du valt***
+> [!NOTE]
+> Textfil sparas under backupmappen du valt.
 
 ### QRRead
 
 När man installerar Quick Report för första gången så behöver man sätta upp några konton i SQL.
-
-***Skickas till urklipp, ej till fil***
+> [!NOTE]
+> Skickas till urklipp, ej till fil.
 
 ### Change Password SQL
 
 Vid byte av lösenord hos kund så är det enklare att köra en SQL querie så byts lösenorden på en gång.
+> [!NOTE]
+> Skickas till urklipp, ej till fil.
 
-***Skickas till urklipp, ej till fil***
 
 Följande konton byts:
 - BIGRAM_DashBoardUser
@@ -139,7 +146,8 @@ Du svarar på frågorna så skapas sedan SQL Query som skickas till ditt urklipp
 
 Första gången du loggar på med kontot så använder du lösenordet Vism@Cyg@te!!.
 
-***Se till att byta till ett eget lösenord det första du gör***
+> [!IMPORTANT]
+> Se till att byta till ett eget lösenord det första du gör.
 
 ## Stop And Start
 
@@ -155,7 +163,7 @@ Två nya funktioner finns nu i skriptet som är kopplade till tjänsterna.
 
 ### Load RestoreFile
 
-Här så får du välja att öppna RestorePoint.xml om det ligger en i Backupkatalogen.då får du en enkel överblick hur kundens tjänster hade för status.
+Här så får du välja att öppna RestorePoint.xml om det ligger en i Backupkatalogen, då får du en enkel överblick hur kundens tjänster hade för status innan uppgradering.
 
 ## Check after uppgradera
 
@@ -183,8 +191,8 @@ Rensar följande kataloger:
 Rensar följande kataloger:
 
 - C:\inetpub\logs\logfiles
-
-***OBS! Det finns kunder som har installerat det på d:\inetpub\logs\logfiles då tar inte denna funktion bort filerna.*** 
+> [!NOTE]
+> Det finns kunder som har installerat det på d:\inetpub\logs\logfiles då tar inte denna funktion bort filerna.
 
 ### Install Catalog
 
@@ -222,7 +230,8 @@ Laddas ner till d:\visma\install
 
 Nedladdning av nedladdningsverktyget för Visma.
 
-OBS! måste har rätt värden under Bigram och BackupFolder.
+> [!IMPORTANT]
+> måste har rätt värden under Bigram och BackupFolder.
 
 ### Decrypt and Encrypt Backup 
 
