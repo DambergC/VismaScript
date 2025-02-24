@@ -653,5 +653,30 @@ if ($SavePathExistAppsettings -eq $false)
 	
 }
 
-
+function Remove-LogFiles
+{
+	param (
+		[string]$logPath = "C:\inetpub\logs\LogFiles"
+	)
+	
+	# Check if the directory exists
+	if (Test-Path -Path $logPath)
+	{
+		# Get all log files in the directory and its subdirectories
+		$logFiles = Get-ChildItem -Path $logPath -Recurse -Filter *.log
+		
+		# Delete each log file
+		foreach ($file in $logFiles)
+		{
+			Remove-Item -Path $file.FullName -Force
+			$CleanUpTextBox.AppendText("Deleted: $($file.FullName)`n")
+		}
+		
+		$CleanUpTextBox.AppendText("All log files have been deleted.`n")
+	}
+	else
+	{
+		$CleanUpTextBox.AppendText("The specified path does not exist: $logPath`n")
+	}
+}
 

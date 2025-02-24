@@ -14,7 +14,6 @@
     <File Build="0" ReferenceFunction="Show-Inventory_psf">Inventory.psf</File>
     <File Build="0" ReferenceFunction="Show-TLScheck_psf">TLScheck.psf</File>
     <File Build="0" ReferenceFunction="Show-SQLqueries_psf">SQLqueries.psf</File>
-    <File Build="0" ReferenceFunction="Show-Certificate_psf">Certificate.psf</File>
     <File Build="0" ReferenceFunction="Show-CleanUp_psf">CleanUp.psf</File>
     <File Build="0" ReferenceFunction="Show-Tools_psf">Tools.psf</File>
     <File Build="0" ReferenceFunction="Show-StopAndStart_psf">StopAndStart.psf</File>
