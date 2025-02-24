@@ -27,7 +27,7 @@ D:\visma\install\backup\CygateScript.ps1
 ```
 Skulle det finnas kund som har sin installation på annan enhet en den som är default (D:\) så hanteras det av skriptet och då är sökvägen självklart samma som ovan men med ändring av enhetsbokstaven.
 
-
+![Hur man startar skriptet.](https://github.com/DambergC/VismaScript/blob/f3c6cc2df2366acbac5a6164e5042a71ea5b0712/ReadMEPictures/CMDstart.png)
 
 Om det skulle ha varit en uppgradering av skriptet tillgänglig så laddas den ned och sedan så kommer du få en dialogruta om att ny version av skriptet nedladdad och att du ombedes att starta om skriptet.
 ## Visma Services Trusted Users
