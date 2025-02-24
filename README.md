@@ -1,12 +1,7 @@
-![image](https://github.com/user-attachments/assets/2f708331-c818-488d-94f3-cfe32121a866)
 # CygateScript.ps1
-
-
 
 Ett skript för att underlätta arbetet med uppgradering av Visma´s produkt Personec P HRM.
 Skriptet har funktioner som underlättar och sparar tid samt gör att uppgraderingsstegen oavsett konsult blir standardiserade.
-
-
 
 ## Start av skriptet - Första gången
 Det finns två sätt att plocka ner skriptet beroende på hur kunden tillåter internetåtkomst.
