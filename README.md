@@ -133,6 +133,64 @@ Första gången du loggar på med kontot så använder du lösenordet Vism@Cyg@t
 
 ***Se till att byta till ett eget lösenord det första du gör***
 
+## Stop And Start
+
+Här stoppar du och startar tjänster och site.
+
+När du stoppar tjänster så skapas en RestorePoint.xml som sparas i den valda Backupkatalogen.
+
+När du sedan väljer att starta tjänsterna så återställer skriptet tjänsterna till hur dom var innan du gjorde uppgraderingen.
+
+Två nya funktioner finns nu i skriptet som är kopplade till tjänsterna.
+
+![Stop and Start](https://github.com/DambergC/VismaScript/blob/224017569cb62235422ec55eeef3ff26406d34fe/ReadMEPictures/StopStart.png)
+
+### Load RestoreFile
+
+Här så får du välja att öppna RestorePoint.xml om det ligger en i Backupkatalogen.då får du en enkel överblick hur kundens tjänster hade för status.
+
+## Check after uppgradera
+
+För att kunna jämföra hur det ser ut efter uppgraderingen så kan du få en enkel överblick som du sedan kan jämföra med när du innan valt att ladda in RestorePoint.xml
+
+## CleanUp
+
+Denna funktion är helt ny och den går bara att köra om du gjort en avinstallation. Om du inte gjort avinstallation så kommer du inte kunna resna något med koppling till Visma produkter.
+
+De knappar som är öppna är Temp Asp.NET, Inetpub Logs och Install Catalog.
+
+Alla knappar under CleanUp är kopplade till vad i vårt dokument säger vi ska rensa.
+
+![CleanUP](https://github.com/DambergC/VismaScript/blob/224017569cb62235422ec55eeef3ff26406d34fe/ReadMEPictures/CleanUp.png)
+
+### Temp Asp.NET
+
+Rensar följande kataloger:
+
+- "C:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET
+- "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files"
+
+### Inetpub
+
+Rensar följande kataloger:
+
+- C:\inetpub\logs\logfiles
+
+OBS! Det finns kunder som har installerat det på d:\inetpub\logs\logfiles då tar inte denna funktion bort filerna. 
+
+### Install Catalog
+
+Denna funktion rensar egentligen samma sak som som VBPS gör med funktioner att ta bort nedladdade versioner av Valda produkter.
+
+Följande kataloger rensas
+-	Support
+-	SAP
+-	Preinstall
+-	Microsoft
+-	HRM
+-	FDN med undantag för PIN
+
+
 
 
 
@@ -141,3 +199,61 @@ Första gången du loggar på med kontot så använder du lösenordet Vism@Cyg@t
 
 - [@DambergC](https://www.github.com/DambergC)
 
+
+## Tools
+
+Sista knappen på huvudsidan för vårt skript är en samling av verktyg som vi kan ha behov av under en felsökning eller en uppgradering.
+
+![Tools](https://github.com/DambergC/VismaScript/blob/224017569cb62235422ec55eeef3ff26406d34fe/ReadMEPictures/Tools.png)
+
+### Cert Permissions & Cert Thumbprint
+
+Här under kan du sätta defaulträttigheter som krävs för certifikat för Personec P och få ut Thumbprint för valt certifikat.
+
+### Reset WWW PUD PPP
+
+Ibland så råkar kund ändra på rättigheter i filstrukturen under WWW för PUD och PPP. Denna funktion återställer till de rättigheter som behövs för att Personec P ska fungera.
+
+### Download IISCrypto
+
+Nedladdning av verktygen för att sätta site till Strict.
+
+Laddas ner till d:\visma\install
+
+### Download VPBS
+
+Nedladdning av nedladdningsverktyget för Visma.
+
+OBS! måste har rätt värden under Bigram och BackupFolder.
+
+### Decrypt and Encrypt Backup 
+
+Två knappar för att avkryptera eller kryptera en vald backupkatalog.
+
+### TLS Check
+
+Kontrollerar om miljön är satt till Strict och endast accepterar TLS 1.2
+
+Skriptet kollar efter 1.0 och  1.1 och rapporterar tillbaka hur status är.
+
+![TLS Check](https://github.com/DambergC/VismaScript/blob/224017569cb62235422ec55eeef3ff26406d34fe/ReadMEPictures/TLSCheck.png)
+
+### TLS 1.2 Regfix
+
+Skjuter in de två registervärden som behövs för TLS 1.2
+
+### CiceronFix
+
+Mer info kommer när den funktionen är klar
+
+## Övriga funktioner
+
+Utöver nämnda funktioner så finns det några funktioner som kan vara bara att veta om.
+
+### Load Logfile
+
+Här väljer du vilken logfil du vill läsa och se vad som är gjort och inventerat.
+
+### Cloes And Encrypt
+
+När du är klar med uppgraderingen och vill avsluta skriptet på ett korrekt sätt så väljer du denna knapp. Då får du valet att kryptera backupfilernas web.config.
