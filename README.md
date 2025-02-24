@@ -27,6 +27,8 @@ D:\visma\install\backup\CygateScript.ps1
 ```
 Skulle det finnas kund som har sin installation på annan enhet en den som är default (D:\) så hanteras det av skriptet och då är sökvägen självklart samma som ovan men med ändring av enhetsbokstaven.
 
+
+
 Om det skulle ha varit en uppgradering av skriptet tillgänglig så laddas den ned och sedan så kommer du få en dialogruta om att ny version av skriptet nedladdad och att du ombedes att starta om skriptet.
 ## Visma Services Trusted Users
 För att få köra skriptet så är det samma krav som på Public Installer, du måste vara medlem i den lokala gruppen ”Visma Services Trusted Users” Hur du lägger till dig i gruppen går att göra det manuellt via Computer Management eller via powershell som du hittar i vårt uppgraderingsdokument.
@@ -37,5 +39,36 @@ Det BIGRAM och BackupFolder du väljer kommer följa med dig under hela tiden s�
 
 ## Logfil
 Allt som väljs och de val man gör i skriptet skrivs i en logfil som ligger under d:\visma\install\backup. Då logfilen används innan man valt BackupFolder så ligger den mer centralt. Dessa logfiler får vid behov rensas manuellt. Det skapas en logfil för varje dag man kör skriptet.
+## Funktioner
+De funktioner i skriptet är framtagna för att standardisera och effektivisera arbetet för konsult vid uppgradering och felsökning av Personec P installation hos kund.
+### FileBackup
+Filbackup är ett krav och MÅSTE köras inför varje uppgradering oavsett Major eller Minor och har man fler BIGRAM så räcker det att köra backupen en gång.
 
- 
+Det som kopieras undan är allt under wwwroot och programs med undantag av *.log filer som exkluderas pga storleken.
+
+Man ska INTE avkryptera miljön innan backup då vid behov så har vi  en funktion där vi kan avkryptera backup för att komma åt värden. Detta är av säkerhet då okrypterade backuper innehåller känslig info om konton och lösenord i kundens miljö.
+## Inventering
+Inventering av systemet där följande saker inventeras:
+
+### system
+***Kan köras när som, dock innan avinstallation***
+-	Vad som är installerat och vilka versioner som är kopplade till Visma
+-	Vilka applikationspooler som är igång och med vilka konton som dom körs med – Om det är en webserver.
+-	Vilka tjänster som är igång och hur dom är konfigurerade. Ibland så kör kunden t.ex. Batchtjänsten med ett AD-konto vilket kunden behöver information om att återställa efter uppgraderingen.
+
+### Password
+***Kan bara köras efter att backup är genomförd***
+
+Lösenorden till vissa utpekade konton som vi ibland kan ha behov att ha tillgång till inventeras från den backup som körts. Att detta ska fungera så måste följande vara uppfyllt.
+-	Backup körd och BackupFolder vald
+-	Avkryptering av Backupen gjord
+
+### Settings
+***Kan bara köras efter att backup är genomförd***
+
+Följande inventeras just nu av Settings
+-	Om värdet useSSO är true eller false
+-	Om värdet Multitenant är true och false
+-	Om det finns en license.json i backupen
+
+Om det är mer värden som kan vara nytta för oss tekniker under en uppgradering så är det enkelt att lägga till mer saker att inventera.
