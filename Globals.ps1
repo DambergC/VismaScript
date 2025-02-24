@@ -213,12 +213,12 @@ function Copy-WithProgress
 	$StagingContent = Get-Content -Path $StagingLogPath
 	$TotalFileCount = $StagingContent.Count - 1
 	$FilebackupWindow.AppendText("`nTotal Files to be copied: {0}" -f $TotalFileCount)
-	Write-Log -Level INFO -Message "Total files to be copied: {0}" $TotalFileCount
+	Write-Log -Level INFO -Message "Total files to be copied: {0} $TotalFileCount" 
 	
 	$BytesTotal = 0
 	[RegEx]::Matches(($StagingContent -join "`n"), $RegexBytes) | ForEach-Object { $BytesTotal += $_.Value }
 	$FilebackupWindow.AppendText("`nTotal bytes to be copied: {0}" -f $BytesTotal)
-	Write-Log -Level INFO -Message "Total bytes to be copied: {0}" $BytesTotal
+	Write-Log -Level INFO -Message "Total bytes to be copied: {0} $BytesTotal" 
 	
 	$RobocopyLogPath = "$global:InstallDrive\Visma\install\Backup\$global:SelectedBackupfolder\RoboCopy.log"
 	$ArgumentList = '"{0}" "{1}" /LOG:"{2}" /ipg:{3} {4}' -f $Source, $Destination, $RobocopyLogPath, $Gap, $CommonRobocopyParams
