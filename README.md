@@ -195,11 +195,6 @@ Följande kataloger rensas
 
 
 
-## Authors
-
-- [@DambergC](https://www.github.com/DambergC)
-
-
 ## Tools
 
 Sista knappen på huvudsidan för vårt skript är en samling av verktyg som vi kan ha behov av under en felsökning eller en uppgradering.
@@ -257,3 +252,7 @@ Här väljer du vilken logfil du vill läsa och se vad som är gjort och invente
 ### Cloes And Encrypt
 
 När du är klar med uppgraderingen och vill avsluta skriptet på ett korrekt sätt så väljer du denna knapp. Då får du valet att kryptera backupfilernas web.config.
+## Authors
+
+- [@DambergC](https://www.github.com/DambergC)
+
