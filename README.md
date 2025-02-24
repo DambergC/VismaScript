@@ -43,7 +43,7 @@ Skulle det finnas kund som har sin installation på annan enhet en den som är d
 Om det skulle ha varit en uppgradering av skriptet tillgänglig så laddas den ned och sedan så kommer du få en dialogruta om att ny version av skriptet nedladdad och att du ombedes att starta om skriptet.
 ## Visma Services Trusted Users
 För att få köra skriptet så är det samma krav som på Public Installer, du måste vara medlem i den lokala gruppen ”Visma Services Trusted Users” Hur du lägger till dig i gruppen går att göra det manuellt via Computer Management eller via powershell som du hittar i vårt uppgraderingsdokument.
-## Några MÅSTE uppfyllas...
+## Några Prereq för att komma åt vissa funktioner.
 För att komma åt funktionerna i skriptet så krävs att du väljer BIGRAM och BACKUKFOLDER under den knappen ”Bigram And BackupFolder”. Efter att du valt det så är övriga knappar öppna så att du kan komma åt underliggande funktioner.
 
 Det BIGRAM och BackupFolder du väljer kommer följa med dig under hela tiden så länge du har skriptet igång. Skulle det stängas ner av misstag så måste du åter välja det vid uppstart.
