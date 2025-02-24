@@ -1,6 +1,8 @@
 
 # CygateScript.ps1
 
+
+
 Ett skript för att underlätta arbetet med uppgradering av Visma´s produkt Personec P HRM.
 Skriptet har funktioner som underlättar och sparar tid samt gör att uppgraderingsstegen oavsett konsult blir standardiserade.
 
@@ -19,6 +21,14 @@ Gå till Github till adressen https://github.com/dambergc/vismascript och går t
 Är det första gången så behöver du lägga till lite värden, spara BIGRAM och sedan skapa en backupmapp.
 
 ![Ändra versionsnummer](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/edit_versions.png)
+- VPBS Version 1 - Används i sökvägen för att ladda ner VPBS från Visma
+  - (visma-pbs.s3.eu-central-1.amazonaws.com/<ins>**251**</ins>/VPBSDownload252.zip)
+- VPBS Version 2 - Används i sökvägen för att ladda ner VPBS från Visma
+  - (visma-pbs.s3.eu-central-1.amazonaws.com/251/VPBSDownload<ins>**252**</ins>.zip)
+- Release Version - Används i skapandet av SQL queries, pekar ut sökvägen till Vismas SQL skript. Ska inte förväxlas med FDN som inte behöver hanteras i skriptet.
+- PPP Version - Används vid skapandet av SQL Queries
+- PUD Version - Används vid skapandet av SQL Queries
+- PFH Version - Används vid skapandet av SQL Queries
 
 ## Uppstart av skript
 För att starta skriptet så starta ett eleverat Powershell fönster och sedan skriv sökvägen till skriptet
@@ -45,7 +55,7 @@ De funktioner i skriptet är framtagna för att standardisera och effektivisera 
 
 ![Funktioner](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Funktioner.png)
 
-### FileBackup
+### FileBackup 
 Filbackup är ett krav och MÅSTE köras inför varje uppgradering oavsett Major eller Minor och har man fler BIGRAM så räcker det att köra backupen en gång.
 
 Det som kopieras undan är allt under wwwroot och programs med undantag av *.log filer som exkluderas pga storleken.
