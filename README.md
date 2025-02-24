@@ -13,10 +13,10 @@ Det finns två sätt att plocka ner skriptet beroende på hur kunden tillåter i
     - b.	Gå till Github till adressen https://github.com/dambergc/vismascript och går till Releases och ladda ner filen CygateScript.ps1 under senaste Release.
 
 ![Välj rätt i github.](https://github.com/DambergC/VismaScript/blob/fc34252a991c24617acf65b4885b48fc6f5ca5e3/ReadMEPictures/github.png)
-## Authors
 
-- [@DambergC](https://www.github.com/DambergC)
+Är det första gången så behöver du lägga till lite värden, spara BIGRAM och sedan skapa en backupmapp.
 
+![Ändra versionsnummer](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/edit_versions.png)
 
 ## Uppstart av skript
 För att starta skriptet så starta ett eleverat Powershell fönster och sedan skriv sökvägen till skriptet
@@ -40,14 +40,24 @@ Det BIGRAM och BackupFolder du väljer kommer följa med dig under hela tiden s�
 Allt som väljs och de val man gör i skriptet skrivs i en logfil som ligger under d:\visma\install\backup. Då logfilen används innan man valt BackupFolder så ligger den mer centralt. Dessa logfiler får vid behov rensas manuellt. Det skapas en logfil för varje dag man kör skriptet.
 ## Funktioner
 De funktioner i skriptet är framtagna för att standardisera och effektivisera arbetet för konsult vid uppgradering och felsökning av Personec P installation hos kund.
+
+![Funktioner](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Funktioner.png)
+
 ### FileBackup
 Filbackup är ett krav och MÅSTE köras inför varje uppgradering oavsett Major eller Minor och har man fler BIGRAM så räcker det att köra backupen en gång.
 
 Det som kopieras undan är allt under wwwroot och programs med undantag av *.log filer som exkluderas pga storleken.
 
 Man ska INTE avkryptera miljön innan backup då vid behov så har vi  en funktion där vi kan avkryptera backup för att komma åt värden. Detta är av säkerhet då okrypterade backuper innehåller känslig info om konton och lösenord i kundens miljö.
+
+![Filebackup](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Filebackup.png)
+
+Backupen körs med hjälp av RoboCopy och loggarna för backupen sparas under BackupFolder-mappen.
+
 ## Inventering
 Inventering av systemet där följande saker inventeras:
+
+![Inventering](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Inventory.png)
 
 ### system
 ***Kan köras när som, dock innan avinstallation***
@@ -71,3 +81,63 @@ Följande inventeras just nu av Settings
 -	Om det finns en license.json i backupen
 
 Om det är mer värden som kan vara nytta för oss tekniker under en uppgradering så är det enkelt att lägga till mer saker att inventera.
+
+## SQL Queries
+
+Här skapas SQL Queries som underlättar vårt arbete. Viktigt är att rätt värden är satt under Bigram och Backupfolder.
+
+![SQL queries](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/SQLqueries.png)
+
+### DBupgrade
+
+SQL Queries för att uppgradera PPP PUD och PUF.
+
+***Textfil sparas under backupmappen du valt***
+
+### QRRead
+
+När man installerar Quick Report för första gången så behöver man sätta upp några konton i SQL.
+
+***Skickas till urklipp, ej till fil***
+
+### Change Password SQL
+
+Vid byte av lösenord hos kund så är det enklare att köra en SQL querie så byts lösenorden på en gång.
+
+***Skickas till urklipp, ej till fil***
+
+Följande konton byts:
+- MODUL_DashBoardUser
+- MODUL_MenuUser
+- MODUL_NeptuneAdmin
+- MODUL_NeptuneReportUser
+- MODUL_NeptuneUser
+- MODUL_QuickReportAdmin
+- MODUL_QuickReportUser
+- Visma_CurrencyUser
+- Visma_CommonStorageUser
+- Visma_SchedulerUser
+- rspdbuser
+
+Sedan så behöver du byta i PIN manuellt.
+
+### Nytt eget NA_Admin konto
+
+Då konton stoppas från inloggning så behöver vi ett konto hos kunden i Neptune.
+
+Denna SQL query skapar en användare med de rättigheter som vi behöver för att komma in systemet.
+
+Du svarar på frågorna så skapas sedan SQL Query som skickas till ditt urklipp.
+
+Första gången du loggar på med kontot så använder du lösenordet Vism@Cyg@te!!.
+
+***Se till att byta till ett eget lösenord det första du gör***
+
+
+
+
+
+## Authors
+
+- [@DambergC](https://www.github.com/DambergC)
+
