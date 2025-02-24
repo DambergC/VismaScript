@@ -6,19 +6,18 @@ Skriptet har funktioner som underlättar och sparar tid samt gör att uppgraderi
 
 
 
+## Start av skriptet - Första gången
+Det finns två sätt att plocka ner skriptet beroende på hur kunden tillåter internetåtkomst.
+-	Nedladdning via powershell
+    - Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/download/CygateScript.ps1' -OutFile D:\Visma\Install\Backup\CygateScript.ps1 -Verbose
+    - b.	Gå till Github till adressen https://github.com/dambergc/vismascript och går till Releases och ladda ner filen CygateScript.ps1 under senaste Release.
+
+![Välj rätt i github.](https://github.com/DambergC/VismaScript/blob/fc34252a991c24617acf65b4885b48fc6f5ca5e3/ReadMEPictures/github.png)
 ## Authors
 
 - [@DambergC](https://www.github.com/DambergC)
 
 
-## Installation
-
-Första gången man ska ladda ner skriptets så kör man följande kommandorad i Powershell
-
-```Powershell
-Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/download/CygateScript.ps1' -OutFile D:\Visma\Install\Backup\CygateScript.ps1 -Verbose
-```
-    
 ## Uppstart av skript
 För att starta skriptet så starta ett eleverat Powershell fönster och sedan skriv sökvägen till skriptet
 
