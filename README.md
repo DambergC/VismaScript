@@ -25,7 +25,7 @@ Gå till Github till adressen https://github.com/dambergc/vismascript och går t
   - (visma-pbs.s3.eu-central-1.amazonaws.com/<ins>**251**</ins>/VPBSDownload252.zip)
 - VPBS Version 2 - Används i sökvägen för att ladda ner VPBS från Visma
   - (visma-pbs.s3.eu-central-1.amazonaws.com/251/VPBSDownload<ins>**252**</ins>.zip)
-- Release Version - Används i skapandet av SQL queries, pekar ut sökvägen till Vismas SQL skript. Ska inte förväxlas med FDN som inte behöver hanteras i skriptet.
+- Release Version - Används i skapandet av SQL queries, pekar ut sökvägen till Vismas SQL skript. ***Ska inte förväxlas med FDN som inte hanteras i skriptet***.
 - PPP Version - Används vid skapandet av SQL Queries
 - PUD Version - Används vid skapandet av SQL Queries
 - PFH Version - Används vid skapandet av SQL Queries
