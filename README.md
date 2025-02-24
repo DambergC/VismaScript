@@ -49,7 +49,7 @@ För att komma åt funktionerna i skriptet så krävs att du väljer BIGRAM och 
 Det BIGRAM och BackupFolder du väljer kommer följa med dig under hela tiden så länge du har skriptet igång. Skulle det stängas ner av misstag så måste du åter välja det vid uppstart.
 
 ## Logfil
-Allt som väljs och de val man gör i skriptet skrivs i en logfil som ligger under d:\visma\install\backup. Då logfilen används innan man valt BackupFolder så ligger den mer centralt. Dessa logfiler får vid behov rensas manuellt. Det skapas en logfil för varje dag man kör skriptet.
+Alla val man gör i skriptet skrivs i en logfil som ligger under d:\visma\install\backup. Logfilen används innan man valt BackupFolder och måste därför ligga under Visma\Backup och dessa logfiler får vid behov rensas manuellt. Det skapas en logfil för varje dag man kör skriptet.
 ## Funktioner
 De funktioner i skriptet är framtagna för att standardisera och effektivisera arbetet för konsult vid uppgradering och felsökning av Personec P installation hos kund.
 
