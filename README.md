@@ -16,14 +16,19 @@ Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/downl
 Är det första gången så behöver du lägga till lite värden, spara BIGRAM och sedan skapa en backupmapp.
 
 ![Ändra versionsnummer](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/edit_versions.png)
-- VPBS Version 1 - Används i sökvägen för att ladda ner VPBS från Visma
-  - (visma-pbs.s3.eu-central-1.amazonaws.com/<ins>**251**</ins>/VPBSDownload252.zip)
-- VPBS Version 2 - Används i sökvägen för att ladda ner VPBS från Visma
-  - (visma-pbs.s3.eu-central-1.amazonaws.com/251/VPBSDownload<ins>**252**</ins>.zip)
-- Release Version - Används i skapandet av SQL queries, pekar ut sökvägen till Vismas SQL skript. ***Ska inte förväxlas med FDN Version som inte hanteras i skriptet***.
-- PPP Version - Används vid skapandet av SQL Queries
-- PUD Version - Används vid skapandet av SQL Queries
-- PFH Version - Används vid skapandet av SQL Queries
+
+
+| Parameter | Beskrivning|
+| ------------- | ------------- |
+| VPBSVersion 1  | Används i sökvägen för att ladda ner VPBS från Visma |
+|  | (visma-pbs.s3.eu-central-1.amazonaws.com/<ins>**251**</ins>/VPBSDownload252.zip) |
+| VPBSVersion 2  | Används i sökvägen för att ladda ner VPBS från Visma |
+|  | (visma-pbs.s3.eu-central-1.amazonaws.com/251/VPBSDownload<ins>**252**</ins>.zip)  |
+| Release_Version  | Används i skapandet av SQL queries, pekar ut sökvägen till Vismas SQL skript.|
+| | ***Ska inte förväxlas med FDN Version som inte hanteras i skriptet***.|
+| PPP Version  | Används vid skapandet av SQL Queries  |
+| PUD Version  | Används vid skapandet av SQL Queries  |
+| PFH Version  | Används vid skapandet av SQL Queries  |
 
 ## Uppstart av skript - Befintligt skript
 För att starta skriptet så starta ett eleverat Powershell fönster och sedan skriv sökvägen till skriptet
