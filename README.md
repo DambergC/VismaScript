@@ -149,7 +149,7 @@ Denna SQL query skapar en användare med de rättigheter som vi behöver för at
 
 Du svarar på frågorna så skapas sedan SQL Query som skickas till ditt urklipp.
 
-Första gången du loggar på med kontot så använder du lösenordet Vism@Cyg@te!!.
+Första gången du loggar på med kontot så använder du lösenordet: ***Vism@Cyg@te!!***
 
 > [!IMPORTANT]
 > Se till att byta till ett eget lösenord det första du gör.
