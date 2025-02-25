@@ -172,7 +172,7 @@ Två nya funktioner finns nu i skriptet som är kopplade till tjänsterna.
 
 Här så får du välja att öppna RestorePoint.xml om det ligger en i Backupkatalogen, då får du en enkel överblick hur kundens tjänster hade för status innan uppgradering.
 
-## Check after uppgradera
+## Kontroll av tjänsterna
 
 För att kunna jämföra hur det ser ut efter uppgraderingen så kan du få en enkel överblick som du sedan kan jämföra med när du innan valt att ladda in RestorePoint.xml
 
