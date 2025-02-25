@@ -30,6 +30,8 @@ Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/downl
 | PUD Version  | Används vid skapandet av SQL Queries  |
 | PFH Version  | Används vid skapandet av SQL Queries  |
 
+![image](https://github.com/user-attachments/assets/93514f6c-e25f-42b1-a771-a7e2bfb8a0fa)
+
 ## Uppstart av skript - Befintligt skript
 För att starta skriptet så starta ett eleverat Powershell fönster och sedan skriv sökvägen till skriptet
 ```Powershell
