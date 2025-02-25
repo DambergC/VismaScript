@@ -433,14 +433,19 @@ $buttonStopServices_Click = {
 	$xmlData = $result | ConvertTo-Xml -NoTypeInformation
 	
 	# Save the XML data to a file
-	$xml_exist = (Test-Path -Path "$global:InstallDrive\Visma\Install\backup\$global:SelectedBackupfolder\ServicesRestorePoint.xml")
+	$restorefile = "$global:SelectedBigram" + "ServicesRestorePoint.xml"
+
+	$xml_exist = (test-path "$global:InstallDrive\Visma\Install\backup\$global:SelectedBackupfolder\$restorefile")
+	
+
 	
 	if ($xml_exist -eq $false)
 	{
-		$xmlData.Save("$global:InstallDrive\Visma\Install\backup\$global:SelectedBackupfolder\ServicesRestorePoint.xml")
+		$xmlData.Save("$global:InstallDrive\Visma\Install\backup\$global:SelectedBackupfolder\$restorefile")
 		$StartStopRichTextBox.AppendText("`n")
-		$StartStopRichTextBox.AppendText("Service Restore File created in backupfolder ")
+		$StartStopRichTextBox.AppendText("$restorefile Service Restore File created in backupfolder ")
 	}
+	
 	
 	Write-Log -Level INFO -Message "Stopping Services --------------"
 	
@@ -558,7 +563,8 @@ $buttonStartServices_Click = {
 		$StartStopRichTextBox.ScrollToCaret()
 		
 		# Load the XML data from the file
-		[XML]$xmlData = Get-Content "$InstallDrive\Visma\Install\backup\$selectedBackupfolder\ServicesRestorePoint.xml"
+		$restorefile = "$global:SelectedBigram" + "ServicesRestorePoint.xml"
+		[XML]$xmlData = Get-Content "$InstallDrive\Visma\Install\backup\$selectedBackupfolder\$restorefile"
 		
 		$countServices = $xmlData.Objects.Object.Count
 		
@@ -645,8 +651,8 @@ $buttonLoadDataRestorefile_Click = {
 	
 	
 	$data = @()
-	
-	[XML]$xmlData = Get-Content "$InstallDrive\Visma\Install\backup\$selectedBackupfolder\ServicesRestorePoint.xml"
+	$restorefile = "$global:SelectedBigram" + "ServicesRestorePoint.xml"
+	[XML]$xmlData = Get-Content "$InstallDrive\Visma\Install\backup\$selectedBackupfolder\$restorefile"
 	
 	
 	foreach ($service in $xmlData.Objects.Object)
@@ -722,6 +728,6 @@ $buttonCheckAfterUpgrade_Click = {
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>
