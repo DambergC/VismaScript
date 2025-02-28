@@ -50,19 +50,19 @@ function Set-RegistryKey
 	switch ($Type)
 	{
 		"String" {
-			Set-ItemProperty -Path $Path -Name $Name -Value $Value -Type String -Force
+			Set-ItemProperty -Path $Path -Name $Name -Value $Value
 		}
 		"DWord" {
-			Set-ItemProperty -Path $Path -Name $Name -Value [int]$Value -Type DWord -Force
+			Set-ItemProperty -Path $Path -Name $Name -Value ([int]$Value)
 		}
 		"QWord" {
-			Set-ItemProperty -Path $Path -Name $Name -Value [long]$Value -Type QWord -Force
+			Set-ItemProperty -Path $Path -Name $Name -Value ([long]$Value)
 		}
 		"Binary" {
-			Set-ItemProperty -Path $Path -Name $Name -Value [byte[]]$Value -Type Binary -Force
+			Set-ItemProperty -Path $Path -Name $Name -Value ([byte[]]$Value)
 		}
 		"MultiString" {
-			Set-ItemProperty -Path $Path -Name $Name -Value [string[]]$Value -Type MultiString -Force
+			Set-ItemProperty -Path $Path -Name $Name -Value ([string[]]$Value)
 		}
 	}
 }

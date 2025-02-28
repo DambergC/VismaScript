@@ -410,7 +410,7 @@ qNiyA8OjjTJToHa+8Ne/H2HLv/2bfWz/22LHCrAr2fKQOJoYTuV/fGcvJ31vOH6g2fb3RBml5Z32
 YnvWdOeEB9hPYE2xRs9+UGiFGNoDgf7pfwCiS7kU9D8AAA==</Form>
   <Code><![CDATA[#requires -version 5.1
 
-$currentVersion = "v1.0.5" # Replace with your current version
+$currentVersion = "v1.0.6" # Replace with your current version
 $updateDate = "2025-02-28" # Replace with date
 
 $ScriptDate.Text = $updateDate
@@ -768,6 +768,6 @@ $toolstripbutton2_Click={
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>
