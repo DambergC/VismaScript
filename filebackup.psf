@@ -374,10 +374,18 @@ $buttonFileBackup_Click={
 	$richtextbox1.AppendText("Ending backup of wwwroot...         ")
 	$richtextbox1.AppendText("`n")
 	$richtextbox1.ScrollToCaret()
+	
+	Add-Type -AssemblyName PresentationCore, PresentationFramework
+	$ButtonType = [System.Windows.MessageBoxButton]::OK
+	$MessageIcon = [System.Windows.MessageBoxImage]::Information
+	$MessageBody = "Backup done!"
+	$MessageTitle = "Backupstatus"
+	
+	$Result = [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon)
 
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>
