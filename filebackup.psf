@@ -375,6 +375,16 @@ $buttonFileBackup_Click={
 	$richtextbox1.AppendText("`n")
 	$richtextbox1.ScrollToCaret()
 	
+	Copy-WithProgress -Source "$InstallDrive\Visma\Install\FDN\PIN\Client\Base\SW" -Destination "$InstallDrive\Visma\Install\Backup\$BackupFolder\PINBackup"
+	$FilebackupWindow.AppendText("`n")
+	$FilebackupWindow.AppendText("Ending backup of PIN...         ")
+	$FilebackupWindow.AppendText("`n")
+	$FilebackupWindow.ScrollToCaret()
+	$richtextbox1.AppendText("`n")
+	$richtextbox1.AppendText("Ending backup of PIN...         ")
+	$richtextbox1.AppendText("`n")
+	$richtextbox1.ScrollToCaret()
+	
 	Add-Type -AssemblyName PresentationCore, PresentationFramework
 	$ButtonType = [System.Windows.MessageBoxButton]::OK
 	$MessageIcon = [System.Windows.MessageBoxImage]::Information
