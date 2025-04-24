@@ -423,7 +423,7 @@ f4TuWAE2JVseEkcTw7n8z2/sU2zf6o4faLb9baOMkvJOe7Fda7J3wgNsJ7AmmKOn3ym0XAztgUD/
 /L/8qivSHUIAAA==</Form>
   <Code><![CDATA[#requires -version 5.1
 
-$currentVersion = "v1.0.9" # Replace with your current version
+$currentVersion = "v1.0.10" # Replace with your current version
 $updateDate = "2025-04-24" # Replace with date
 
 $ScriptDate.Text = $updateDate
