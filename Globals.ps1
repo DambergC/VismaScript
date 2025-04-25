@@ -474,16 +474,21 @@ function Remove-PersonecFolders
 		$CleanupTextBox.AppendText("`n")
 		$cleanupTextBox.ScrollToCaret()
 		
+		# Get the full paths of excluded folders for accurate comparison
+		$ExcludedFoldersFullPaths = $ExcludedFolders | ForEach-Object { Join-Path -Path $Path -ChildPath $_ }
+		
 		# Initialize the Progress Bar
-		$CleanUpProgress.Maximum = (Get-ChildItem -Path $Path -Recurse | Where-Object { -not ($ExcludedFolders -contains $_.Parent) -and -not ($ExcludedFolders -contains $_.Name) }).Count
+		$CleanUpProgress.Maximum = (Get-ChildItem -Path $Path -Recurse | Where-Object {
+				($ExcludedFoldersFullPaths -notcontains $_.FullName) -and ($ExcludedFoldersFullPaths -notcontains $_.Parent)
+			}).Count
 		$CleanUpProgress.Step = 1
 		$CleanUpProgress.Value = 0
 		
 		# Remove folders and files, excluding specified folders and their contents
 		foreach ($item in Get-ChildItem -Path $Path -Recurse)
 		{
-			# Skip if the item is in the excluded folder or is an excluded folder
-			if ($ExcludedFolders -contains $item.Name -or $ExcludedFolders -contains $item.Parent)
+			# Skip if the item is under an excluded folder or is an excluded folder
+			if ($ExcludedFoldersFullPaths -contains $item.FullName -or ($ExcludedFoldersFullPaths | Where-Object { $item.FullName -like "$_*" }))
 			{
 				$CleanupTextBox.AppendText("Skipping excluded folder or its contents: $($item.FullName)")
 				Write-Log -Level INFO -Message "Skipping excluded folder or its contents: $($item.FullName)"
