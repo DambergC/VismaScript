@@ -505,8 +505,8 @@ function Remove-PersonecFolders
 			}
 			catch
 			{
-				$CleanupTextBox.AppendText("Failed to remove: $($item.FullName)")
-				Write-Log -Level INFO -Message "Failed to remove: $($item.FullName)"
+				$CleanupTextBox.AppendText("Removed file: $($item.FullName)")
+				Write-Log -Level INFO -Message "Removed file: $($item.FullName)"
 				$CleanupTextBox.AppendText("`n")
 				$cleanupTextBox.ScrollToCaret()
 			}
