@@ -475,17 +475,18 @@ function Remove-PersonecFolders
 		$cleanupTextBox.ScrollToCaret()
 		
 		# Initialize the Progress Bar
-		$CleanUpProgress.Maximum = (Get-ChildItem -Path $Path | Where-Object { -not ($ExcludedFolders -contains $_.Name) }).Count
+		$CleanUpProgress.Maximum = (Get-ChildItem -Path $Path -Recurse | Where-Object { -not ($ExcludedFolders -contains $_.Parent) -and -not ($ExcludedFolders -contains $_.Name) }).Count
 		$CleanUpProgress.Step = 1
 		$CleanUpProgress.Value = 0
 		
-		# Remove folders and files, excluding specified folders
-		foreach ($item in Get-ChildItem -Path $Path)
+		# Remove folders and files, excluding specified folders and their contents
+		foreach ($item in Get-ChildItem -Path $Path -Recurse)
 		{
-			if ($ExcludedFolders -contains $item.Name)
+			# Skip if the item is in the excluded folder or is an excluded folder
+			if ($ExcludedFolders -contains $item.Name -or $ExcludedFolders -contains $item.Parent)
 			{
-				$CleanupTextBox.AppendText("Skipping excluded folder: $($item.name)")
-				Write-Log -Level INFO -Message "Skipping excluded folder: $($item.name)"
+				$CleanupTextBox.AppendText("Skipping excluded folder or its contents: $($item.FullName)")
+				Write-Log -Level INFO -Message "Skipping excluded folder or its contents: $($item.FullName)"
 				$CleanupTextBox.AppendText("`n")
 				$cleanupTextBox.ScrollToCaret()
 				continue
@@ -499,8 +500,8 @@ function Remove-PersonecFolders
 			}
 			catch
 			{
-				$CleanupTextBox.AppendText("Failed to remove: $($item.name)")
-				Write-Log -Level INFO -Message "Failed to remove: $($item.name)"
+				$CleanupTextBox.AppendText("Failed to remove: $($item.FullName)")
+				Write-Log -Level INFO -Message "Failed to remove: $($item.FullName)"
 				$CleanupTextBox.AppendText("`n")
 				$cleanupTextBox.ScrollToCaret()
 			}
