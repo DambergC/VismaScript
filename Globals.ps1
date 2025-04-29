@@ -159,7 +159,6 @@ function Update-ListBox
 		$ListBox.ValueMember = $ValueMember
 	}
 }
-
 function update-config
 {
 	$bigrams = (Get-ChildItem -Path "$InstallDrive\Visma\install\backup\Appsettings\").BaseName
@@ -206,7 +205,7 @@ function Copy-WithProgress
 	$selectedBackupfolder = $BackupFolderListbox.SelectedItem
 	
 	$StagingLogPath = "$global:InstallDrive\Visma\install\Backup\$global:SelectedBackupfolder\RoboCopyStaging.log"
-	$StagingArgumentList = '"{0}" "{1}" /LOG:"{2}" /L {3}' -f $Source, $Destination, $StagingLogPath, $CommonRobocopyParams
+	$StagingArgumentList = '"{0}" "{1}" /LOG+:"{2}" /L {3}' -f $Source, $Destination, $StagingLogPath, $CommonRobocopyParams
 	
 	Start-Process -Wait -FilePath robocopy.exe -ArgumentList $StagingArgumentList -NoNewWindow
 	
@@ -221,8 +220,102 @@ function Copy-WithProgress
 	Write-Log -Level INFO -Message "Total bytes to be copied: {0} $BytesTotal" 
 	
 	$RobocopyLogPath = "$global:InstallDrive\Visma\install\Backup\$global:SelectedBackupfolder\RoboCopy.log"
-	$ArgumentList = '"{0}" "{1}" /LOG:"{2}" /ipg:{3} {4}' -f $Source, $Destination, $RobocopyLogPath, $Gap, $CommonRobocopyParams
+	$ArgumentList = '"{0}" "{1}" /LOG+:"{2}" /ipg:{3} {4}' -f $Source, $Destination, $RobocopyLogPath, $Gap, $CommonRobocopyParams
 	
+	$Robocopy = Start-Process -FilePath robocopy.exe -ArgumentList $ArgumentList -Verbose -PassThru -NoNewWindow
+	Start-Sleep -Milliseconds 100
+	
+	while (!$Robocopy.HasExited)
+	{
+		Start-Sleep -Milliseconds $ReportGap
+		$BytesCopied = 0
+		$LogContent = Get-Content -Path $RobocopyLogPath
+		[Regex]::Matches($LogContent -join "`n", $RegexBytes) | ForEach-Object { $BytesCopied += $_.Value }
+		$CopiedFileCount = $LogContent.Count - 1
+		
+		$Percentage = 0
+		if ($BytesCopied -gt 0)
+		{
+			$Percentage = (($BytesCopied / $BytesTotal) * 100)
+		}
+		
+		$ProgressBarBackup.Value = [math]::Min($Percentage, 100)
+		$ProgressBarBackup.Refresh()
+	}
+	
+	[PSCustomObject]@{
+		BytesCopied = $BytesCopied
+		FilesCopied = $CopiedFileCount
+	}
+}
+
+function Copy-WithProgressTEST
+{
+	[CmdletBinding()]
+	param (
+		[Parameter(Mandatory = $true)]
+		[string]$Source,
+		[Parameter(Mandatory = $true)]
+		[string]$Destination,
+		[Parameter(Mandatory = $true)]
+		[string]$Title,
+		[int]$Gap = 200,
+		[int]$ReportGap = 2000
+	)
+	
+	$RegexBytes = '(?<=\s+)\d+(?=\s+)'
+	
+	# Initialize the Progress Bar
+	$ProgressBarBackup.Maximum = 100
+	$ProgressBarBackup.Step = 1
+	$ProgressBarBackup.Value = 0
+	
+	$CommonRobocopyParams = '/MIR /NP /NDL /NC /BYTES /NJH /NJS /xf *.log'
+	
+	$FilebackupWindow.AppendText("`nAnalyzing robocopy job ...")
+	
+	# Base Log File Paths
+	$selectedBackupfolder = $BackupFolderListbox.SelectedItem
+	$BaseLogPath = "$global:InstallDrive\Visma\install\Backup\$global:SelectedBackupfolder\$Title" + "Robocopy.log"
+	
+	# Function to ensure unique log file
+	function Ensure-UniqueLogFile
+	{
+		param (
+			[string]$LogFilePath
+		)
+		if (Test-Path -Path $LogFilePath)
+		{
+			$Timestamp = (Get-Date).ToString("yyyyMMdd_HHmmss")
+			$NewLogFilePath = $LogFilePath -replace '\.log$', "_$Timestamp.log"
+			Rename-Item -Path $LogFilePath -NewName $NewLogFilePath
+			Write-Log -Level INFO -Message "Renamed existing log file to: $NewLogFilePath"
+		}
+	}
+	
+	# Ensure staging and robocopy logs are unique
+	$StagingLogPath = $BaseLogPath -replace 'Robocopy.log$', 'StagingRobocopy.log'
+	Ensure-UniqueLogFile -LogFilePath $StagingLogPath
+	
+	$RobocopyLogPath = $BaseLogPath
+	Ensure-UniqueLogFile -LogFilePath $RobocopyLogPath
+	
+	# Staging Analysis
+	$StagingArgumentList = '"{0}" "{1}" /LOG:"{2}" /L {3}' -f $Source, $Destination, $StagingLogPath, $CommonRobocopyParams
+	Start-Process -Wait -FilePath robocopy.exe -ArgumentList $StagingArgumentList -NoNewWindow
+	
+	$StagingContent = Get-Content -Path $StagingLogPath
+	$TotalFileCount = $StagingContent.Count - 1
+	$FilebackupWindow.AppendText("`nTotal Files to be copied: {0}" -f $TotalFileCount)
+	Write-Log -Level INFO -Message "Total files to be copied: {0} $TotalFileCount"
+	
+	$BytesTotal = 0
+	[RegEx]::Matches(($StagingContent -join "`n"), $RegexBytes) | ForEach-Object { $BytesTotal += $_.Value }
+	$FilebackupWindow.AppendText("`nTotal bytes to be copied: {0}" -f $BytesTotal)
+	Write-Log -Level INFO -Message "Total bytes to be copied: {0} $BytesTotal"
+	
+	# Robocopy Execution
+	$ArgumentList = '"{0}" "{1}" /LOG:"{2}" /ipg:{3} {4}' -f $Source, $Destination, $RobocopyLogPath, $Gap, $CommonRobocopyParams
 	$Robocopy = Start-Process -FilePath robocopy.exe -ArgumentList $ArgumentList -Verbose -PassThru -NoNewWindow
 	Start-Sleep -Milliseconds 100
 	
@@ -291,7 +384,6 @@ function Get-IniFile
 	}
 	return $ini
 }
-
 Function Write-Log
 {
 	[CmdletBinding()]
@@ -307,7 +399,6 @@ Function Write-Log
 	$Line = "$Stamp $Level $Message"
 	"$Stamp $Level $Message" | Out-File -Encoding utf8 $logfile -Append
 }
-
 function New-RandomPassword
 {
 	param (
@@ -331,7 +422,6 @@ function New-RandomPassword
 	
 	return -join $result
 }
-
 function Set-PermissionCertificate
 {
 	
@@ -381,7 +471,6 @@ function Set-PermissionCertificate
 	
 	
 }
-
 function Get-RegValue
 {
 	param (
@@ -398,7 +487,6 @@ function Get-RegValue
 		return "Not Found"
 	}
 }
-
 function Check-LocalGroupMembership
 {
 	param (
@@ -434,12 +522,10 @@ function Refresh-StatusBar
 {
 	$StatusBar.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
 }
-
 function Refresh-StatusBarMain
 {
 	$statusBarmain.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
 }
-
 function Test-WebServer
 {
 	# Check if IIS is installed
@@ -587,7 +673,6 @@ function Remove-PersonecFoldersOLD
 	$CleanupTextBox.AppendText("`n")
 	$cleanupTextBox.ScrollToCaret()
 }
-
 function Is-ApplicationInstalled
 {
 	param (
@@ -624,6 +709,62 @@ function Is-ApplicationInstalled
 #$isInstalled = Is-ApplicationInstalled -AppName $applicationName -Manufacturer $manufacturerName
 #Write-Output $isInstalled
 
+
+function Check-FileSize
+{
+	param (
+		[string]$FilePath,
+		# Path to the file
+		[int]$MinSizeKB,
+		# Minimum acceptable size in KB
+		[string]$ErrorTitle,
+		# Title for the error dialog
+		[string]$ErrorText,
+		# Text for the error dialog
+		[string]$SuccessTitle,
+		# Title for the success dialog
+		[string]$SuccessText,
+		# Text for the success dialog
+		[string]$WarningTitle,
+		# Title for the warning dialog
+		[string]$WarningText # Text for the warning dialog
+	)
+	
+	# Check if the file exists
+	if (-Not (Test-Path $FilePath))
+	{
+		# Special handling for RoboCopy files
+		if ($FilePath -match "\\\\.*\\.*")
+		{
+			# This is a simplistic check for a UNC path or RoboCopy file
+			# Show warning dialog for RoboCopy files
+			Add-Type -AssemblyName PresentationFramework
+			[System.Windows.MessageBox]::Show($WarningText, $WarningTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Warning)
+		}
+		else
+		{
+			Write-Host "File not found at path: $FilePath" -ForegroundColor Red
+		}
+		return
+	}
+	
+	# Get the file size in KB
+	$FileSize = (Get-Item $FilePath).Length / 1KB
+	
+	# Compare the file size
+	if ($FileSize -lt $MinSizeKB)
+	{
+		# Show dialog with red text for error
+		Add-Type -AssemblyName PresentationFramework
+		[System.Windows.MessageBox]::Show("$ErrorText File size: $FileSize KB", $ErrorTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
+	}
+	else
+	{
+		# Show dialog with green text for success
+		Add-Type -AssemblyName PresentationFramework
+		[System.Windows.MessageBox]::Show("$SuccessText File size: $FileSize KB", $SuccessTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Information)
+	}
+}
 
 
 #Sample variable that provides the location of the script

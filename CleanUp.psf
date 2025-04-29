@@ -410,9 +410,6 @@ $formCleanUp_Load={
 	$PIPpath = (Test-Path "$global:InstallDrive\Visma\wwwroot\$global:SelectedBigram\PIP")
 
 	
-
-
-	
 	if (Is-ApplicationInstalled -AppName "Personec P AG - $global:SelectedBigram" -Manufacturer 'visma')
 	{
 		$buttonPAGWeb.Enabled = $false
