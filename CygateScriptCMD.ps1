@@ -16,17 +16,17 @@ $scriptdate = Get-Date -Format yyyy-MM-dd
 
 # Define the main menu and submenus
 $mainMenu = @(
-	@{ Column1 = "A. Option A"; Column2 = "B. Option B" },
-	@{ Column1 = "C. Option C"; Column2 = "D. Option D" },
-	@{ Column1 = "E. Option E"; Column2 = "F. Option F" }
+	@{ Column1 = "[B]igram"; Column2 = "[T]ools" },
+	@{ Column1 = "[F]ilebackup"; Column2 = "[Q]ueries" },
+	@{ Column1 = "[C]leanup"; Column2 = "[S]top and Start" }
 )
 
 $subMenus = @{
-	"A" = @(
-		@{ Column1 = "1. Submenu A1"; Column2 = "2. Submenu A2" },
-		@{ Column1 = "3. Submenu A3"; Column2 = "4. Submenu A4" }
-	)
 	"B" = @(
+		@{ Column1 = "1. Select Bigram"; Column2 = "2. Set Values" },
+		@{ Column1 = "3. Select BackupFolder"; Column2 = "4. Create BackupFolder" }
+	)
+	"F" = @(
 		@{ Column1 = "1. Submenu B1"; Column2 = "2. Submenu B2" },
 		@{ Column1 = "3. Submenu B3"; Column2 = "4. Submenu B4" }
 	)

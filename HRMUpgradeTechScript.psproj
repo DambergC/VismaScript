@@ -3,7 +3,7 @@
   <FileID>11f82b5e-6550-455c-9093-0f5698ec7249</FileID>
   <ProjectType>0</ProjectType>
   <RememberPowerShellVersion>True</RememberPowerShellVersion>
-  <PowerShellVersion>Local Machine - PowerShell V5 (64 Bit)</PowerShellVersion>
+  <PowerShellVersion>Local Machine - PowerShell V7.5.0 (64 Bit)</PowerShellVersion>
   <Folders />
   <Files>
     <File Build="0">Startup.pss</File>
