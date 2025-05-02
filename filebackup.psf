@@ -385,7 +385,7 @@ $buttonFileBackup_Click={
 	$richtextbox1.AppendText("`n")
 	$richtextbox1.ScrollToCaret()
 	
-	Check-FileSize -FilePath "$InstallDrive\Visma\install\backup\$global:SelectedBackupfolder\Robocopy.log" -MinSizeKB 1000 -ErrorTitle 'ERROR' -ErrorText 'Something is not working, please check backup!' -SuccessTitle 'Success' -SuccessText 'Backup done!' -WarningTitle 'Warning' -WarningText 'Please check log and backup!'
+	Check-FileSize -FilePath "$InstallDrive\Visma\install\backup\$global:SelectedBackupfolder\Robocopy.log" -MinSizeKB 500 -ErrorTitle 'ERROR' -ErrorText 'Something is not working, please check backup!' -SuccessTitle 'Success' -SuccessText 'Backup done!' -WarningTitle 'Warning' -WarningText 'Please check log and backup!'
 	
 	<##
 	Add-Type -AssemblyName PresentationCore, PresentationFramework

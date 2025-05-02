@@ -18,6 +18,5 @@
     <File Build="0" ReferenceFunction="Show-Tools_psf">Tools.psf</File>
     <File Build="0" ReferenceFunction="Show-StopAndStart_psf">StopAndStart.psf</File>
     <File Build="0" ReferenceFunction="Show-About_psf">About.psf</File>
-    <File Build="0" Shared="False" ReferenceFunction="Invoke-CygateScriptCMD_ps1">CygateScriptCMD.ps1</File>
   </Files>
 </Project>

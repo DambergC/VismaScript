@@ -710,7 +710,7 @@ function Is-ApplicationInstalled
 #Write-Output $isInstalled
 
 
-function Check-FileSize
+function Check-FileSizeOLD
 {
 	param (
 		[string]$FilePath,
@@ -766,6 +766,61 @@ function Check-FileSize
 	}
 }
 
+function Check-FileSize
+{
+	param (
+		[string]$FilePath,
+		# Path to the file
+		[int]$MinSizeKB,
+		# Minimum acceptable size in KB
+		[string]$ErrorTitle,
+		# Title for the error dialog
+		[string]$ErrorText,
+		# Text for the error dialog
+		[string]$SuccessTitle,
+		# Title for the success dialog
+		[string]$SuccessText,
+		# Text for the success dialog
+		[string]$WarningTitle,
+		# Title for the warning dialog
+		[string]$WarningText # Text for the warning dialog
+	)
+	
+	# Check if the file exists
+	if (-Not (Test-Path $FilePath))
+	{
+		# Special handling for RoboCopy files
+		if ($FilePath -match "\\\\.*\\.*")
+		{
+			# This is a simplistic check for a UNC path or RoboCopy file
+			# Show warning dialog for RoboCopy files
+			Add-Type -AssemblyName PresentationFramework
+			[System.Windows.MessageBox]::Show($WarningText, $WarningTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Warning)
+		}
+		else
+		{
+			Write-Host "File not found at path: $FilePath" -ForegroundColor Red
+		}
+		return
+	}
+	
+	# Get the file size in KB and round down to the nearest whole number
+	$FileSize = [math]::Floor((Get-Item $FilePath).Length / 1KB)
+	
+	# Compare the file size
+	if ($FileSize -lt $MinSizeKB)
+	{
+		# Show dialog with red text for error
+		Add-Type -AssemblyName PresentationFramework
+		[System.Windows.MessageBox]::Show("$ErrorText File size: $FileSize KB", $ErrorTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
+	}
+	else
+	{
+		# Show dialog with green text for success
+		Add-Type -AssemblyName PresentationFramework
+		[System.Windows.MessageBox]::Show("$SuccessText File size: $FileSize KB", $SuccessTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Information)
+	}
+}
 
 #Sample variable that provides the location of the script
 [string]$ScriptDirectory = Get-ScriptDirectory
