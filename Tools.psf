@@ -587,13 +587,13 @@ $buttonDownloadVPBS_Click= {
 	$selectedBackupfolder = $global:SelectedBackupfolder
 	
 	$ToolTextbox.AppendText("`n")
-	$ToolTextbox.AppendText("Starting download PIN")
+	$ToolTextbox.AppendText("Starting download VPBS")
 	[XML]$xmlValues = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\$global:SelectedBigram.XML"
 	
 	$VPBSValue_1 = $xmlValues.Configuration.VPBSVersion_1
 	$VPBSValue_2 = $xmlValues.Configuration.VPBSVersion_2
 	
-	Write-Log -Level INFO -Message "Pinversion from XML $VPBSValue"
+	Write-Log -Level INFO -Message "VPBSversion from XML $VPBSValue"
 	
 	$zip = "VPBSDownload$VPBSValue_2.zip"
 	
@@ -604,7 +604,7 @@ $buttonDownloadVPBS_Click= {
 	$ToolTextbox.AppendText("VPBS downloaded")
 	Write-Log -Level INFO -Message "Finished downloading $zip"
 	$ToolTextbox.AppendText("`n")
-	$ToolTextbox.AppendText("Unblock PIN zip file $zip")
+	$ToolTextbox.AppendText("Unblock VPBS zip file $zip")
 	Write-Log -Level INFO -Message "Unblock VPBS zip file $zip"
 	Unblock-File -Path "$global:InstallDrive\Visma\Install\$zip" -Verbose
 	$ToolTextbox.AppendText("`n")

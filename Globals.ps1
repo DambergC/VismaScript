@@ -6,6 +6,26 @@ $global:CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().
 $global:SelectedBackupfolder = 'Select Folder'
 #requires -version 5.1
 #Sample function that provides the location of the script
+
+function Test-Elevation
+{
+    <#
+    .SYNOPSIS
+        Checks if the current PowerShell session is running with elevated (Administrator) privileges.
+    .OUTPUTS
+        Boolean
+    .EXAMPLE
+        if (-not (Test-Elevation)) {
+            Write-Warning "Please run this script as Administrator."
+            exit 1
+        }
+    #>
+	$currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+	$principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+	return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+
 function Get-ScriptDirectory
 {
 <#

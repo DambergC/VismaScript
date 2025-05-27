@@ -1065,7 +1065,7 @@ $buttonSaveBigram_Click={
 	$xmlWriter.Flush()
 	$xmlWriter.Close()
 	
-	
+	$richtextbox1.AppendText("`n")
 	$richtextbox1.AppendText("CREATED/Updated instance: $BIGRAM_XML")
 	$richtextbox1.AppendText("`n")
 	$richtextbox1.ScrollToCaret()
@@ -1189,6 +1189,6 @@ $TB_Bigram_TextChanged={
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>

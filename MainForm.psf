@@ -423,8 +423,8 @@ u/8K3bECbEq2PCSOJoZz+Z/f2MfYvtUdP9Bs+9tGGSXlnfZiu9Zk74QH2E5gTTBHT79TaLkY2gOB
 /vl/AQga1QkeQgAA</Form>
   <Code><![CDATA[#requires -version 5.1
 
-$currentVersion = "v1.0.17" # Replace with your current version
-$updateDate = "2025-05-02" # Replace with date
+$currentVersion = "v1.0.18" # Replace with your current version
+$updateDate = "2025-05-27" # Replace with date
 
 $ScriptDate.Text = $updateDate
 
@@ -432,6 +432,29 @@ $ScriptVersion.Text = $currentVersion
 $repo = "DambergC/VismaScript"
 $file = "CygateScript.ps1"
 $localPath = "$global:InstallDrive\Visma\Install\Backup\CygateScript.ps1"
+
+$Elevetaion = Test-Elevation
+
+if ($Elevetaion -eq $false)
+{
+	Add-Type -AssemblyName PresentationCore, PresentationFramework
+	$ButtonType = [System.Windows.MessageBoxButton]::OK
+	$MessageIcon = [System.Windows.MessageBoxImage]::Information
+	$MessageBody = "You must run the script in a elevated Powershell Prompt!"
+	$MessageTitle = "Not Elevated"
+	
+	$Result = [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon)
+	
+	
+	if ($Result -eq [System.Windows.MessageBoxResult]::OK)
+	{
+		
+		$MainForm.Close()
+		
+	}
+	
+	
+}
 
 
 function Get-LatestReleaseTag
@@ -508,6 +531,21 @@ $MainForm_Load={
 	#TODO: Initialize Form Controls here
 	#Requires -Version 5.1
 	
+	$TeliaLogo = @"
+████████╗███████╗██╗     ██╗ █████╗                                    
+╚══██╔══╝██╔════╝██║     ██║██╔══██╗                                   
+   ██║   █████╗  ██║     ██║███████║                                   
+   ██║   ██╔══╝  ██║     ██║██╔══██║                                   
+   ██║   ███████╗███████╗██║██║  ██║                                   
+   ╚═╝   ╚══════╝╚══════╝╚═╝╚═╝  ╚═╝                                   
+ ██████╗██╗   ██╗ ██████╗  █████╗ ████████╗███████╗     █████╗ ██████╗ 
+██╔════╝╚██╗ ██╔╝██╔════╝ ██╔══██╗╚══██╔══╝██╔════╝    ██╔══██╗██╔══██╗
+██║      ╚████╔╝ ██║  ███╗███████║   ██║   █████╗      ███████║██████╔╝
+██║       ╚██╔╝  ██║   ██║██╔══██║   ██║   ██╔══╝      ██╔══██║██╔══██╗
+╚██████╗   ██║   ╚██████╔╝██║  ██║   ██║   ███████╗    ██║  ██║██████╔╝
+ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═╝  ╚═╝╚═════╝                                                                                                
+"@
+	
 	
 	$group = "Visma Services Trusted Users"
 	$groupMembers = Get-LocalGroupMember -Group $group
@@ -516,6 +554,8 @@ $MainForm_Load={
 	if ($groupMembers.Name -contains $currentUser)
 	{
 		
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("$TeliaLogo")
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.AppendText("$global:CurrentUser is a member of the $group group.")
 		$richtextbox1.ScrollToCaret()
@@ -586,11 +626,7 @@ $MainForm_Load={
 		{
 			$result = $drive.Substring(0, [Math]::Min($drive.Length, 2))
 			$richtextbox1.AppendText("`n")
-			$richtextbox1.AppendText("SCRIPT START")
-			$richtextbox1.AppendText("`n")
 			$richtextbox1.AppendText("Backupfolder and script located on $drive")
-			$richtextbox1.AppendText("`n")
-			$richtextbox1.AppendText("Enjoy the script and relax...")
 			$richtextbox1.ScrollToCaret()
 		}
 	}
