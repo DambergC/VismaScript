@@ -983,14 +983,15 @@ $BigramListBox_SelectedIndexChanged={
 	$file = $BigramListBox.selecteditem
 	
 	[XML]$xmlValues = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\$file.XML"
+	[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
 	
 	$bigramValue = $xmlValues.configuration.CustomerBigram
-	$releseValue = $xmlValues.configuration.ReleaseVersion
-	$PPPValue = $xmlValues.configuration.PPP
-	$PUDValue = $xmlValues.configuration.PUD
-	$PFHValue = $xmlValues.configuration.PFH
-	$VPBSValue_1 = $xmlValues.Configuration.VPBSVersion_1
-	$VPBSValue_2 = $xmlValues.Configuration.VPBSVersion_2
+	$releseValue = $xmlValuesVersion.configuration.ReleaseVersion
+	$PPPValue = $xmlValuesVersion.configuration.PPP
+	$PUDValue = $xmlValuesVersion.configuration.PUD
+	$PFHValue = $xmlValuesVersion.configuration.PFH
+	$VPBSValue_1 = $xmlValuesVersion.Configuration.VPBSVersion_1
+	$VPBSValue_2 = $xmlValuesVersion.Configuration.VPBSVersion_2
 
 	
 	$richtextbox1.AppendText("`n")
@@ -1042,7 +1043,7 @@ $buttonSaveBigram_Click={
 		New-Item -Path "$InstallDrive\Visma\install\backup\Appsettings" -ItemType Directory
 	}
 	
-	#Create XML
+	#Create XML BIGRAM
 	$xmlWriter = New-Object System.XMl.XmlTextWriter("$installdrive\Visma\install\backup\Appsettings\$BIGRAM_XML.XML", $null)
 	$xmlWriter.Formatting = 'Indented'
 	$xmlWriter.Indentation = 1
@@ -1055,6 +1056,27 @@ $buttonSaveBigram_Click={
 	$xmlWriter.WriteElementString("ConfigVersion", "1.0")
 	$xmlWriter.WriteElementString("CustomerBigram", "$BIGRAM_XML")
 	$xmlWriter.WriteElementString("InstallDrive", "$InstallDrive")
+	$xmlWriter.WriteEndElement() # Configuration endnode
+	$xmlWriter.Flush()
+	$xmlWriter.Close()
+	
+	$richtextbox1.AppendText("`n")
+	$richtextbox1.AppendText("CREATED/Updated instance: $BIGRAM_XML")
+	$richtextbox1.AppendText("`n")
+	$richtextbox1.ScrollToCaret()
+	Write-Log -Level INFO -Message "Created/Updated instance: $BIGRAM_XML"
+	
+	#Create XML VERSION
+	$xmlWriter = New-Object System.XMl.XmlTextWriter("$installdrive\Visma\install\backup\Appsettings\Version.XML", $null)
+	$xmlWriter.Formatting = 'Indented'
+	$xmlWriter.Indentation = 1
+	$XmlWriter.IndentChar = "`t"
+	
+	$xmlWriter.WriteStartDocument()
+	
+	$xmlWriter.WriteStartElement("Configuration") # Configuration Startnode
+	
+	$xmlWriter.WriteElementString("ConfigVersion", "1.0")
 	$xmlWriter.WriteElementString("VPBSVersion_1", "$VPBSVERSION_1")
 	$xmlWriter.WriteElementString("VPBSVersion_2", "$VPBSVERSION_2")
 	$xmlWriter.WriteElementString("ReleaseVersion", "$TB_ReleaseVersion_XML")
@@ -1069,7 +1091,6 @@ $buttonSaveBigram_Click={
 	$richtextbox1.AppendText("CREATED/Updated instance: $BIGRAM_XML")
 	$richtextbox1.AppendText("`n")
 	$richtextbox1.ScrollToCaret()
-	Write-Log -Level INFO -Message "Created/Updated instance: $BIGRAM_XML"
 	update-config
 	
 	

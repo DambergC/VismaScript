@@ -179,7 +179,7 @@ function Update-ListBox
 		$ListBox.ValueMember = $ValueMember
 	}
 }
-function update-config
+<## function update-config
 {
 	$bigrams = (Get-ChildItem -Path "$InstallDrive\Visma\install\backup\Appsettings\").BaseName
 	
@@ -198,6 +198,30 @@ function update-config
 		
 	}
 	
+}
+##>
+
+function update-config
+{
+	# Exclude specific files (e.g., 'Test1', 'Test2') from bigrams
+	$excludedBigrams = @('Version.XML')
+	$bigrams = (Get-ChildItem -Path "$InstallDrive\Visma\install\backup\Appsettings\" -Exclude $excludedBigrams).BaseName
+	
+	$BigramListBox.Items.Clear()
+	foreach ($bigram in $bigrams)
+	{
+		Update-ListBox -ListBox $BigramListBox -Items $bigram -Append
+	}
+	
+	# Exclude multiple folders if needed
+	$excludedFolders = @('Appsettings')
+	$backupFolders = (Get-ChildItem -Path "$InstallDrive\visma\install\backup" -Directory -Exclude $excludedFolders).BaseName
+	
+	$BackupFolderListbox.Items.Clear()
+	foreach ($Backupfolder in $backupFolders)
+	{
+		Update-ListBox -ListBox $BackupFolderListbox -Items $Backupfolder -Append
+	}
 }
 function Copy-WithProgress
 {

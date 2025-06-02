@@ -8,12 +8,12 @@
     <File>MainForm.psf</File>
     <File>Globals.ps1</File>
     <File>CleanUp.psf</File>
-    <File>SQLqueries.psf</File>
     <File>TLScheck.psf</File>
     <File>Inventory.psf</File>
     <File>BigramBackupFolder.psf</File>
     <File>filebackup.psf</File>
     <File>Startup.pss</File>
     <File>StopAndStart.psf</File>
+    <File>SQLTools.psf</File>
   </OpenFiles>
 </ProjectState>
