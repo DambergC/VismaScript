@@ -925,6 +925,22 @@ function Remove-LogFiles
 	}
 }
 
+function Is-ProcessRunning
+{
+	param (
+		[Parameter(Mandatory = $true)]
+		[string]$ProcessName
+	)
+	$process = Get-Process -Name $ProcessName -ErrorAction SilentlyContinue
+	return $null -ne $process
+}
+
+# Example usage:
+# Returns True if "notepad" is running, otherwise False
+
+
+
+
 function Set-ControlTheme
 {
 	[CmdletBinding()]

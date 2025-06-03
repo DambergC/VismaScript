@@ -407,6 +407,19 @@ $formSQLTools_Load = {
 	}
 }
 
+if (Is-ProcessRunning -ProcessName PublicInstallerNextGen)
+{
+	$buttonPPPVersion.Enabled = $true
+	
+}
+
+else
+{
+	$buttonPPPVersion.Enabled = $false
+	
+	
+}
+
 $buttonDBUpgradeScript_Click = {
 	#TODO: Place custom script here
 	$selectedBigram = $global:SelectedBigram
@@ -920,6 +933,6 @@ SELECT * FROM dbo.RMRUNSCRIPT order by RUNDATETIME1 desc
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>
