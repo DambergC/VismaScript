@@ -410,7 +410,7 @@ $formCleanUp_Load={
 	$PIPpath = (Test-Path "$global:InstallDrive\Visma\wwwroot\$global:SelectedBigram\PIP")
 
 	
-	if (Is-ApplicationInstalled -AppName "Personec P AG - $global:SelectedBigram" -Manufacturer 'visma')
+	if (Is-ApplicationInstalled -AppName "Personec P AG - $global:SelectedBigram")
 	{
 		$buttonPAGWeb.Enabled = $false
 	}
@@ -418,13 +418,10 @@ $formCleanUp_Load={
 	{
 		$buttonPAGWeb.Enabled = $true
 	}
-	if ($PAGpath -eq $false)
-	{
-		$buttonPAGWeb.Enabled = $false
-	}
 	
 	
-	if (Is-ApplicationInstalled -AppName "Forhandling webadmin - $global:SelectedBigram" -Manufacturer 'visma')
+	
+	if (Is-ApplicationInstalled -AppName "Personec P Forhandling webadmin - $global:SelectedBigram" -Manufacturer 'visma')
 	{
 		$buttonPFHWebAdmin.Enabled = $false
 	}
@@ -432,13 +429,10 @@ $formCleanUp_Load={
 	{
 		$buttonPFHWebAdmin.Enabled = $true
 	}
-	if ($PFApath -eq $false)
-	{
-		$buttonPFHWebAdmin.Enabled = $false
-	}
+
 	
 
-	if (Is-ApplicationInstalled -AppName "Integration API - $global:SelectedBigram" -Manufacturer 'visma')
+	if (Is-ApplicationInstalled -AppName "Personec P Integration API - $global:SelectedBigram" -Manufacturer 'visma')
 	{
 		$buttonPIP.Enabled = $false
 	}
@@ -446,13 +440,10 @@ $formCleanUp_Load={
 	{
 		$buttonPIP.Enabled = $true
 	}
-	if ($PIOpath -eq $false)
-	{
-		$buttonPIP.Enabled = $false
-	}
+
 	
 
-	if (Is-ApplicationInstalled -AppName "Utdata plus - $global:SelectedBigram" -Manufacturer 'visma')
+	if (Is-ApplicationInstalled -AppName "Personec P Utdata plus - $global:SelectedBigram" -Manufacturer 'visma')
 	{
 		$buttonPUDWeb.Enabled = $false
 	}
@@ -460,7 +451,8 @@ $formCleanUp_Load={
 	{
 		$buttonPUDWeb.Enabled = $true
 	}
-	if (Is-ApplicationInstalled -AppName "P Web Server - $global:SelectedBigram" -Manufacturer 'visma')
+
+	if (Is-ApplicationInstalled -AppName "Visma Personec P Web Server - $global:SelectedBigram" -Manufacturer 'visma')
 	{
 		$buttonPPPWeb.Enabled = $false
 	}
@@ -468,7 +460,7 @@ $formCleanUp_Load={
 	{
 		$buttonPPPWeb.Enabled = $true
 	}
-	if (Is-ApplicationInstalled -AppName "Förhandling Win - $global:SelectedBigram" -Manufacturer 'visma')
+	if (Is-ApplicationInstalled -AppName "Personec P Forhandling Web - $global:SelectedBigram" -Manufacturer 'visma')
 	{
 		$buttonPFHWin.Enabled = $false
 	}
@@ -476,7 +468,7 @@ $formCleanUp_Load={
 	{
 		$buttonPFHWin.Enabled = $true
 	}
-	if (Is-ApplicationInstalled -AppName "Utdata Win - $global:SelectedBigram" -Manufacturer 'visma')
+	if (Is-ApplicationInstalled -AppName "Personec P Utdata Win - $global:SelectedBigram" -Manufacturer 'visma')
 	{
 		$buttonPUDWin.Enabled = $false
 	}
@@ -492,7 +484,7 @@ $formCleanUp_Load={
 	{
 		$buttonPPPWin.Enabled = $true
 	}
-	if (Is-ApplicationInstalled -AppName "Information Authorization Service - $global:SelectedBigram" -Manufacturer 'visma')
+	if (Is-ApplicationInstalled -AppName "Personec Information Authorization Service - $global:SelectedBigram" -Manufacturer 'visma')
 	{
 		$buttonPAAWin.Enabled = $false
 	}
@@ -500,7 +492,7 @@ $formCleanUp_Load={
 	{
 		$buttonPAAWin.Enabled = $true
 	}
-	if (Is-ApplicationInstalled -AppName "P Background Service - $global:SelectedBigram" -Manufacturer 'visma')
+	if (Is-ApplicationInstalled -AppName "Personec P Background Service - $global:SelectedBigram" -Manufacturer 'visma')
 	{
 		$buttonPBSWin.Enabled = $false
 	}

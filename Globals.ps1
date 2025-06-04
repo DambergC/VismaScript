@@ -717,7 +717,39 @@ function Remove-PersonecFoldersOLD
 	$CleanupTextBox.AppendText("`n")
 	$cleanupTextBox.ScrollToCaret()
 }
+
+
 function Is-ApplicationInstalled
+{
+	param (
+		[Parameter(Mandatory = $true)]
+		[string]$AppName,
+		[string]$Manufacturer
+	)
+	
+	$registryPaths = @(
+		'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
+		'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
+	)
+	
+	foreach ($path in $registryPaths)
+	{
+		$apps = @(Get-ItemProperty -Path $path -ErrorAction SilentlyContinue)
+		foreach ($app in $apps)
+		{
+			if ($null -ne $app.DisplayName -and $app.DisplayName -eq $AppName)
+			{
+				if (-not $Manufacturer -or ($null -ne $app.Publisher -and $app.Publisher -eq $Manufacturer))
+				{
+					return $true
+				}
+			}
+		}
+	}
+	return $false
+}
+
+function Is-ApplicationInstalledOLD
 {
 	param (
 		[string]$AppName,
@@ -737,7 +769,7 @@ function Is-ApplicationInstalled
 		
 		foreach ($app in $installedApps)
 		{
-			if ($app.DisplayName -like "*$AppName*" -and $app.Publisher -like "*$Manufacturer*")
+			if ($app.DisplayName -eq $AppName -and $app.Publisher -like "*$Manufacturer*")
 			{
 				return $true
 			}
