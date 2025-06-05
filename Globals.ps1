@@ -970,8 +970,161 @@ function Is-ProcessRunning
 # Example usage:
 # Returns True if "notepad" is running, otherwise False
 
+function Get-LatestReleaseTagORG
+{
+	param (
+		[string]$repo
+	)
+	$releasesUrl = "https://api.github.com/repos/$repo/releases/latest"
+	#$releasesUrl = "https://github.com/$repo/releases/latest/download/$file"
+	try
+	{
+		$response = Invoke-RestMethod -Uri $releasesUrl -Method Get
+		if ($response -and $response.tag_name)
+		{
+			return $response.tag_name
+			$releaseFound = "New Version: $response.tag_name ready to download"
+		}
+		else
+		{
+			$releaseFound = "No release tag found"
+			Write-Log -Level INFO -Message "No release tag found."
+		}
+	}
+	catch
+	{
+		$releaseFound = "Could not check for latest release"
+		Write-Log -Level INFO -Message "Failed to retrieve the latest release. Please check the repository name and try again."
+	}
+}
+
+function Get-LatestReleaseTag
+{
+	param (
+		[string]$repo
+	)
+	
+	$releasesUrl = "https://api.github.com/repos/$repo/releases/latest"
+	
+	try
+	{
+		# Attempt to access the GitHub API
+		$response = Invoke-RestMethod -Uri $releasesUrl -Method Get -ErrorAction Stop
+		
+		if ($response -and $response.tag_name)
+		{
+			# Access successful and tag found
+			$releaseFound = "New Version: $($response.tag_name) ready to download"
+			Write-Verbose $releaseFound
+			return $response.tag_name
+		}
+		else
+		{
+			# Access successful but no tag found
+			$releaseFound = "No release tag found"
+			
+			try
+			{
+				Write-Log -Level INFO -Message "No release tag found."
+			}
+			catch
+			{
+				Write-Verbose "No release tag found. (Write-Log function not available)"
+			}
+			
+			return $null
+		}
+	}
+	catch
+	{
+		# Access denied or other error
+		$releaseFound = "Could not check for latest release"
+		
+		try
+		{
+			Write-Log -Level INFO -Message "Failed to retrieve the latest release. Please check the repository name and try again."
+		}
+		catch
+		{
+			Write-Verbose "Failed to retrieve the latest release. Please check the repository name and try again. (Write-Log function not available)"
+		}
+		
+		# Show GUI dialog with OK button
+			Write-Host "Failed"
+		
+		return $false
+	}
+}
+
+function Download-LatestVersion
+{
+	param (
+		[string]$repo,
+		[string]$file,
+		[string]$localPath,
+		[string]$latestTag
+	)
+	#$downloadUrl = "https://raw.githubusercontent.com/$repo/main/$file"
+	$downloadUrl = "https://github.com/$repo/releases/latest/download/$file"
+	#Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing -Headers $headers -Method Get
+	Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing -Method Get
+}
+
+function Test-DownloadAccess
+{
+	param (
+		[Parameter(Mandatory = $true)]
+		[string]$repo,
+		[Parameter(Mandatory = $true)]
+		[string]$file,
+		[Parameter(Mandatory = $false)]
+		[string]$latestTag
+	)
+	
+	try
+	{
+		# Construct URL for the GitHub release
+		$downloadUrl = "https://github.com/$repo/releases/latest/download/$file"
+		
+		# Use a HEAD request to check if the file is accessible without downloading it
+		$response = Invoke-WebRequest -Uri $downloadUrl -Method Head -UseBasicParsing -ErrorAction Stop
+		
+		# If we got here, the request was successful, meaning we have access
+		Write-Verbose "Access check successful for: $downloadUrl"
+		return $true
+	}
+	catch
+	{
+		# Log the specific error for troubleshooting
+		Write-Verbose "Access check failed: $($_.Exception.Message)"
+		
+		# Display the GUI dialog with OK button
+		Add-Type -AssemblyName PresentationCore, PresentationFramework
+		$ButtonType = [System.Windows.MessageBoxButton]::OK
+		$MessageIcon = [System.Windows.MessageBoxImage]::Information
+		$MessageBody = "You are not member of local group with rights to run this script"
+		$MessageTitle = "Not authorized"
+		
+		$Result = [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon)
+		
+		# Return false for any kind of failure
+		return $false
+	}
+}
 
 
+function Download-LatestVersionVersionFile
+{
+	param (
+		[string]$repo,
+		[string]$file,
+		[string]$localPath,
+		[string]$latestTag
+	)
+	
+	$downloadUrlVersion = "https://github.com/$repo/releases/latest/download/$configFile"
+	Invoke-WebRequest -Uri $downloadUrlVersion -OutFile $localPathVersion -UseBasicParsing -Method Get
+}
 
 function Set-ControlTheme
 {
