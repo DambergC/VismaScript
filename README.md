@@ -41,8 +41,9 @@ Skulle det finnas kund som har sin installation på annan enhet en den som är d
 
 ![Hur man startar skriptet.](https://github.com/DambergC/VismaScript/blob/f3c6cc2df2366acbac5a6164e5042a71ea5b0712/ReadMEPictures/CMDstart.png)
 ### Ny version
+Inlagt i nya verionen 2.0.0 så är de värden som innan skrevs in under BIGRAM and BACKUPFOLDER i en separat fil som ligger under mappen APPSETTNGS och heter Version.XML. Denna fil kan ni efter nedladdning editera antingen i notepad++ eller i vårt skript under BIGRAM and BACKUPFOLDER. Skriver ni värden och väljer spara BIGRAM så sparas värdena i version.XML
 
-Om det skulle ha varit en uppgradering av skriptet tillgänglig så laddas den ned och sedan så kommer du få en dialogruta om att ny version av skriptet nedladdad och att du ombedes att starta om skriptet.
+Skulle ni sitta hos en kund som inte tillåter åtkomst till Github så får ni ladda ner den manuellt från vår Github.
 
 ## Visma Services Trusted Users
 För att få köra skriptet så är det samma krav som på Public Installer, du måste vara medlem i den lokala gruppen ”Visma Services Trusted Users” Hur du lägger till dig i gruppen går att göra det manuellt via Computer Management eller via powershell som du hittar i vårt uppgraderingsdokument.
@@ -50,7 +51,7 @@ För att få köra skriptet så är det samma krav som på Public Installer, du 
 ## Några Prereq för att komma åt vissa funktioner.
 För att komma åt funktionerna i skriptet så krävs att du väljer BIGRAM och BACKUKFOLDER under den knappen ”Bigram And BackupFolder”. Efter att du valt det så är övriga knappar öppna så att du kan komma åt underliggande funktioner.
 
-Det BIGRAM och BACKUPFOLDER du väljer kommer följa med dig under hela tiden så länge du har skriptet igång. Skulle det stängas ner av misstag så måste du åter välja det vid uppstart.
+Det BIGRAM AND BACKUPFOLDER du väljer kommer följa med dig under hela tiden så länge du har skriptet igång. Skulle det stängas ner av misstag så måste du åter välja det vid uppstart.
 ## Logfil
 Alla val man gör i skriptet skrivs i en logfil som ligger under d:\visma\install\backup. Logfilen används innan man valt BackupFolder och måste därför ligga under Visma\Backup och dessa logfiler får vid behov rensas manuellt. Det skapas en logfil för varje dag man kör skriptet.
 ## Funktioner
@@ -104,11 +105,13 @@ Följande inventeras just nu av Settings
 
 Om det är mer värden som kan vara nytta för oss tekniker under en uppgradering så är det enkelt att lägga till mer saker att inventera.
 
-## SQL Queries
+## SQL Tools
 
-Här skapas SQL Queries som underlättar vårt arbete. Viktigt är att rätt värden är satt under Bigram och Backupfolder.
+Här skapas SQL Queries som underlättar vårt arbete.
+Här är lite nytt med queries direkt mot databasen för att kolla version och vilka skript som körts. Detta kräver att PIN är igång då skriptet plockar värden från en avkrypterad BIGRAM_applications.XML.
+Det finns också möjlighet att få ut SQL queries om du behöver köra frågorna manuellt vid behov.
 
-![SQL queries](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/SQLqueries.png)
+![image](https://github.com/user-attachments/assets/3c0d52a3-3fdb-4da0-bce0-9a7c36a52cfb)
 
 ### DBupgrade
 SQL Queries för att uppgradera PPP PUD och PUF.
