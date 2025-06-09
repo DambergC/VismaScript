@@ -3,8 +3,9 @@
 	<ConfigVersion>1.0</ConfigVersion>
 	<VPBSVersion_1>251</VPBSVersion_1>
 	<VPBSVersion_2>254</VPBSVersion_2>
-	<ReleaseVersion>25040</ReleaseVersion>
-	<PPP>25040</PPP>
+	<FDNVersion>25050</FDNVersion>
+	<HRMVersion>25060</HRMVersion>
+	<PPP>25060</PPP>
 	<PUD>25040</PUD>
 	<PFH>25040</PFH>
 </Configuration>

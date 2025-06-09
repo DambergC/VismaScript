@@ -1041,10 +1041,10 @@ $buttonPPPVersion_Click = {
 	$selectedBigram = $global:SelectedBigram
 	
 	[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
-	$ReleaseVersionXML = $xmlValuesVersion.configuration.ReleaseVersion
+	$FDNVersionXML = $xmlValuesVersion.configuration.FDNVersion
 	
 	$BigramXMLFile = $SelectedBigram + "_applications.xml"
-	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$ReleaseVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
+	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$FDNVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
 	
 	$databaseserver = $xml.Applications.InstanceCommon.Parameters.DatabaseServer
 	$databaseusername = $xml.Applications.InstanceCommon.Parameters.DatabaseServerUser
@@ -1076,10 +1076,10 @@ $buttonPPPScriptrun_Click = {
 	$selectedBigram = $global:SelectedBigram
 	
 	[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
-	$ReleaseVersionXML = $xmlValuesVersion.configuration.ReleaseVersion
+	$FDNVersionXML = $xmlValuesVersion.configuration.FDNVersion
 	
 	$BigramXMLFile = $SelectedBigram + "_applications.xml"
-	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$ReleaseVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
+	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$FDNVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
 	
 	$databaseserver = $xml.Applications.InstanceCommon.Parameters.DatabaseServer
 	$databaseusername = $xml.Applications.InstanceCommon.Parameters.DatabaseServerUser
@@ -1111,10 +1111,10 @@ $buttonPUDVersion_Click={
 	$selectedBigram = $global:SelectedBigram
 	
 	[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
-	$ReleaseVersionXML = $xmlValuesVersion.configuration.ReleaseVersion
+	$FDNVersionXML = $xmlValuesVersion.configuration.FDNVersion
 	
 	$BigramXMLFile = $SelectedBigram + "_applications.xml"
-	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$ReleaseVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
+	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$FDNVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
 	
 	$databaseserver = $xml.Applications.InstanceCommon.Parameters.DatabaseServer
 	$databaseusername = $xml.Applications.InstanceCommon.Parameters.DatabaseServerUser
@@ -1147,10 +1147,10 @@ $buttonPFHVersion_Click = {
 	$selectedBigram = $global:SelectedBigram
 	
 	[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
-	$ReleaseVersionXML = $xmlValuesVersion.configuration.ReleaseVersion
+	$FDNVersionXML = $xmlValuesVersion.configuration.FDNVersion
 	
 	$BigramXMLFile = $SelectedBigram + "_applications.xml"
-	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$ReleaseVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
+	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$FDNVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
 	
 	$databaseserver = $xml.Applications.InstanceCommon.Parameters.DatabaseServer
 	$databaseusername = $xml.Applications.InstanceCommon.Parameters.DatabaseServerUser
@@ -1181,10 +1181,10 @@ $buttonPUDScriptrun_Click = {
 	$selectedBigram = $global:SelectedBigram
 	
 	[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
-	$ReleaseVersionXML = $xmlValuesVersion.configuration.ReleaseVersion
+	$FDNVersionXML = $xmlValuesVersion.configuration.FDNVersion
 	
 	$BigramXMLFile = $SelectedBigram + "_applications.xml"
-	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$ReleaseVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
+	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$FDNVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
 	
 	$databaseserver = $xml.Applications.InstanceCommon.Parameters.DatabaseServer
 	$databaseusername = $xml.Applications.InstanceCommon.Parameters.DatabaseServerUser
@@ -1215,10 +1215,10 @@ $buttonPFHScriptrun_Click={
 	$selectedBigram = $global:SelectedBigram
 	
 	[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
-	$ReleaseVersionXML = $xmlValuesVersion.configuration.ReleaseVersion
+	$FDNVersionXML = $xmlValuesVersion.configuration.FDNVersion
 	
 	$BigramXMLFile = $SelectedBigram + "_applications.xml"
-	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$ReleaseVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
+	[xml]$xml = (Get-Content "$global:InstallDrive\Visma\Install\FDN\pin\Client\Base\SW\$FDNVersionXML\$BigramXMLFile" -Raw) -replace '[^\u0009\u000A\u000D\u0020-\u007E]', ''
 	
 	$databaseserver = $xml.Applications.InstanceCommon.Parameters.DatabaseServer
 	$databaseusername = $xml.Applications.InstanceCommon.Parameters.DatabaseServerUser
