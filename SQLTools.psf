@@ -596,6 +596,7 @@ $buttonDBUpgradeScriptFile_Click = {
 	$selectedBackupfolder = $global:SelectedBackupfolder
 	
 	[XML]$xmlValues = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\$global:selectedbigram.XML"
+	[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
 	$QRRead = $global:SelectedBigram + "_QRRead"
 	$DB_PPP = $global:SelectedBigram + "_PPP"
 	$DB_PFH = $global:SelectedBigram + "_PFH"
@@ -608,10 +609,11 @@ $buttonDBUpgradeScriptFile_Click = {
 	$DBUser_SU = $global:SelectedBigram + "_SecurityUser"
 	$DBUser_NA = $global:SelectedBigram + "_NeptuneAdmin"
 	$DBUser_NU = $global:SelectedBigram + "_NeptuneUser"
-	$ReleaseVersionXML = $xmlValues.configuration.ReleaseVersion
-	$PPPXML = $xmlValues.configuration.PPP
-	$PUDXML = $xmlValues.configuration.PUD
-	$PFHXML = $xmlValues.configuration.PFH
+	$HRMVersionXML = $xmlValuesVersion.configuration.HRMversion
+	$PINVersionXML = $xmlValuesVersion.configuration.PINversion
+	$PPPXML = $xmlValuesVersion.configuration.PPP
+	$PUDXML = $xmlValuesVersion.configuration.PUD
+	$PFHXML = $xmlValuesVersion.configuration.PFH
 	
 	$QRReadPW = New-RandomPassword -length 14
 	
@@ -623,14 +625,14 @@ $buttonDBUpgradeScriptFile_Click = {
 ##Personic P
 USE $DB_PPP
 SELECT DBVERSION, PROGVERSION FROM dbo.OA0P0997
-:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$ReleaseVersionXML\mRSPu$PPPXML.sql
+:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$PPPXML\mRSPu$PPPXML.sql
 GO
-:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$ReleaseVersionXML\mRSPview.sql
-:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$ReleaseVersionXML\mRSPproc.sql
-:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$ReleaseVersionXML\mRSPtriggers.sql
-:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$ReleaseVersionXML\mRSPgra.sql
-:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$ReleaseVersionXML\msDBUPDATERIGHTSP.sql
-:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$ReleaseVersionXML\PPPds_Feltexter.sql
+:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$PPPXML\mRSPview.sql
+:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$PPPXML\mRSPproc.sql
+:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$PPPXML\mRSPtriggers.sql
+:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$PPPXML\mRSPgra.sql
+:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$PPPXML\msDBUPDATERIGHTSP.sql
+:r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$PPPXML\PPPds_Feltexter.sql
 GO
 SELECT DBVERSION, PROGVERSION FROM dbo.OA0P0997
 SELECT * FROM dbo.RMRUNSCRIPT order by RUNDATETIME1 desc
@@ -638,12 +640,12 @@ SELECT * FROM dbo.RMRUNSCRIPT order by RUNDATETIME1 desc
 #Personic U
 USE $DB_PUD
 SELECT * FROM dbo.PU_VERSIONSINFO
-:r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$ReleaseVersionXML\mPSUu$PUDXML.sql
+:r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$PUDXML\mPSUu$PUDXML.sql
 GO
-:r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$ReleaseVersionXML\mPSUproc.sql
-:r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$ReleaseVersionXML\mPSUview.sql
-:r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$ReleaseVersionXML\mPSUgra.sql
-:r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$ReleaseVersionXML\msdbupdaterightsU.sql
+:r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$PUDXML\mPSUproc.sql
+:r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$PUDXML\mPSUview.sql
+:r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$PUDXML\mPSUgra.sql
+:r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$PUDXML\msdbupdaterightsU.sql
 GO
 SELECT * FROM dbo.PU_VERSIONSINFO
 SELECT * FROM dbo.RMRUNSCRIPT order by RUNDATETIME1 desc
@@ -651,13 +653,13 @@ SELECT * FROM dbo.RMRUNSCRIPT order by RUNDATETIME1 desc
 ##Personic PFH
 USE $DB_PFH
 SELECT DBVERSION, PROGVERSION FROM dbo.OF0P0997
-:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$ReleaseVersionXML\mPSFu$PFHXML.sql
+:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$PFHXML\mPSFu$PFHXML.sql
 GO
-:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$ReleaseVersionXML\mPSFproc.sql
-:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$ReleaseVersionXML\mPSFview.sql
-:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$ReleaseVersionXML\mPSFgra.sql
-:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$ReleaseVersionXML\msDBUPDATERIGHTSF.sql
-:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$ReleaseVersionXML\PFHds_Feltexter.sql
+:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$PFHXML\mPSFproc.sql
+:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$PFHXML\mPSFview.sql
+:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$PFHXML\mPSFgra.sql
+:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$PFHXML\msDBUPDATERIGHTSF.sql
+:r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$PFHXML\PFHds_Feltexter.sql
 GO
 SELECT DBVERSION, PROGVERSION FROM dbo.OF0P0997
 SELECT * FROM dbo.RMRUNSCRIPT order by RUNDATETIME1 desc
@@ -733,7 +735,7 @@ $buttonQRReadScriptClipboar_Click = {
 	$DBUser_SU = $selectedBigram + "_SecurityUser"
 	$DBUser_NA = $selectedBigram + "_NeptuneAdmin"
 	$DBUser_NU = $selectedBigram + "_NeptuneUser"
-	$ReleaseVersionXML = $xmlValues.configuration.ReleaseVersion
+	$HRMVersionXML = $xmlValues.configuration.ReleaseVersion
 	$PPPXML = $xmlValues.configuration.PPP
 	$PUDXML = $xmlValues.configuration.PUD
 	$PFHXML = $xmlValues.configuration.PFH

@@ -420,8 +420,8 @@ NiVbHhJHE8O5/M9v7ONr3+qOH2i2/W2jjJLyTml/15rsnfAA2wmsCebo6XcKLRdDeyDQP/8vCdDP
 oRZCAAA=</Form>
   <Code><![CDATA[#requires -version 5.1
 
-$currentVersion = "v2.0.1" # Replace with your current version
-$updateDate = "2025-06-09" # Replace with date
+$currentVersion = "v2.0.2" # Replace with your current version
+$updateDate = "2025-06-10" # Replace with date
 
 $ScriptDate.Text = $updateDate
 
