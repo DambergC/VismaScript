@@ -311,7 +311,7 @@ $formInventory_Load = {
 $buttonSystem_Click={
 	#TODO: Place custom script here
 	
-	$Services = "Scheduler", "Ciceron Server Manager", "NeptuneMB_$global:SelectedBigram", "PersonecPBatchManager$global:SelectedBigram", "PersonecPUtdataExportImportService$global:SelectedBigram", "RSPFlexService$global:SelectedBigram", "Visma.P-Background-Service - $global:SelectedBigram", "Visma.PersonecP.PufIa.WinSvc - $global:SelectedBigram"
+	$services = "PBSScheduler_$global:SelectedBigram", "Scheduler", "Ciceron Server Manager", "NeptuneMB_$global:SelectedBigram", "PersonecPBatchManager$global:SelectedBigram", "PersonecPUtdataExportImportService$global:SelectedBigram", "RSPFlexService$global:SelectedBigram", "Visma.P-Background-Service - $global:SelectedBigram", "Visma.PersonecP.PufIa.WinSvc - $global:SelectedBigram"
 
 		
 		###################################
