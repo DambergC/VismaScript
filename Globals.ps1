@@ -6,6 +6,78 @@ $global:CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().
 $global:SelectedBackupfolder = 'Select Folder'
 #requires -version 5.1
 #Sample function that provides the location of the script
+#Install-Module sqlserver -Force
+
+function Install-NuGetPackage()
+{
+	$packageName = "NuGet";
+	# Check if the module is installed
+	try
+	{
+		$installedPackage = Get-PackageProvider -ListAvailable -Name $packageName -ErrorAction Stop
+	}
+	catch
+	{
+		Write-Host "Package $packageName not detected. Will continue to install. " 
+	}
+	if ($installedPackage)
+	{
+		# Package is installed, check if it's outdated
+		$installedVersion = $installedPackage.Version
+		$latestVersion = "2.8.5.201"
+		if ($installedVersion -lt $latestVersion)
+		{
+			Write-Host "Updating $packageName from version $installedVersion to $latestVersion" 
+			Update-PackageProvider -Name $packageName -Force
+		}
+		else
+		{
+			Write-Host "$packageName is already up-to-date (version $installedVersion)" 
+		}
+	}
+	else
+	{
+		# Module is not installed, install it
+		Write-Host "Installing $packageName"
+		Install-PackageProvider -Name $packageName -Force
+	}
+	# Import the package
+	Import-PackageProvider $packageName
+	return $true;
+}
+function Install-SqlServerModule()
+{
+	$moduleName = "SqlServer";
+	# Check if the module is installed
+	$installedModules = Get-Module -ListAvailable -Name $moduleName | Sort-Object -Property Version -Descending
+	if ($installedModules)
+	{
+		# Module is installed, check if it's outdated
+		# Get the version of the newest module
+		$installedVersion = $installedModules[0].Version.ToString()
+		$latestVersion = "22.1.1"
+		if ($installedVersion -lt $latestVersion)
+		{
+			Write-Host "Updating $moduleName from version $installedVersion to $latestVersion" 
+			Update-Module -Name $moduleName -Force
+		}
+		else
+		{
+			Write-Host "$moduleName is already up-to-date (version $installedVersion)"
+		}
+	}
+	else
+	{
+		# Module is not installed, install it
+		Write-Host "Installing $moduleName"
+		Install-Module -Name $moduleName -Force -AllowClobber
+	}
+	# Import the module
+	Import-Module $moduleName
+	return 1;
+}
+
+
 
 function Test-Elevation
 {
@@ -586,6 +658,66 @@ function Test-WebServer
 	}
 }
 function Remove-PersonecFolders
+{
+	param (
+		[string]$Path,
+		[string[]]$ExcludedFolders = @()
+	)
+	
+	if (-not (Test-Path $Path))
+	{
+		$CleanupTextBox.AppendText("Folder does not exist: $Path`n")
+		Write-Log -Level INFO -Message "Folder does not exist: $Path"
+		$CleanupTextBox.ScrollToCaret()
+		return
+	}
+	
+	$CleanupTextBox.AppendText("Start cleanup:`n$Path`n")
+	Write-Log -Level INFO -Message "Start cleanup: $Path"
+	$CleanupTextBox.ScrollToCaret()
+	
+	# Get excluded folders as full (resolved) paths
+	$ExcludedFoldersFullPaths = $ExcludedFolders | ForEach-Object {
+		[System.IO.Path]::GetFullPath((Join-Path -Path $Path -ChildPath $_))
+	}
+	
+	# Gather all items, filter out anything inside excluded folder(s)
+	$allItems = Get-ChildItem -Path $Path -Recurse -Force
+	
+	$itemsToRemove = $allItems | Where-Object {
+		$itemPath = [System.IO.Path]::GetFullPath($_.FullName)
+		-not ($ExcludedFoldersFullPaths | Where-Object { $itemPath -like "$_*" -or $itemPath.StartsWith("$_") })
+	}
+	
+	$CleanUpProgress.Maximum = $itemsToRemove.Count
+	$CleanUpProgress.Step = 1
+	$CleanUpProgress.Value = 0
+	
+	foreach ($item in $itemsToRemove)
+	{
+		try
+		{
+			Remove-Item -Path $item.FullName -Recurse -Force -ErrorAction Stop
+			$CleanupTextBox.AppendText("Removed: $($item.FullName)`n")
+			Write-Log -Level INFO -Message "Removed: $($item.FullName)"
+		}
+		catch
+		{
+			$CleanupTextBox.AppendText("Failed to remove: $($item.FullName)`n")
+			Write-Log -Level ERROR -Message "Failed to remove: $($item.FullName). Error: $_"
+		}
+		$CleanUpProgress.PerformStep()
+		$CleanUpProgress.Refresh()
+		$CleanupTextBox.ScrollToCaret()
+	}
+	
+	$CleanupTextBox.AppendText("CleanUp Finished`n")
+	Write-Log -Level INFO -Message "CleanUp Finished"
+	$CleanupTextBox.ScrollToCaret()
+}
+
+
+function Remove-PersonecFoldersOLD2
 {
 	param (
 		[string]$Path,

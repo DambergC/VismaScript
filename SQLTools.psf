@@ -1055,7 +1055,7 @@ $buttonPPPVersion_Click = {
 	$PPPDatabase = $SelectedBigram +"_PPP"
 	
 	#TODO: Place custom script here
-	Install-Module sqlserver
+	
 	
 	$sqlqueryVersion = @"
 USE $PPPDatabase
@@ -1090,7 +1090,7 @@ $buttonPPPScriptrun_Click = {
 	$PPPDatabase = $SelectedBigram + "_PPP"
 	
 	#TODO: Place custom script here
-	Install-Module sqlserver
+	
 	
 	$sqlqueryVersion = @"
 USE $PPPDatabase
@@ -1125,7 +1125,7 @@ $buttonPUDVersion_Click={
 	$PUDDatabase = $SelectedBigram + "_PUD"
 	
 	#TODO: Place custom script here
-	Install-Module sqlserver
+	
 	
 	$sqlqueryVersion = @"
 USE $PUDDatabase

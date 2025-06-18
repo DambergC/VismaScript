@@ -496,7 +496,8 @@ Else
 	
 }
 
-
+Install-NuGetPackage
+Install-SqlServerModule
 
 $MainForm_Load={
 	#TODO: Initialize Form Controls here
