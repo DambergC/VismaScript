@@ -669,6 +669,15 @@ $buttonCleanUp_Click={
 
 $buttonLoadLogfile_Click={
 	#TODO: Place custom script here
+	
+	$richtextbox1.DetectUrls = $true
+	
+	$richtextbox1.add_LinkClicked({
+			param ($sender,
+				$e)
+			Start-Process $e.LinkText
+		})
+	
 	$openfiledialog1.ShowDialog()
 	$logfile = $openfiledialog1.FileName
 	$variable = Get-Content $logfile -Raw | ForEach-Object { "$_`r`n" }

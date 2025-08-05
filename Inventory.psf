@@ -251,6 +251,14 @@ $formInventory_Load = {
 $buttonSystem_Click={
 	#TODO: Place custom script here
 	
+	$InventoryTextBox.DetectUrls = $true
+	
+	$InventoryTextBox.add_LinkClicked({
+			param ($sender,
+				$e)
+			Start-Process $e.LinkText
+		})
+	
 	$services = "PBSScheduler_$global:SelectedBigram", "Scheduler", "Ciceron Server Manager", "NeptuneMB_$global:SelectedBigram", "PersonecPBatchManager$global:SelectedBigram", "PersonecPUtdataExportImportService$global:SelectedBigram", "RSPFlexService$global:SelectedBigram", "Visma.P-Background-Service - $global:SelectedBigram", "Visma.PersonecP.PufIa.WinSvc - $global:SelectedBigram"
 
 		
@@ -396,6 +404,26 @@ $buttonSystem_Click={
 			Write-Log -Level INFO -Message "NO Application Pools"
 			
 		}
+		
+		$CertAndBindings = Get-IISBindingsWithCerts
+		
+		$InventoryTextBox.DetectUrls = $true
+		
+		$InventoryTextBox.add_LinkClicked({
+				param ($sender,
+					$e)
+				Start-Process $e.LinkText
+			})
+		
+		
+		$resultCertAndBindings = $CertAndBindings | Out-String
+		
+		$InventoryTextBox.AppendText("Cert and Bindings:`n")
+		$InventoryTextBox.AppendText($resultCertAndBindings)
+		$InventoryTextBox.ScrollToCaret()
+		Write-Log -Level INFO -Message " Cert and Bindings:"
+		Write-Log -Level INFO -Message $resultCertAndBindings
+		
 	}
 	
 	else

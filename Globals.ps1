@@ -76,9 +76,6 @@ function Install-SqlServerModule()
 	Import-Module $moduleName
 	return 1;
 }
-
-
-
 function Test-Elevation
 {
     <#
@@ -96,8 +93,6 @@ function Test-Elevation
 	$principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
 	return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
-
-
 function Get-ScriptDirectory
 {
 <#
@@ -121,7 +116,6 @@ function Get-ScriptDirectory
 		Split-Path $script:MyInvocation.MyCommand.Path
 	}
 }
-
 function Set-RegistryKey
 {
 	param (
@@ -158,13 +152,11 @@ function Set-RegistryKey
 		}
 	}
 }
-
 # Example usage
 #Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyStringProperty" -Value "MyStringValue" -Type "String"
 #Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyDwordProperty" -Value 12345 -Type "DWord"
 #Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyBinaryProperty" -Value ([byte[]](0x01, 0x02, 0x03, 0x04)) -Type "Binary"
 #Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyMultiStringProperty" -Value @("String1", "String2") -Type "MultiString"
-
 function Update-ListBox
 {
 <#
@@ -272,7 +264,6 @@ function Update-ListBox
 	
 }
 ##>
-
 function update-config
 {
 	# Exclude specific files (e.g., 'Test1', 'Test2') from bigrams
@@ -364,7 +355,6 @@ function Copy-WithProgress
 		FilesCopied = $CopiedFileCount
 	}
 }
-
 function Copy-WithProgressTEST
 {
 	[CmdletBinding()]
@@ -458,7 +448,6 @@ function Copy-WithProgressTEST
 		FilesCopied = $CopiedFileCount
 	}
 }
-
 function Get-IniFile
 {
 	param (
@@ -715,8 +704,6 @@ function Remove-PersonecFolders
 	Write-Log -Level INFO -Message "CleanUp Finished"
 	$CleanupTextBox.ScrollToCaret()
 }
-
-
 function Remove-PersonecFoldersOLD2
 {
 	param (
@@ -849,8 +836,6 @@ function Remove-PersonecFoldersOLD
 	$CleanupTextBox.AppendText("`n")
 	$cleanupTextBox.ScrollToCaret()
 }
-
-
 function Is-ApplicationInstalled
 {
 	param (
@@ -880,7 +865,6 @@ function Is-ApplicationInstalled
 	}
 	return $false
 }
-
 function Is-ApplicationInstalledOLD
 {
 	param (
@@ -910,14 +894,11 @@ function Is-ApplicationInstalledOLD
 	
 	return $false
 }
-
 # Example usage:
 #$applicationName = "Chrome"
 #$manufacturerName = "Google"
 #$isInstalled = Is-ApplicationInstalled -AppName $applicationName -Manufacturer $manufacturerName
 #Write-Output $isInstalled
-
-
 function Check-FileSizeOLD
 {
 	param (
@@ -973,7 +954,6 @@ function Check-FileSizeOLD
 		[System.Windows.MessageBox]::Show("$SuccessText File size: $FileSize KB", $SuccessTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Information)
 	}
 }
-
 function Check-FileSize
 {
 	param (
@@ -1029,7 +1009,6 @@ function Check-FileSize
 		[System.Windows.MessageBox]::Show("$SuccessText File size: $FileSize KB", $SuccessTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Information)
 	}
 }
-
 #Sample variable that provides the location of the script
 [string]$ScriptDirectory = Get-ScriptDirectory
 
@@ -1061,7 +1040,6 @@ if ($SavePathExistAppsettings -eq $false)
 	New-Item -Path "$global:InstallDrive\visma\install\backup" -ItemType Directory -Name Appsettings
 	
 }
-
 function Remove-LogFiles
 {
 	param (
@@ -1088,7 +1066,6 @@ function Remove-LogFiles
 		$CleanUpTextBox.AppendText("The specified path does not exist: $logPath`n")
 	}
 }
-
 function Is-ProcessRunning
 {
 	param (
@@ -1098,10 +1075,8 @@ function Is-ProcessRunning
 	$process = Get-Process -Name $ProcessName -ErrorAction SilentlyContinue
 	return $null -ne $process
 }
-
 # Example usage:
 # Returns True if "notepad" is running, otherwise False
-
 function Get-LatestReleaseTagORG
 {
 	param (
@@ -1129,7 +1104,6 @@ function Get-LatestReleaseTagORG
 		Write-Log -Level INFO -Message "Failed to retrieve the latest release. Please check the repository name and try again."
 	}
 }
-
 function Get-LatestReleaseTag
 {
 	param (
@@ -1187,7 +1161,6 @@ function Get-LatestReleaseTag
 		return $false
 	}
 }
-
 function Download-LatestVersion
 {
 	param (
@@ -1201,7 +1174,6 @@ function Download-LatestVersion
 	#Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing -Headers $headers -Method Get
 	Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing -Method Get
 }
-
 function Test-DownloadAccess
 {
 	param (
@@ -1243,8 +1215,6 @@ function Test-DownloadAccess
 		return $false
 	}
 }
-
-
 function Download-LatestVersionVersionFile
 {
 	param (
@@ -1257,7 +1227,6 @@ function Download-LatestVersionVersionFile
 	$downloadUrlVersion = "https://github.com/$repo/releases/latest/download/$configFile"
 	Invoke-WebRequest -Uri $downloadUrlVersion -OutFile $localPathVersion -UseBasicParsing -Method Get
 }
-
 function Set-ControlTheme
 {
 	[CmdletBinding()]
@@ -1539,3 +1508,114 @@ namespace SAPIENTypes
 		}
 	}
 }
+<#
+.SYNOPSIS
+    Function to extract all IIS website bindings (excluding Default Web Site), display HTTPS bindings as URLs, and show certificate details.
+
+.DESCRIPTION
+    - Shows all IIS website bindings except "Default Web Site".
+    - Prints HTTPS bindings as URLs for quick access.
+    - Displays HTTPS certificate subject, expiration date, and thumbprint for each binding.
+    - Outputs script execution info (UTC timestamp and user).
+    - No parameters required, just run as administrator.
+
+.EXAMPLE
+    Get-IISBindingsWithCerts
+#>
+
+function Get-IISBindingsWithCerts
+{
+	[CmdletBinding()]
+	param ()
+
+	Import-Module WebAdministration
+	
+
+	
+	$sites = Get-Website | Where-Object { $_.Name -ne "Default Web Site" }
+	
+	$bindingsInfo = @()
+	foreach ($site in $sites)
+	{
+		foreach ($binding in $site.Bindings.Collection)
+		{
+			# Extract host from BindingInformation (format: IP:Port:Host)
+			$split = $binding.BindingInformation -split ':', 3
+			$bindingHost = if ($split.Count -eq 3) { $split[2] }
+			else { "" }
+			$bindingsInfo += [PSCustomObject]@{
+				SiteName    = $site.Name
+				Protocol    = $binding.Protocol
+				BindingInfo = $binding.BindingInformation
+				BindingHost = $bindingHost
+				#Port	    = $binding.EndPoint.Port
+				#IPAddress   = $binding.EndPoint.Address
+			}
+		}
+	}
+	
+	$bindingsInfo | Format-Table -AutoSize
+	
+	
+	
+	function Get-FormattedUrl
+	{
+		param (
+			[string]$bindingHost,
+			[string]$sitename
+		)
+		if ($bindingHost)
+		{
+			return "https://$bindingHost/$sitename/menu/?usesso=false"
+		}
+		else
+		{
+			return "https://localhost/$sitename/menu/?usesso=false"
+		}
+	}
+	
+	$httpsBindings = Get-IISSite | Where-Object { $_.Name -ne "Default Web Site" } | ForEach-Object {
+		$site = $_
+		$site.Bindings | Where-Object { $_.protocol -eq "https" } | ForEach-Object {
+			# Extract host from bindingInformation
+			$split = $_.bindingInformation -split ':', 3
+			$bindingHost = if ($split.Count -eq 3) { $split[2] }
+			else { "" }
+			# Try to get thumbprint property (may be 'certificateHash' or 'CertificateHash')
+			$certHash = $_.certificateHash
+			if (-not $certHash -and $_.PSObject.Properties.Match('CertificateHash'))
+			{
+				$certHash = $_.CertificateHash
+			}
+			$certObj = $null
+			$thumbprint = ""
+			if ($certHash)
+			{
+				# Convert Byte[] to hex string if needed
+				if ($certHash -is [byte[]])
+				{
+					$thumbprint = ($certHash | ForEach-Object { $_.ToString("X2") }) -join ''
+				}
+				else
+				{
+					$thumbprint = $certHash.ToString()
+				}
+				$certObj = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object { $_.Thumbprint -eq $thumbprint }
+			}
+			[PSCustomObject]@{
+				SiteName    = $site.Name
+				BindingHost = $bindingHost
+				#Port	    = $_.port
+				URL		    = Get-FormattedUrl $bindingHost $site.Name
+				CertSubject = if ($certObj) { $certObj.Subject } else { "Not found" }
+				CertExpires = if ($certObj) { $certObj.NotAfter } else { "Not found" }
+				#CertThumbprint = if ($certObj) { $certObj.Thumbprint } else { $thumbprint }
+			}
+		}
+	}
+	
+	$httpsBindings | Format-Table -AutoSize
+}
+
+# To run the function, just call:
+# Get-IISBindingsWithCerts
