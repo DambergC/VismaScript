@@ -1548,14 +1548,12 @@ function Get-IISBindingsWithCerts
 				Protocol    = $binding.Protocol
 				BindingInfo = $binding.BindingInformation
 				BindingHost = $bindingHost
-				#Port	    = $binding.EndPoint.Port
-				#IPAddress   = $binding.EndPoint.Address
 			}
 		}
 	}
 	
 	$bindingsInfo | Format-Table -AutoSize
-	
+
 	
 	
 	function Get-FormattedUrl
@@ -1613,8 +1611,8 @@ function Get-IISBindingsWithCerts
 			}
 		}
 	}
-	
-	$httpsBindings | Format-Table -AutoSize
+
+	$httpsBindings
 }
 
 # To run the function, just call:
