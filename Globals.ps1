@@ -116,6 +116,46 @@ function Get-ScriptDirectory
 		Split-Path $script:MyInvocation.MyCommand.Path
 	}
 }
+
+function Get-HighestFolderName
+{
+	param (
+		[string]$Path = "D:\Visma\Install\FDN\pin",
+		[switch]$Recurse
+	)
+	
+	# Verify the path exists
+	if (-not (Test-Path -Path $Path))
+	{
+		Write-Error "The specified path does not exist: $Path"
+		return
+	}
+	
+	# Get all folders within the specified path, with optional recursion
+	if ($Recurse)
+	{
+		$folders = Get-ChildItem -Path $Path -Directory -Recurse
+	}
+	else
+	{
+		$folders = Get-ChildItem -Path $Path -Directory
+	}
+	
+	# Filter folders with purely numeric names, sort descending, select top 1 name
+	$highestFolderName = $folders |
+	Where-Object { $_.Name -match '^\d+$' } |
+	Sort-Object { [int]$_.Name } -Descending |
+	Select-Object -First 1 |
+	ForEach-Object { $_.Name }
+	
+	return $highestFolderName
+}
+
+# Example usage:
+# Get-HighestFolderName
+# Get-HighestFolderName -Recurse
+
+
 function Set-RegistryKey
 {
 	param (
@@ -267,7 +307,7 @@ function Update-ListBox
 function update-config
 {
 	# Exclude specific files (e.g., 'Test1', 'Test2') from bigrams
-	$excludedBigrams = @('Version.XML')
+	$excludedBigrams = @('Version.XML','VPBS.XML')
 	$bigrams = (Get-ChildItem -Path "$InstallDrive\Visma\install\backup\Appsettings\" -Exclude $excludedBigrams).BaseName
 	
 	$BigramListBox.Items.Clear()
