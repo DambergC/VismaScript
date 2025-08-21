@@ -46,6 +46,7 @@ function Install-NuGetPackage()
 	return $true;
 }
 function Install-SqlServerModule()
+
 {
 	$moduleName = "SqlServer";
 	# Check if the module is installed
@@ -55,8 +56,8 @@ function Install-SqlServerModule()
 		# Module is installed, check if it's outdated
 		# Get the version of the newest module
 		$installedVersion = $installedModules[0].Version.ToString()
-		$latestVersion = "22.1.1"
-		if ($installedVersion -lt $latestVersion)
+		$latestVersion = "22.3.0"
+		if ($installedVersion -ne $latestVersion)
 		{
 			Write-Host "Updating $moduleName from version $installedVersion to $latestVersion" 
 			Update-Module -Name $moduleName -Force
@@ -74,8 +75,126 @@ function Install-SqlServerModule()
 	}
 	# Import the module
 	Import-Module $moduleName
-	return 1;
+
 }
+
+function Install-SqlServerModule_TEST
+{
+	[CmdletBinding()]
+	param (
+		[string]$ModuleName = 'SqlServer',
+		[string]$Repository = 'PSGallery',
+		[switch]$TrustRepository,
+		[switch]$RemoveOldVersions,
+		[version]$MinimumVersion,
+		[switch]$AllUsersScope
+	)
+	
+	$ErrorActionPreference = 'Stop'
+	
+	# Ensure we're on Windows PowerShell 5.1
+	if (-not ($PSVersionTable.PSVersion.Major -eq 5 -and $PSVersionTable.PSVersion.Minor -eq 1))
+	{
+		throw "This function is intended for Windows PowerShell 5.1. Detected $($PSVersionTable.PSVersion)."
+	}
+	
+	# Prefer TLS 1.2 for PSGallery/NuGet
+	try
+	{
+		[Net.ServicePointManager]::SecurityProtocol = `
+		[Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+	}
+	catch { }
+	
+	# Keep PackageManagement/PowerShellGet healthy on 5.1
+	$pmMin = [version]'1.4.8.1'
+	$psgMin = [version]'2.2.5.1'
+	
+	$pm = Get-Module -ListAvailable -Name PackageManagement | Sort-Object Version -Descending | Select-Object -First 1
+	if (-not $pm -or [version]$pm.Version -lt $pmMin)
+	{
+		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
+		Install-Module -Name PackageManagement -MinimumVersion $pmMin -Scope CurrentUser -Force -AllowClobber
+		Write-Verbose "PackageManagement updated to at least $pmMin. You may need to restart the session."
+	}
+	
+	$psg = Get-Module -ListAvailable -Name PowerShellGet | Sort-Object Version -Descending | Select-Object -First 1
+	if (-not $psg -or [version]$psg.Version -lt $psgMin)
+	{
+		Install-Module -Name PowerShellGet -MinimumVersion $psgMin -Scope CurrentUser -Force -AllowClobber
+		Write-Verbose "PowerShellGet updated to at least $psgMin. You may need to restart the session."
+	}
+	
+	# Ensure NuGet provider (required by PowerShellGet)
+	if (-not (Get-PackageProvider -Name NuGet -ListAvailable -ErrorAction SilentlyContinue))
+	{
+		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
+	}
+	
+	# Ensure PSGallery exists and optionally trust it
+	$repo = Get-PSRepository -Name $Repository -ErrorAction SilentlyContinue
+	if (-not $repo)
+	{
+		Register-PSRepository -Default
+		$repo = Get-PSRepository -Name $Repository -ErrorAction Stop
+	}
+	if ($TrustRepository -and $repo.InstallationPolicy -ne 'Trusted')
+	{
+		Set-PSRepository -Name $Repository -InstallationPolicy Trusted
+	}
+	
+	$scope = if ($AllUsersScope) { 'AllUsers' }
+	else { 'CurrentUser' }
+	
+	# Determine target version (latest or meeting MinimumVersion)
+	$installed = Get-InstalledModule -Name $ModuleName -AllVersions -ErrorAction SilentlyContinue
+	$findParams = @{ Name = $ModuleName; Repository = $Repository }
+	if ($MinimumVersion) { $findParams['MinimumVersion'] = $MinimumVersion }
+	$latest = Find-Module @findParams -ErrorAction Stop
+	$targetVersion = [version]$latest.Version
+	
+	if (-not $installed)
+	{
+		Write-Verbose "Installing $ModuleName $targetVersion (Scope=$scope)..."
+		Install-Module -Name $ModuleName -RequiredVersion $targetVersion -Repository $Repository -Scope $scope -Force -AllowClobber
+	}
+	else
+	{
+		$currentMax = ($installed | Sort-Object Version -Descending | Select-Object -First 1).Version
+		if ([version]$currentMax -lt $targetVersion)
+		{
+			Write-Verbose "Installing newer $ModuleName $targetVersion (Scope=$scope)..."
+			Install-Module -Name $ModuleName -RequiredVersion $targetVersion -Repository $Repository -Scope $scope -Force -AllowClobber
+		}
+		else
+		{
+			Write-Verbose "$ModuleName is up to date ($currentMax)."
+		}
+		
+		if ($RemoveOldVersions)
+		{
+			foreach ($m in ($installed | Where-Object { $_.Version -lt $targetVersion }))
+			{
+				try
+				{
+					Uninstall-Module -Name $ModuleName -RequiredVersion $m.Version -Force -ErrorAction Stop
+				}
+				catch
+				{
+					Write-Verbose "Could not remove $ModuleName $($m.Version): $($_.Exception.Message)"
+				}
+			}
+		}
+	}
+	
+	# Load the intended version
+	if (Get-Module -Name $ModuleName) { Remove-Module -Name $ModuleName -Force }
+	Import-Module -Name $ModuleName -RequiredVersion $targetVersion -Force -ErrorAction Stop | Out-Null
+	
+	return (Get-Module -Name $ModuleName).Version
+}
+
+
 function Test-Elevation
 {
     <#

@@ -1054,8 +1054,7 @@ $buttonPPPVersion_Click = {
 	
 	$PPPDatabase = $SelectedBigram +"_PPP"
 	
-	#TODO: Place custom script here
-	
+
 	
 	$sqlqueryVersion = @"
 USE $PPPDatabase
