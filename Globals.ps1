@@ -1417,7 +1417,7 @@ function Set-ControlTheme
 	{
 		$WindowColor = [System.Drawing.Color]::White
 		$ContainerColor = [System.Drawing.Color]::WhiteSmoke
-		$BackColor = [System.Drawing.Color]::Gainsboro
+		$BackColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
 		$ForeColor = [System.Drawing.Color]::Black
 		$BorderColor = [System.Drawing.Color]::DimGray
 		$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
