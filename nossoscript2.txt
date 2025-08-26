@@ -1,0 +1,59 @@
+#
+# Version 1.0 NJN
+# Skapar NoSSO Applikation i IIS och lägger in Applikationspool
+# D: måste finns
+#
+
+# Läs in parameters
+$BIGRAM = Read-Host -Prompt 'Skriv BIGRAM namnet'
+$FQDN = Read-Host -Prompt 'Skriv FQDN namnet'
+
+
+
+#Gör om till Stora och småbokstäver
+$BIGRAM = $BIGRAM.ToUpper()
+$FQDN = $FQDN.Tolower()
+
+
+#Kontrollera om web.config finns i katalogen tas allt bort.
+If (Test-Path D:\Visma\wwwroot\$BIGRAM\NOSSO\web.config){
+	Remove-Item D:\Visma\wwwroot\$BIGRAM\NOSSO\web.config
+    Remove-WebApplication -Name 'NoSSO' -Site ("{0}" -f $BIGRAM)
+    Remove-WebAppPool -Name ("{0} NOSSO" -f $BIGRAM)
+    Remove-Item D:\Visma\wwwroot\$BIGRAM\NOSSO -Force
+    
+}
+
+
+#Välj rättigeter
+$AR_IUSR = New-Object System.Security.AccessControl.FileSystemAccessRule('IUSR','ReadAndExecute','ContainerInherit,ObjectInherit','None','Allow')
+$AR_IIS_IUSRS = New-Object System.Security.AccessControl.FileSystemAccessRule('IIS_IUSRS','ReadAndExecute','ContainerInherit,ObjectInherit','None','Allow')
+
+#Vad ska Skrivas
+$text1 = '<?xml version="1.0" encoding="UTF-8"?>'
+$text2 = '<configuration>'
+$text3 = ' <system.webServer> '
+$text4 = '		<httpRedirect enabled="true" destination="https://' + $FQDN +'/' + $BIGRAM + '/Login/?wa=wsignin1.0&amp;wtrealm=https%3A%2F%2F' +$FQDN + '%2F'+ $BIGRAM + '%2FMenu%2F&amp;wctx=rm%3D0&amp;useSso=false" exactDestination="true" /> '
+$text5 = '	</system.webServer> '
+$text6 = '</configuration>'
+
+#Skapa katalogen
+New-Item -type directory -path ("D:\Visma\wwwroot\{0}\NOSSO" -f $BIGRAM) 
+
+#Fixa med rättigheter
+$AclPlan = Get-Acl ("D:\Visma\wwwroot\{0}\NOSSO" -f $BIGRAM)
+$AclPlan.SetAccessRule($AR_IUSR)
+$AclPlan.SetAccessRule($AR_IIS_IUSRS)
+#Sätt rättigheter
+Set-Acl ("D:\Visma\wwwroot\{0}\NOSSO" -f $BIGRAM) $AclPlan
+
+#Skapa Applikationspool
+New-WebAppPool -Name ("{0} NOSSO" -f $BIGRAM)
+Set-ItemProperty ("IIS:\AppPools\{0} NOSSO" -f $BIGRAM) -Name managedRuntimeVersion -Value 'v4.0'
+Set-ItemProperty ("IIS:\AppPools\{0} NOSSO" -f $BIGRAM) -Name enable32BitAppOnWin64 -Value 'True'
+
+#Skapa  WebbApplikation
+New-WebApplication -Name 'NoSSO' -Site ("{0}" -f $BIGRAM) -PhysicalPath ("D:\Visma\wwwroot\{0}\NOSSO" -f $BIGRAM) -ApplicationPool ("{0} NoSSO" -f $BIGRAM)
+
+#Skriv web.config
+Add-Content d:\Visma\wwwroot\$BIGRAM\NOSSO\web.config $text1,$text2,$text3,$text4,$text5,$text6

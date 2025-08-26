@@ -1,0 +1,31 @@
+# Define the folder path and web.config content
+$folderPath = "D:\visma\wwwroot\BIGRAM\BIGRAM\MenuNOSSO"
+$webConfigContent = @"
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+ <system.webServer> 
+		<httpRedirect enabled="true" destination="https://viw.kommun.se/BIGRAM/MENU?useSso=false" exactDestination="true" /> 
+	</system.webServer> 
+</configuration>
+"@
+
+# Create the folder
+New-Item -Path $folderPath -ItemType Directory -Force
+
+# Create the web.config file with the specified content
+$webConfigPath = Join-Path -Path $folderPath -ChildPath "web.config"
+Set-Content -Path $webConfigPath -Value $webConfigContent
+
+# Import the WebAdministration module
+Import-Module WebAdministration
+
+# Define the virtual directory and application pool names
+$virtualDirectoryName = "MenuNOSSO"
+$applicationPoolName = "BIGRAM Menu AppPool"
+$siteName = "Default Web Site"  # Change this to your actual site name
+
+# Create the virtual directory
+New-WebVirtualDirectory -Site $siteName -Name $virtualDirectoryName -PhysicalPath $folderPath
+
+# Convert the virtual directory to an application
+New-WebApplication -Site $siteName -Name $virtualDirectoryName -PhysicalPath $folderPath -ApplicationPool $applicationPoolName
