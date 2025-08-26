@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Configuration>
+	<ConfigVersion>1.0</ConfigVersion>
+	<VPBSVersion_1>251</VPBSVersion_1>
+	<VPBSVersion_2>254</VPBSVersion_2>
+	<FDNVersion>25050</FDNVersion>
+	<HRMVersion>25060</HRMVersion>
+	<PPP>25060</PPP>
+	<PUD>25040</PUD>
+	<PFH>25040</PFH>
+</Configuration>

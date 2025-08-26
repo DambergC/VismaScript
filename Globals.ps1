@@ -6,6 +6,212 @@ $global:CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().
 $global:SelectedBackupfolder = 'Select Folder'
 #requires -version 5.1
 #Sample function that provides the location of the script
+#Install-Module sqlserver -Force
+
+function Install-NuGetPackage()
+{
+	$packageName = "NuGet";
+	# Check if the module is installed
+	try
+	{
+		$installedPackage = Get-PackageProvider -ListAvailable -Name $packageName -ErrorAction Stop
+	}
+	catch
+	{
+		Write-Host "Package $packageName not detected. Will continue to install. " 
+	}
+	if ($installedPackage)
+	{
+		# Package is installed, check if it's outdated
+		$installedVersion = $installedPackage.Version
+		$latestVersion = "2.8.5.201"
+		if ($installedVersion -lt $latestVersion)
+		{
+			Write-Host "Updating $packageName from version $installedVersion to $latestVersion" 
+			Update-PackageProvider -Name $packageName -Force
+		}
+		else
+		{
+			Write-Host "$packageName is already up-to-date (version $installedVersion)" 
+		}
+	}
+	else
+	{
+		# Module is not installed, install it
+		Write-Host "Installing $packageName"
+		Install-PackageProvider -Name $packageName -Force
+	}
+	# Import the package
+	Import-PackageProvider $packageName
+	return $true;
+}
+function Install-SqlServerModule()
+
+{
+	$moduleName = "SqlServer";
+	# Check if the module is installed
+	$installedModules = Get-Module -ListAvailable -Name $moduleName | Sort-Object -Property Version -Descending
+	if ($installedModules)
+	{
+		# Module is installed, check if it's outdated
+		# Get the version of the newest module
+		$installedVersion = $installedModules[0].Version.ToString()
+		$latestVersion = "22.3.0"
+		if ($installedVersion -ne $latestVersion)
+		{
+			Write-Host "Updating $moduleName from version $installedVersion to $latestVersion" 
+			Update-Module -Name $moduleName -Force
+		}
+		else
+		{
+			Write-Host "$moduleName is already up-to-date (version $installedVersion)"
+		}
+	}
+	else
+	{
+		# Module is not installed, install it
+		Write-Host "Installing $moduleName"
+		Install-Module -Name $moduleName -Force -AllowClobber
+	}
+	# Import the module
+	Import-Module $moduleName
+
+}
+
+function Install-SqlServerModule_TEST
+{
+	[CmdletBinding()]
+	param (
+		[string]$ModuleName = 'SqlServer',
+		[string]$Repository = 'PSGallery',
+		[switch]$TrustRepository,
+		[switch]$RemoveOldVersions,
+		[version]$MinimumVersion,
+		[switch]$AllUsersScope
+	)
+	
+	$ErrorActionPreference = 'Stop'
+	
+	# Ensure we're on Windows PowerShell 5.1
+	if (-not ($PSVersionTable.PSVersion.Major -eq 5 -and $PSVersionTable.PSVersion.Minor -eq 1))
+	{
+		throw "This function is intended for Windows PowerShell 5.1. Detected $($PSVersionTable.PSVersion)."
+	}
+	
+	# Prefer TLS 1.2 for PSGallery/NuGet
+	try
+	{
+		[Net.ServicePointManager]::SecurityProtocol = `
+		[Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+	}
+	catch { }
+	
+	# Keep PackageManagement/PowerShellGet healthy on 5.1
+	$pmMin = [version]'1.4.8.1'
+	$psgMin = [version]'2.2.5.1'
+	
+	$pm = Get-Module -ListAvailable -Name PackageManagement | Sort-Object Version -Descending | Select-Object -First 1
+	if (-not $pm -or [version]$pm.Version -lt $pmMin)
+	{
+		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
+		Install-Module -Name PackageManagement -MinimumVersion $pmMin -Scope CurrentUser -Force -AllowClobber
+		Write-Verbose "PackageManagement updated to at least $pmMin. You may need to restart the session."
+	}
+	
+	$psg = Get-Module -ListAvailable -Name PowerShellGet | Sort-Object Version -Descending | Select-Object -First 1
+	if (-not $psg -or [version]$psg.Version -lt $psgMin)
+	{
+		Install-Module -Name PowerShellGet -MinimumVersion $psgMin -Scope CurrentUser -Force -AllowClobber
+		Write-Verbose "PowerShellGet updated to at least $psgMin. You may need to restart the session."
+	}
+	
+	# Ensure NuGet provider (required by PowerShellGet)
+	if (-not (Get-PackageProvider -Name NuGet -ListAvailable -ErrorAction SilentlyContinue))
+	{
+		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
+	}
+	
+	# Ensure PSGallery exists and optionally trust it
+	$repo = Get-PSRepository -Name $Repository -ErrorAction SilentlyContinue
+	if (-not $repo)
+	{
+		Register-PSRepository -Default
+		$repo = Get-PSRepository -Name $Repository -ErrorAction Stop
+	}
+	if ($TrustRepository -and $repo.InstallationPolicy -ne 'Trusted')
+	{
+		Set-PSRepository -Name $Repository -InstallationPolicy Trusted
+	}
+	
+	$scope = if ($AllUsersScope) { 'AllUsers' }
+	else { 'CurrentUser' }
+	
+	# Determine target version (latest or meeting MinimumVersion)
+	$installed = Get-InstalledModule -Name $ModuleName -AllVersions -ErrorAction SilentlyContinue
+	$findParams = @{ Name = $ModuleName; Repository = $Repository }
+	if ($MinimumVersion) { $findParams['MinimumVersion'] = $MinimumVersion }
+	$latest = Find-Module @findParams -ErrorAction Stop
+	$targetVersion = [version]$latest.Version
+	
+	if (-not $installed)
+	{
+		Write-Verbose "Installing $ModuleName $targetVersion (Scope=$scope)..."
+		Install-Module -Name $ModuleName -RequiredVersion $targetVersion -Repository $Repository -Scope $scope -Force -AllowClobber
+	}
+	else
+	{
+		$currentMax = ($installed | Sort-Object Version -Descending | Select-Object -First 1).Version
+		if ([version]$currentMax -lt $targetVersion)
+		{
+			Write-Verbose "Installing newer $ModuleName $targetVersion (Scope=$scope)..."
+			Install-Module -Name $ModuleName -RequiredVersion $targetVersion -Repository $Repository -Scope $scope -Force -AllowClobber
+		}
+		else
+		{
+			Write-Verbose "$ModuleName is up to date ($currentMax)."
+		}
+		
+		if ($RemoveOldVersions)
+		{
+			foreach ($m in ($installed | Where-Object { $_.Version -lt $targetVersion }))
+			{
+				try
+				{
+					Uninstall-Module -Name $ModuleName -RequiredVersion $m.Version -Force -ErrorAction Stop
+				}
+				catch
+				{
+					Write-Verbose "Could not remove $ModuleName $($m.Version): $($_.Exception.Message)"
+				}
+			}
+		}
+	}
+	
+	# Load the intended version
+	if (Get-Module -Name $ModuleName) { Remove-Module -Name $ModuleName -Force }
+	Import-Module -Name $ModuleName -RequiredVersion $targetVersion -Force -ErrorAction Stop | Out-Null
+	
+	return (Get-Module -Name $ModuleName).Version
+}
+
+
+function Test-Elevation
+{
+    <#
+    .SYNOPSIS
+        Checks if the current PowerShell session is running with elevated (Administrator) privileges.
+    .OUTPUTS
+        Boolean
+    .EXAMPLE
+        if (-not (Test-Elevation)) {
+            Write-Warning "Please run this script as Administrator."
+            exit 1
+        }
+    #>
+	$currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+	$principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+	return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
 function Get-ScriptDirectory
 {
 <#
@@ -29,6 +235,45 @@ function Get-ScriptDirectory
 		Split-Path $script:MyInvocation.MyCommand.Path
 	}
 }
+
+function Get-HighestFolderName
+{
+	param (
+		[string]$Path = "D:\Visma\Install\FDN\pin",
+		[switch]$Recurse
+	)
+	
+	# Verify the path exists
+	if (-not (Test-Path -Path $Path))
+	{
+		Write-Error "The specified path does not exist: $Path"
+		return
+	}
+	
+	# Get all folders within the specified path, with optional recursion
+	if ($Recurse)
+	{
+		$folders = Get-ChildItem -Path $Path -Directory -Recurse
+	}
+	else
+	{
+		$folders = Get-ChildItem -Path $Path -Directory
+	}
+	
+	# Filter folders with purely numeric names, sort descending, select top 1 name
+	$highestFolderName = $folders |
+	Where-Object { $_.Name -match '^\d+$' } |
+	Sort-Object { [int]$_.Name } -Descending |
+	Select-Object -First 1 |
+	ForEach-Object { $_.Name }
+	
+	return $highestFolderName
+}
+
+# Example usage:
+# Get-HighestFolderName
+# Get-HighestFolderName -Recurse
+
 
 function Set-RegistryKey
 {
@@ -66,13 +311,11 @@ function Set-RegistryKey
 		}
 	}
 }
-
 # Example usage
 #Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyStringProperty" -Value "MyStringValue" -Type "String"
 #Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyDwordProperty" -Value 12345 -Type "DWord"
 #Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyBinaryProperty" -Value ([byte[]](0x01, 0x02, 0x03, 0x04)) -Type "Binary"
 #Set-RegistryKey -Path "HKCU:\Software\MyApp" -Name "MyMultiStringProperty" -Value @("String1", "String2") -Type "MultiString"
-
 function Update-ListBox
 {
 <#
@@ -159,7 +402,7 @@ function Update-ListBox
 		$ListBox.ValueMember = $ValueMember
 	}
 }
-function update-config
+<## function update-config
 {
 	$bigrams = (Get-ChildItem -Path "$InstallDrive\Visma\install\backup\Appsettings\").BaseName
 	
@@ -178,6 +421,29 @@ function update-config
 		
 	}
 	
+}
+##>
+function update-config
+{
+	# Exclude specific files (e.g., 'Test1', 'Test2') from bigrams
+	$excludedBigrams = @('Version.XML','VPBS.XML')
+	$bigrams = (Get-ChildItem -Path "$InstallDrive\Visma\install\backup\Appsettings\" -Exclude $excludedBigrams).BaseName
+	
+	$BigramListBox.Items.Clear()
+	foreach ($bigram in $bigrams)
+	{
+		Update-ListBox -ListBox $BigramListBox -Items $bigram -Append
+	}
+	
+	# Exclude multiple folders if needed
+	$excludedFolders = @('Appsettings')
+	$backupFolders = (Get-ChildItem -Path "$InstallDrive\visma\install\backup" -Directory -Exclude $excludedFolders).BaseName
+	
+	$BackupFolderListbox.Items.Clear()
+	foreach ($Backupfolder in $backupFolders)
+	{
+		Update-ListBox -ListBox $BackupFolderListbox -Items $Backupfolder -Append
+	}
 }
 function Copy-WithProgress
 {
@@ -248,7 +514,6 @@ function Copy-WithProgress
 		FilesCopied = $CopiedFileCount
 	}
 }
-
 function Copy-WithProgressTEST
 {
 	[CmdletBinding()]
@@ -342,7 +607,6 @@ function Copy-WithProgressTEST
 		FilesCopied = $CopiedFileCount
 	}
 }
-
 function Get-IniFile
 {
 	param (
@@ -548,6 +812,64 @@ function Remove-PersonecFolders
 		[string[]]$ExcludedFolders = @()
 	)
 	
+	if (-not (Test-Path $Path))
+	{
+		$CleanupTextBox.AppendText("Folder does not exist: $Path`n")
+		Write-Log -Level INFO -Message "Folder does not exist: $Path"
+		$CleanupTextBox.ScrollToCaret()
+		return
+	}
+	
+	$CleanupTextBox.AppendText("Start cleanup:`n$Path`n")
+	Write-Log -Level INFO -Message "Start cleanup: $Path"
+	$CleanupTextBox.ScrollToCaret()
+	
+	# Get excluded folders as full (resolved) paths
+	$ExcludedFoldersFullPaths = $ExcludedFolders | ForEach-Object {
+		[System.IO.Path]::GetFullPath((Join-Path -Path $Path -ChildPath $_))
+	}
+	
+	# Gather all items, filter out anything inside excluded folder(s)
+	$allItems = Get-ChildItem -Path $Path -Recurse -Force
+	
+	$itemsToRemove = $allItems | Where-Object {
+		$itemPath = [System.IO.Path]::GetFullPath($_.FullName)
+		-not ($ExcludedFoldersFullPaths | Where-Object { $itemPath -like "$_*" -or $itemPath.StartsWith("$_") })
+	}
+	
+	$CleanUpProgress.Maximum = $itemsToRemove.Count
+	$CleanUpProgress.Step = 1
+	$CleanUpProgress.Value = 0
+	
+	foreach ($item in $itemsToRemove)
+	{
+		try
+		{
+			Remove-Item -Path $item.FullName -Recurse -Force -ErrorAction Stop
+			$CleanupTextBox.AppendText("Removed: $($item.FullName)`n")
+			Write-Log -Level INFO -Message "Removed: $($item.FullName)"
+		}
+		catch
+		{
+			$CleanupTextBox.AppendText("Failed to remove: $($item.FullName)`n")
+			Write-Log -Level ERROR -Message "Failed to remove: $($item.FullName). Error: $_"
+		}
+		$CleanUpProgress.PerformStep()
+		$CleanUpProgress.Refresh()
+		$CleanupTextBox.ScrollToCaret()
+	}
+	
+	$CleanupTextBox.AppendText("CleanUp Finished`n")
+	Write-Log -Level INFO -Message "CleanUp Finished"
+	$CleanupTextBox.ScrollToCaret()
+}
+function Remove-PersonecFoldersOLD2
+{
+	param (
+		[string]$Path,
+		[string[]]$ExcludedFolders = @()
+	)
+	
 	$folderexist = (Test-Path $Path)
 	
 	if ($folderexist -eq $true)
@@ -676,6 +998,35 @@ function Remove-PersonecFoldersOLD
 function Is-ApplicationInstalled
 {
 	param (
+		[Parameter(Mandatory = $true)]
+		[string]$AppName,
+		[string]$Manufacturer
+	)
+	
+	$registryPaths = @(
+		'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
+		'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
+	)
+	
+	foreach ($path in $registryPaths)
+	{
+		$apps = @(Get-ItemProperty -Path $path -ErrorAction SilentlyContinue)
+		foreach ($app in $apps)
+		{
+			if ($null -ne $app.DisplayName -and $app.DisplayName -eq $AppName)
+			{
+				if (-not $Manufacturer -or ($null -ne $app.Publisher -and $app.Publisher -eq $Manufacturer))
+				{
+					return $true
+				}
+			}
+		}
+	}
+	return $false
+}
+function Is-ApplicationInstalledOLD
+{
+	param (
 		[string]$AppName,
 		[string]$Manufacturer
 	)
@@ -693,7 +1044,7 @@ function Is-ApplicationInstalled
 		
 		foreach ($app in $installedApps)
 		{
-			if ($app.DisplayName -like "*$AppName*" -and $app.Publisher -like "*$Manufacturer*")
+			if ($app.DisplayName -eq $AppName -and $app.Publisher -like "*$Manufacturer*")
 			{
 				return $true
 			}
@@ -702,14 +1053,11 @@ function Is-ApplicationInstalled
 	
 	return $false
 }
-
 # Example usage:
 #$applicationName = "Chrome"
 #$manufacturerName = "Google"
 #$isInstalled = Is-ApplicationInstalled -AppName $applicationName -Manufacturer $manufacturerName
 #Write-Output $isInstalled
-
-
 function Check-FileSizeOLD
 {
 	param (
@@ -765,7 +1113,6 @@ function Check-FileSizeOLD
 		[System.Windows.MessageBox]::Show("$SuccessText File size: $FileSize KB", $SuccessTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Information)
 	}
 }
-
 function Check-FileSize
 {
 	param (
@@ -821,7 +1168,6 @@ function Check-FileSize
 		[System.Windows.MessageBox]::Show("$SuccessText File size: $FileSize KB", $SuccessTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Information)
 	}
 }
-
 #Sample variable that provides the location of the script
 [string]$ScriptDirectory = Get-ScriptDirectory
 
@@ -853,7 +1199,6 @@ if ($SavePathExistAppsettings -eq $false)
 	New-Item -Path "$global:InstallDrive\visma\install\backup" -ItemType Directory -Name Appsettings
 	
 }
-
 function Remove-LogFiles
 {
 	param (
@@ -880,7 +1225,167 @@ function Remove-LogFiles
 		$CleanUpTextBox.AppendText("The specified path does not exist: $logPath`n")
 	}
 }
-
+function Is-ProcessRunning
+{
+	param (
+		[Parameter(Mandatory = $true)]
+		[string]$ProcessName
+	)
+	$process = Get-Process -Name $ProcessName -ErrorAction SilentlyContinue
+	return $null -ne $process
+}
+# Example usage:
+# Returns True if "notepad" is running, otherwise False
+function Get-LatestReleaseTagORG
+{
+	param (
+		[string]$repo
+	)
+	$releasesUrl = "https://api.github.com/repos/$repo/releases/latest"
+	#$releasesUrl = "https://github.com/$repo/releases/latest/download/$file"
+	try
+	{
+		$response = Invoke-RestMethod -Uri $releasesUrl -Method Get
+		if ($response -and $response.tag_name)
+		{
+			return $response.tag_name
+			$releaseFound = "New Version: $response.tag_name ready to download"
+		}
+		else
+		{
+			$releaseFound = "No release tag found"
+			Write-Log -Level INFO -Message "No release tag found."
+		}
+	}
+	catch
+	{
+		$releaseFound = "Could not check for latest release"
+		Write-Log -Level INFO -Message "Failed to retrieve the latest release. Please check the repository name and try again."
+	}
+}
+function Get-LatestReleaseTag
+{
+	param (
+		[string]$repo
+	)
+	
+	$releasesUrl = "https://api.github.com/repos/$repo/releases/latest"
+	
+	try
+	{
+		# Attempt to access the GitHub API
+		$response = Invoke-RestMethod -Uri $releasesUrl -Method Get -ErrorAction Stop
+		
+		if ($response -and $response.tag_name)
+		{
+			# Access successful and tag found
+			$releaseFound = "New Version: $($response.tag_name) ready to download"
+			Write-Verbose $releaseFound
+			return $response.tag_name
+		}
+		else
+		{
+			# Access successful but no tag found
+			$releaseFound = "No release tag found"
+			
+			try
+			{
+				Write-Log -Level INFO -Message "No release tag found."
+			}
+			catch
+			{
+				Write-Verbose "No release tag found. (Write-Log function not available)"
+			}
+			
+			return $null
+		}
+	}
+	catch
+	{
+		# Access denied or other error
+		$releaseFound = "Could not check for latest release"
+		
+		try
+		{
+			Write-Log -Level INFO -Message "Failed to retrieve the latest release. Please check the repository name and try again."
+		}
+		catch
+		{
+			Write-Verbose "Failed to retrieve the latest release. Please check the repository name and try again. (Write-Log function not available)"
+		}
+		
+		# Show GUI dialog with OK button
+			Write-Host "Failed"
+		
+		return $false
+	}
+}
+function Download-LatestVersion
+{
+	param (
+		[string]$repo,
+		[string]$file,
+		[string]$localPath,
+		[string]$latestTag
+	)
+	#$downloadUrl = "https://raw.githubusercontent.com/$repo/main/$file"
+	$downloadUrl = "https://github.com/$repo/releases/latest/download/$file"
+	#Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing -Headers $headers -Method Get
+	Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UseBasicParsing -Method Get
+}
+function Test-DownloadAccess
+{
+	param (
+		[Parameter(Mandatory = $true)]
+		[string]$repo,
+		[Parameter(Mandatory = $true)]
+		[string]$file,
+		[Parameter(Mandatory = $false)]
+		[string]$latestTag
+	)
+	
+	try
+	{
+		# Construct URL for the GitHub release
+		$downloadUrl = "https://github.com/$repo/releases/latest/download/$file"
+		
+		# Use a HEAD request to check if the file is accessible without downloading it
+		$response = Invoke-WebRequest -Uri $downloadUrl -Method Head -UseBasicParsing -ErrorAction Stop
+		
+		# If we got here, the request was successful, meaning we have access
+		Write-Verbose "Access check successful for: $downloadUrl"
+		return $true
+	}
+	catch
+	{
+		# Log the specific error for troubleshooting
+		Write-Verbose "Access check failed: $($_.Exception.Message)"
+		
+		# Display the GUI dialog with OK button
+		Add-Type -AssemblyName PresentationCore, PresentationFramework
+		$ButtonType = [System.Windows.MessageBoxButton]::OK
+		$MessageIcon = [System.Windows.MessageBoxImage]::Information
+		$MessageBody = "You are not member of local group with rights to run this script"
+		$MessageTitle = "Not authorized"
+		
+		$Result = [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon)
+		
+		# Return false for any kind of failure
+		return $false
+	}
+}
+function Download-LatestVersionVersionFile
+{
+	param (
+		[string]$repo,
+		[string]$file,
+		[string]$localPath,
+		[string]$latestTag
+	)
+	
+	$downloadUrlVersion = "https://github.com/$repo/releases/latest/download/$configFile"
+	Invoke-WebRequest -Uri $downloadUrlVersion -OutFile $localPathVersion -UseBasicParsing -Method Get
+}
 function Set-ControlTheme
 {
 	[CmdletBinding()]
@@ -912,7 +1417,7 @@ function Set-ControlTheme
 	{
 		$WindowColor = [System.Drawing.Color]::White
 		$ContainerColor = [System.Drawing.Color]::WhiteSmoke
-		$BackColor = [System.Drawing.Color]::Gainsboro
+		$BackColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
 		$ForeColor = [System.Drawing.Color]::Black
 		$BorderColor = [System.Drawing.Color]::DimGray
 		$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
@@ -1162,3 +1667,112 @@ namespace SAPIENTypes
 		}
 	}
 }
+<#
+.SYNOPSIS
+    Function to extract all IIS website bindings (excluding Default Web Site), display HTTPS bindings as URLs, and show certificate details.
+
+.DESCRIPTION
+    - Shows all IIS website bindings except "Default Web Site".
+    - Prints HTTPS bindings as URLs for quick access.
+    - Displays HTTPS certificate subject, expiration date, and thumbprint for each binding.
+    - Outputs script execution info (UTC timestamp and user).
+    - No parameters required, just run as administrator.
+
+.EXAMPLE
+    Get-IISBindingsWithCerts
+#>
+
+function Get-IISBindingsWithCerts
+{
+	[CmdletBinding()]
+	param ()
+
+	Import-Module WebAdministration
+	
+
+	
+	$sites = Get-Website | Where-Object { $_.Name -ne "Default Web Site" }
+	
+	$bindingsInfo = @()
+	foreach ($site in $sites)
+	{
+		foreach ($binding in $site.Bindings.Collection)
+		{
+			# Extract host from BindingInformation (format: IP:Port:Host)
+			$split = $binding.BindingInformation -split ':', 3
+			$bindingHost = if ($split.Count -eq 3) { $split[2] }
+			else { "" }
+			$bindingsInfo += [PSCustomObject]@{
+				SiteName    = $site.Name
+				Protocol    = $binding.Protocol
+				BindingInfo = $binding.BindingInformation
+				BindingHost = $bindingHost
+			}
+		}
+	}
+	
+	$bindingsInfo | Format-Table -AutoSize
+
+	
+	
+	function Get-FormattedUrl
+	{
+		param (
+			[string]$bindingHost,
+			[string]$sitename
+		)
+		if ($bindingHost)
+		{
+			return "https://$bindingHost/$sitename/menu/?usesso=false"
+		}
+		else
+		{
+			return "https://localhost/$sitename/menu/?usesso=false"
+		}
+	}
+	
+	$httpsBindings = Get-IISSite | Where-Object { $_.Name -ne "Default Web Site" } | ForEach-Object {
+		$site = $_
+		$site.Bindings | Where-Object { $_.protocol -eq "https" } | ForEach-Object {
+			# Extract host from bindingInformation
+			$split = $_.bindingInformation -split ':', 3
+			$bindingHost = if ($split.Count -eq 3) { $split[2] }
+			else { "" }
+			# Try to get thumbprint property (may be 'certificateHash' or 'CertificateHash')
+			$certHash = $_.certificateHash
+			if (-not $certHash -and $_.PSObject.Properties.Match('CertificateHash'))
+			{
+				$certHash = $_.CertificateHash
+			}
+			$certObj = $null
+			$thumbprint = ""
+			if ($certHash)
+			{
+				# Convert Byte[] to hex string if needed
+				if ($certHash -is [byte[]])
+				{
+					$thumbprint = ($certHash | ForEach-Object { $_.ToString("X2") }) -join ''
+				}
+				else
+				{
+					$thumbprint = $certHash.ToString()
+				}
+				$certObj = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object { $_.Thumbprint -eq $thumbprint }
+			}
+			[PSCustomObject]@{
+				SiteName    = $site.Name
+				BindingHost = $bindingHost
+				#Port	    = $_.port
+				URL		    = Get-FormattedUrl $bindingHost $site.Name
+				CertSubject = if ($certObj) { $certObj.Subject } else { "Not found" }
+				CertExpires = if ($certObj) { $certObj.NotAfter } else { "Not found" }
+				#CertThumbprint = if ($certObj) { $certObj.Thumbprint } else { $thumbprint }
+			}
+		}
+	}
+
+	$httpsBindings
+}
+
+# To run the function, just call:
+# Get-IISBindingsWithCerts
