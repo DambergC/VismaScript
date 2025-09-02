@@ -1399,7 +1399,7 @@ function Set-ControlTheme
 		[System.Collections.Hashtable]$CustomColor
 	)
 	
-	$Font = [System.Drawing.Font]::New('Segoe UI', 9)
+	$Font = [System.Drawing.Font]::New('Microsoft Sans Serif', 8.25)
 	
 	#Initialize the colors
 	if ($Theme -eq 'Dark')
@@ -1415,11 +1415,11 @@ function Set-ControlTheme
 	}
 	else
 	{
-		$WindowColor = [System.Drawing.Color]::White
+		$WindowColor = [System.Drawing.Color]::FromArgb(203, 216, 230)
 		$ContainerColor = [System.Drawing.Color]::WhiteSmoke
-		$BackColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
+		$BackColor = [System.Drawing.Color]::WhiteSmoke
 		$ForeColor = [System.Drawing.Color]::Black
-		$BorderColor = [System.Drawing.Color]::DimGray
+		$BorderColor = [System.Drawing.Color]::WhiteSmoke
 		$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
 		$SelectionForeColor = [System.Drawing.Color]::White
 		$MenuSelectionColor = [System.Drawing.Color]::LightSteelBlue
@@ -1564,11 +1564,11 @@ namespace SAPIENTypes
 		}
 		elseif ($target -is [System.Windows.Forms.GroupBox])
 		{
-			$target.FlatStyle = 'Flat'
+			$target.FlatStyle = 'Standard'
 		}
 		elseif ($target -is [System.Windows.Forms.Button])
 		{
-			$target.FlatStyle = 'Flat'
+			$target.FlatStyle = 'Standard'
 			$target.FlatAppearance.BorderColor = $BorderColor
 			$target.BackColor = $BackColor
 		}
@@ -1581,7 +1581,7 @@ namespace SAPIENTypes
 		elseif ($target -is [System.Windows.Forms.ComboBox])
 		{
 			$target.BackColor = $BackColor
-			$target.FlatStyle = 'Flat'
+			$target.FlatStyle = 'Standard'
 		}
 		elseif ($target -is [System.Windows.Forms.TextBox])
 		{
@@ -1614,7 +1614,7 @@ namespace SAPIENTypes
 			$target.HeaderBackColor = $ContainerColor
 			$target.HeaderForeColor = $ForeColor
 			$target.FlatMode = $true
-			$target.BorderStyle = 'FixedSingle'
+			$target.BorderStyle = 'Single'
 			$target.GridLineColor = $BorderColor
 			$target.AlternatingBackColor = $ContainerColor
 			$target.SelectionBackColor = $SelectionBackColor
@@ -1667,6 +1667,8 @@ namespace SAPIENTypes
 		}
 	}
 }
+
+
 <#
 .SYNOPSIS
     Function to extract all IIS website bindings (excluding Default Web Site), display HTTPS bindings as URLs, and show certificate details.
