@@ -1407,6 +1407,7 @@ function Set-ControlTheme
 		$WindowColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
 		$ContainerColor = [System.Drawing.Color]::FromArgb(45, 45, 45)
 		$BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
+		$richtextboxColorBG = [System.Drawing.Color]::FromArgb(0,0,0)
 		$ForeColor = [System.Drawing.Color]::White
 		$BorderColor = [System.Drawing.Color]::DimGray
 		$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
@@ -1416,10 +1417,11 @@ function Set-ControlTheme
 	else
 	{
 		$WindowColor = [System.Drawing.Color]::FromArgb(203, 216, 230)
-		$ContainerColor = [System.Drawing.Color]::WhiteSmoke
-		$BackColor = [System.Drawing.Color]::WhiteSmoke
+		$ContainerColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
+		$BackColor = [System.Drawing.Color]::FromArgb(225, 225, 225)
+		$richtextboxColorBG = [System.Drawing.Color]::FromArgb(250,250,250)
 		$ForeColor = [System.Drawing.Color]::Black
-		$BorderColor = [System.Drawing.Color]::WhiteSmoke
+		$BorderColor = [System.Drawing.Color]::FromArgb(173,173,173)
 		$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
 		$SelectionForeColor = [System.Drawing.Color]::White
 		$MenuSelectionColor = [System.Drawing.Color]::LightSteelBlue
@@ -1539,6 +1541,10 @@ namespace SAPIENTypes
 		{
 			$target.BackColor = $BorderColor
 		}
+		elseif ($target -is [System.Windows.Forms.Richtextbox])
+		{
+			$target.BackColor = $richtextboxColorBG
+		}
 		elseif ($target -is [System.Windows.Forms.PropertyGrid])
 		{
 			$target.BackColor = $BorderColor
@@ -1585,9 +1591,10 @@ namespace SAPIENTypes
 		}
 		elseif ($target -is [System.Windows.Forms.TextBox])
 		{
-			$target.BorderStyle = 'FixedSingle'
-			$target.BackColor = $BackColor
+			$target.BorderStyle = 'None'
+			$target.BackColor = $ContainerColor
 		}
+		
 		elseif ($target -is [System.Windows.Forms.DataGridView])
 		{
 			$target.GridColor = $BorderColor
@@ -1623,8 +1630,9 @@ namespace SAPIENTypes
 		elseif ($target -is [System.Windows.Forms.ToolStrip])
 		{
 			
-			$target.BackColor = $BackColor
+			$target.BackColor = $ContainerColor
 			$target.Renderer = $render
+
 			
 			foreach ($item in $target.Items)
 			{
