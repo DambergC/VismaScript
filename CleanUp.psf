@@ -420,6 +420,18 @@ $formCleanUp_Load={
 	#TODO: Initialize Form Controls here
 	Refresh-StatusBar
 	
+	$DisplayMode = Get-RegValue -RegPath 'HKLM:\SOFTWARE\Wow6432Node\Visma\TeliaCygate' -RegName DisplayModeScript
+	
+	if ($DisplayMode -eq 'Light')
+	{
+		Set-ControlTheme -Control $formCleanUp -Theme Light
+	}
+	
+	elseif ($DisplayMode -eq 'Dark')
+	{
+		Set-ControlTheme -Control $formCleanUp -Theme Dark
+	}
+	
 	If ($global:SelectedBigram -eq 'Select Bigram' -or $global:SelectedBackupfolder -eq 'Select Folder')
 	{
 		$richtextbox1.AppendText("`n")
@@ -819,6 +831,11 @@ $buttonWwwLog_Click={
 
 $buttonInstallFolder_Click={
 	#TODO: Place custom script here
+	Remove-PersonecFolders -Path "$global:InstallDrive\Visma\install\Support"
+	Remove-PersonecFolders -Path "$global:InstallDrive\Visma\install\Preinstall"
+	Remove-PersonecFolders -Path "$global:InstallDrive\Visma\install\Microsoft"
+	Remove-PersonecFolders -Path "$global:InstallDrive\Visma\install\HRM"
+	Remove-PersonecFolders -Path "$global:InstallDrive\Visma\install\FDN" -ExcludedFolders 'PiN'
 	
 }
 ]]></Code>

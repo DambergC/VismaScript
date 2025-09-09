@@ -785,15 +785,72 @@ $BigramBackupFolder_Load={
 	#TODO: Initialize Form Controls here
 	update-config
 	
-	[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
+	$InstallDrive = $global:InstallDrive
+	
+	$DisplayMode = Get-RegValue -RegPath 'HKLM:\SOFTWARE\Wow6432Node\Visma\TeliaCygate' -RegName DisplayModeScript
+	
+	if ($DisplayMode -eq 'Light')
+	{
+		Set-ControlTheme -Control $BigramBackupFolder -Theme Light
+	}
+	
+	elseif ($DisplayMode -eq 'Dark')
+	{
+		Set-ControlTheme -Control $BigramBackupFolder -Theme Dark
+	}
 	
 	
+	if (Test-Path "$global:InstallDrive\Visma\install\FDN\PIN\Client\Base\SW")
+	{
+		
+		$global:FDNversion = Get-HighestFolderName -Path "$InstallDrive\Visma\install\FDN\PIN\Client\Base\SW" -Recurse
+	}
+	else
+	{
+		$global:FDNversion = 'Download'
+		
+	}
 	
-	$FDNVersion.Text = Get-HighestFolderName -Path "$global:InstallDrive\Visma\install\FDN\PIN\Client\Base\SW"
-	$HRMVersion.Text = Get-HighestFolderName -Path "$global:InstallDrive\Visma\install\HRM" -Recurse
-	$TB_DB_PPP_Version.Text = Get-HighestFolderName -Path "$global:InstallDrive\Visma\install\hrm\ppp\DatabaseServer\Script\SW"
-	$TB_DB_PUD_Version.Text = Get-HighestFolderName -Path "$global:InstallDrive\Visma\install\hrm\PUD\DatabaseServer\Script\SW"
-	$TB_DB_PFH_Version.Text = Get-HighestFolderName -Path "$global:InstallDrive\Visma\install\hrm\PFH\DatabaseServer\Script\SW"
+	if (Test-Path "$global:InstallDrive\Visma\install\HRM\ppp")
+	{
+		$global:HRMversion = Get-HighestFolderName -Path "$InstallDrive\Visma\install\HRM" -Recurse
+	}
+	else
+	{
+		$global:HRMversion = 'Download'
+	}
+	
+	if (Test-Path "$InstallDrive\Visma\install\hrm\ppp\DatabaseServer\Script\SW")
+	{
+		$global:PPPversion = Get-HighestFolderName -Path "$InstallDrive\Visma\install\hrm\ppp\DatabaseServer\Script\SW" -Recurse
+	}
+	else
+	{
+		$global:PPPversion = 'Download'
+	}
+	
+	if (Test-Path "$InstallDrive\Visma\install\hrm\PUD\DatabaseServer\Script\SW")
+	{
+		$global:PUDversion = Get-HighestFolderName -Path "$InstallDrive\Visma\install\hrm\PUD\DatabaseServer\Script\SW" -Recurse
+	}
+	else
+	{
+		$global:PUDversion = 'Download'
+	}
+	if (Test-Path "$InstallDrive\Visma\install\HRM\PFH\DatabaseServer\Script\SW")
+	{
+		$global:PFHversion = Get-HighestFolderName -Path "$InstallDrive\Visma\install\HRM\PFH\DatabaseServer\Script\SW" -Recurse
+	}
+	else
+	{
+		$global:PFHversion = 'Download'
+	}
+
+	$FDNVersion.Text = $global:FDNversion
+	$HRMVersion.Text = $global:HRMversion
+	$TB_DB_PPP_Version.Text = $global:PPPversion
+	$TB_DB_PUD_Version.Text = $global:PUDversion
+	$TB_DB_PFH_Version.Text = $global:PFHversion
 	
 	Refresh-StatusBar
 	
@@ -810,16 +867,10 @@ $BigramBackupFolder_Load={
 $BigramBackupFolder.add_FormClosing(
 	{
 		
-		#TODO: Place custom script here
+
 		$InstallDrive = $global:InstallDrive
 		$BIGRAM_XML = $TB_Bigram.text
-		$FDNReleaseVersion_XML = $FDNVersion.text
-		$HRMReleaseVersion_XML = $HRMVersion.text
-		$DB_PPP_XML = $TB_DB_PPP_Version.text
-		$DB_PUD_XML = $TB_DB_PUD_Version.Text
-		$DB_PFH_XML = $TB_DB_PFH_Version.text
-		$VPBSVERSION_1 = $TB_VPBSVersion_1.Text
-		$VPBSVERSION_2 = $TB_VPBSVersion_2.Text
+
 		
 		
 		$SavePathExist = Test-Path -Path "$InstallDrive\Visma\install\backup\AppSettings"
@@ -853,26 +904,26 @@ $BigramBackupFolder.add_FormClosing(
 		Write-Log -Level INFO -Message "Created/Updated instance: $BIGRAM_XML"
 		
 		#Create XML VERSION
-		$xmlWriter = New-Object System.XMl.XmlTextWriter("$installdrive\Visma\install\backup\Appsettings\Version.XML", $null)
-		$xmlWriter.Formatting = 'Indented'
-		$xmlWriter.Indentation = 1
-		$XmlWriter.IndentChar = "`t"
+		#$xmlWriter = New-Object System.XMl.XmlTextWriter("$installdrive\Visma\install\backup\Appsettings\Version.XML", $null)
+		#$xmlWriter.Formatting = 'Indented'
+		#$xmlWriter.Indentation = 1
+		#$XmlWriter.IndentChar = "`t"
 		
-		$xmlWriter.WriteStartDocument()
+		#$xmlWriter.WriteStartDocument()
 		
-		$xmlWriter.WriteStartElement("Configuration") # Configuration Startnode
+		#$xmlWriter.WriteStartElement("Configuration") # Configuration Startnode
 		
-		$xmlWriter.WriteElementString("ConfigVersion", "1.0")
-		$xmlWriter.WriteElementString("VPBSVersion_1", "$VPBSVERSION_1")
-		$xmlWriter.WriteElementString("VPBSVersion_2", "$VPBSVERSION_2")
-		$xmlWriter.WriteElementString("FDNVersion", "$FDNReleaseVersion_XML")
-		$xmlWriter.WriteElementString("HRMVersion", "$HRMReleaseVersion_XML")
-		$xmlWriter.WriteElementString("PPP", "$DB_PPP_XML")
-		$xmlWriter.WriteElementString("PUD", "$DB_PUD_XML")
-		$xmlWriter.WriteElementString("PFH", "$DB_PFH_XML")
-		$xmlWriter.WriteEndElement() # Configuration endnode
-		$xmlWriter.Flush()
-		$xmlWriter.Close()
+		#$xmlWriter.WriteElementString("ConfigVersion", "1.0")
+		#$xmlWriter.WriteElementString("VPBSVersion_1", "$VPBSVERSION_1")
+		#$xmlWriter.WriteElementString("VPBSVersion_2", "$VPBSVERSION_2")
+		#$xmlWriter.WriteElementString("FDNVersion", "$FDNReleaseVersion_XML")
+		#$xmlWriter.WriteElementString("HRMVersion", "$HRMReleaseVersion_XML")
+		#$xmlWriter.WriteElementString("PPP", "$DB_PPP_XML")
+		#$xmlWriter.WriteElementString("PUD", "$DB_PUD_XML")
+		#$xmlWriter.WriteElementString("PFH", "$DB_PFH_XML")
+		#$xmlWriter.WriteEndElement() # Configuration endnode
+		#$xmlWriter.Flush()
+		#$xmlWriter.Close()
 		
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.AppendText("CREATED/Updated instance: $BIGRAM_XML")
@@ -894,7 +945,7 @@ $BigramListBox_SelectedIndexChanged={
 	$file = $BigramListBox.selecteditem
 	
 	[XML]$xmlValues = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\$file.XML"
-	[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
+	#[XML]$xmlValuesVersion = Get-Content "$global:InstallDrive\Visma\install\backup\appsettings\Version.XML"
 	
 	$bigramValue = $xmlValues.configuration.CustomerBigram
 
@@ -918,15 +969,8 @@ $BigramListBox_SelectedIndexChanged={
 	}
 
 $buttonSaveBigram_Click={
-	#TODO: Place custom script here
 	$InstallDrive = $global:InstallDrive
 	$BIGRAM_XML = $TB_Bigram.text
-	$FDNReleaseVersion_XML = $FDNVersion.text
-	$HRMReleaseVersion_XML = $HRMVersion.text
-	$DB_PPP_XML = $TB_DB_PPP_Version.text
-	$DB_PUD_XML = $TB_DB_PUD_Version.Text
-	$DB_PFH_XML = $TB_DB_PFH_Version.text
-
 	
 	$SavePathExist = Test-Path -Path "$InstallDrive\Visma\install\backup\AppSettings"
 	
@@ -958,30 +1002,9 @@ $buttonSaveBigram_Click={
 	$richtextbox1.ScrollToCaret()
 	Write-Log -Level INFO -Message "Created/Updated instance: $BIGRAM_XML"
 	
-	#Create XML VERSION
-	$xmlWriter = New-Object System.XMl.XmlTextWriter("$installdrive\Visma\install\backup\Appsettings\Version.XML", $null)
-	$xmlWriter.Formatting = 'Indented'
-	$xmlWriter.Indentation = 1
-	$XmlWriter.IndentChar = "`t"
 	
-	$xmlWriter.WriteStartDocument()
 	
-	$xmlWriter.WriteStartElement("Configuration") # Configuration Startnode
-	
-	$xmlWriter.WriteElementString("ConfigVersion", "1.0")
-	$xmlWriter.WriteElementString("FDNVersion", "$FDNReleaseVersion_XML")
-	$xmlWriter.WriteElementString("HRMVersion", "$HRMReleaseVersion_XML")
-	$xmlWriter.WriteElementString("PPP", "$DB_PPP_XML")
-	$xmlWriter.WriteElementString("PUD", "$DB_PUD_XML")
-	$xmlWriter.WriteElementString("PFH", "$DB_PFH_XML")
-	$xmlWriter.WriteEndElement() # Configuration endnode
-	$xmlWriter.Flush()
-	$xmlWriter.Close()
-	
-	$richtextbox1.AppendText("`n")
-	$richtextbox1.AppendText("CREATED/Updated instance: $BIGRAM_XML")
-	$richtextbox1.AppendText("`n")
-	$richtextbox1.ScrollToCaret()
+
 	update-config
 	
 	
@@ -995,6 +1018,27 @@ $buttonClose_Click={
 	
 	$BigramBackupFolder.Close()
 }
+
+
+$BigramBackupFolder.add_Closing(
+	{
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("Versions downloaded on server:")
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("FDN version on server: $global:FDNversion")
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("HRM version on server: $global:HRMversion")
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("PPP version on server: $global:PPPversion")
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("PUD version on server: $Global:PUDversion")
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("PFH version on server: $Global:PFHversion")
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.ScrollToCaret()
+	}
+)
+
 
 
 $buttonDeleteFolder_Click={

@@ -323,19 +323,31 @@ w9VH2yD/oV9fZPmNj63efz0jh0HgOp/+guaOd0MIVT3QO8wPXI/dWzbb96Zmm6uGa+gxxbn8SSqf
 O98i6q0pfRNAggjxy5qSRO9qEtze0+9qzogt0lf57Tc7b80/IUutYVWSwer7bGD5oW7zd0KybkwU
 13a99FXPC3e239SQgrM22UPLP/yGV3LKxnr6TdWlPDBjAveYef2Z6emjH9PWWe5AbW11/6nKSoIu
 VhbHldIJWCo5sp8nri1eDpcWtGvlVg8/+6fYsekx35d172bOPFtfokrciHndB2bb6J7hyHKfpVU8
-LZ3mi/kk4nJC205v+jmZ60Z3P6KmglBMrKZdfSeWkiSco3a331zv1ZKwXW5+80y3Xf/A7AbHeCD5
+LZ3mi6Uk4nJC205v+jmZ60Z3P6KmglBMrKZdfSeWkiSco3a331zv1ZKwXW5+80y3Xf/A7AbHeCD5
 yi4GmJ6kOpb5sF1md7yu10Of+QPdtkbr+azotp8kg1RLt10TLRWHilmoOwazEzR7Fs65KKJyxENr
 HCcnsWDOiwfrJZfIqrj3/KVPZ/9LCggtR3GnMxz9nc2ofYdhh57lmG+7zue5FoH+OUUQEzoIKYs/
 PTueevqoV2HfhbMki5Ynq4r7S+5P9D9edhjOXr2VEuvtbUC/uaPFps+8uWUw/2PO1nKdJClCSWF6
 buiMalPdZA196YbB45blIH+iwpYrJjGDTXt6MdLDlkgHyiaJcT7JxgtSB4D6razqBaNfcN1Oa52v
 KP1Eu7uX0n8e6Kcq/+wA5buzLyz8Zz6/pO4xb2u17hfSfDGJELfcHsf4qXJPsrfaNPpkeH4zqcc8
 fkmZu7OvpfKc+AFj/2yRJ8G04elfUuOcxZ8j8Y5lPNCAZHfxK7Zd8RObjU4Pkzv95QDK1XV819YR
-WmmW5NnEhmpz9AcLB23cthAnf2QgFHAPJyVaXj/pN9EjBi7f/Vu3jYvHj/7VvyGZvzSUMgAA</Form>
+WmmW5NnEhmpz9AcLB23cthAnf2QgFHAPJyVaXj/pN9EjBi7f/Vu3jYvHj/7Vv/FeMMyUMgAA</Form>
   <Code><![CDATA[
 $formStopAndStart_Load = {
 	#TODO: Initialize Form Controls here
 	
 	Refresh-StatusBar
+	
+	$DisplayMode = Get-RegValue -RegPath 'HKLM:\SOFTWARE\Wow6432Node\Visma\TeliaCygate' -RegName DisplayModeScript
+	
+	if ($DisplayMode -eq 'Light')
+	{
+		Set-ControlTheme -Control $formStopAndStart -Theme Light
+	}
+	
+	elseif ($DisplayMode -eq 'Dark')
+	{
+		Set-ControlTheme -Control $formStopAndStart -Theme Dark
+	}
 	
 	If ($global:SelectedBigram -eq 'Select Bigram' -or $global:SelectedBackupfolder -eq 'Select Folder' )
 	{
@@ -690,6 +702,6 @@ $buttonCheckAfterUpgrade_Click = {
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>

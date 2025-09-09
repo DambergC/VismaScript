@@ -4,6 +4,11 @@
 $global:SelectedBigram = 'Select Bigram'
 $global:CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 $global:SelectedBackupfolder = 'Select Folder'
+#$global:FDNVersion = 'Download'
+#$global:HRMVersion = 'Download'
+#$global:PPPVersion = 'Download'
+#$global:PUDVersion = 'Download'
+#$global:PFHVersion = 'Download'
 #requires -version 5.1
 #Sample function that provides the location of the script
 #Install-Module sqlserver -Force
@@ -236,7 +241,7 @@ function Get-ScriptDirectory
 	}
 }
 
-function Get-HighestFolderName
+function Get-HighestFolderNameOLD
 {
 	param (
 		[string]$Path = "D:\Visma\Install\FDN\pin",
@@ -267,13 +272,83 @@ function Get-HighestFolderName
 	Select-Object -First 1 |
 	ForEach-Object { $_.Name }
 	
-	return $highestFolderName
+	
+	
 }
 
 # Example usage:
 # Get-HighestFolderName
 # Get-HighestFolderName -Recurse
 
+
+function Get-HighestFolderName
+{
+    <#
+    .SYNOPSIS
+        Returns the highest (largest numeric) purely numeric subfolder name.
+    .DESCRIPTION
+        Scans the specified path (optionally recursively) for subdirectories whose
+        names consist only of digits (regex: ^\d+$). Returns the highest numeric
+        name as a string. 
+        If the path does not exist, returns the string: Does not exist
+        If no numeric folders are found, returns $null.
+    .PARAMETER Path
+        Root path to scan. Default: D:\Visma\Install\FDN\pin
+    .PARAMETER Recurse
+        If specified, scans all descendant directories.
+    .OUTPUTS
+        [string] or $null
+    .EXAMPLE
+        Get-HighestFolderName
+    .EXAMPLE
+        Get-HighestFolderName -Path 'C:\Data' -Recurse
+    #>
+	[CmdletBinding()]
+	param (
+		[string]$Path = 'D:\Visma\Install\FDN\pin',
+		[switch]$Recurse
+	)
+	
+	# Path check (return EXACT string as requested)
+	if (-not (Test-Path -LiteralPath $Path))
+	{
+		return 'Download'
+	}
+	
+	$gciParams = @{
+		Path	    = $Path
+		Directory   = $true
+		ErrorAction = 'SilentlyContinue'
+	}
+	if ($Recurse) { $gciParams.Recurse = $true }
+	
+	$maxName = $null
+	[long]$maxValue = [long]::MinValue
+	
+	foreach ($dir in Get-ChildItem @gciParams)
+	{
+		$name = $dir.Name
+		if ($name -match '^\d+$')
+		{
+			# Safe parse to Int64 (skip if it somehow overflows)
+			try
+			{
+				[long]$val = $name
+			}
+			catch
+			{
+				continue
+			}
+			if ($val -gt $maxValue)
+			{
+				$maxValue = $val
+				$maxName = $name
+			}
+		}
+	}
+	
+	return $maxName # Will be $null if none found
+}
 
 function Set-RegistryKey
 {
@@ -1408,8 +1483,8 @@ function Set-ControlTheme
 		$ContainerColor = [System.Drawing.Color]::FromArgb(45, 45, 45)
 		$BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
 		$richtextboxColorBG = [System.Drawing.Color]::FromArgb(0,0,0)
-		$ForeColor = [System.Drawing.Color]::White
-		$BorderColor = [System.Drawing.Color]::DimGray
+		$ForeColor = [System.Drawing.Color]::LawnGreen
+		$BorderColor = [System.Drawing.Color]::White
 		$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
 		$SelectionForeColor = [System.Drawing.Color]::White
 		$MenuSelectionColor = [System.Drawing.Color]::DimGray
@@ -1536,6 +1611,7 @@ namespace SAPIENTypes
 			#Set Font
 			$target.Font = $Font
 			$target.BackColor = $ContainerColor
+			$target.formborderstyle = 'Fixed3D'
 		}
 		elseif ($target -is [System.Windows.Forms.SplitContainer])
 		{
@@ -1591,8 +1667,8 @@ namespace SAPIENTypes
 		}
 		elseif ($target -is [System.Windows.Forms.TextBox])
 		{
-			$target.BorderStyle = 'None'
-			$target.BackColor = $ContainerColor
+			$target.BorderStyle = 'Fixed3D'
+			$target.BackColor = $richtextboxColorBG
 		}
 		
 		elseif ($target -is [System.Windows.Forms.DataGridView])
@@ -1653,7 +1729,7 @@ namespace SAPIENTypes
 			$target -is [System.Windows.Forms.ListView] -or
 			$target -is [System.Windows.Forms.TreeView])
 		{
-			$target.BackColor = $WindowColor
+			$target.BackColor = $richtextboxColorBG 
 		}
 		else
 		{

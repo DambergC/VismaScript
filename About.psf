@@ -1192,7 +1192,17 @@ f3rxHz9+/vb/AITpmm5+rQMA</Form>
   <Code><![CDATA[
 $FormAbout_Load={
 	#TODO: Initialize Form Controls here
+	$DisplayMode = Get-RegValue -RegPath 'HKLM:\SOFTWARE\Wow6432Node\Visma\TeliaCygate' -RegName DisplayModeScript
 	
+	if ($DisplayMode -eq 'Light')
+	{
+		Set-ControlTheme -Control $FormAbout -Theme Light
+	}
+	
+	elseif ($DisplayMode -eq 'Dark')
+	{
+		Set-ControlTheme -Control $FormAbout -Theme Dark
+	}
 }
 
 
@@ -1209,6 +1219,6 @@ $linklabelGithubVismaScript_LinkClicked=[System.Windows.Forms.LinkLabelLinkClick
 
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>

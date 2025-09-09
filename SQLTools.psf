@@ -560,6 +560,18 @@ $formSQLTools_Load = {
 	#TODO: Initialize Form Controls here
 	Refresh-StatusBar
 	
+	$DisplayMode = Get-RegValue -RegPath 'HKLM:\SOFTWARE\Wow6432Node\Visma\TeliaCygate' -RegName DisplayModeScript
+	
+	if ($DisplayMode -eq 'Light')
+	{
+		Set-ControlTheme -Control $formSQLTools -Theme Light
+	}
+	
+	elseif ($DisplayMode -eq 'Dark')
+	{
+		Set-ControlTheme -Control $formSQLTools -Theme Dark
+	}
+	
 	If ($global:SelectedBigram -eq 'Select Bigram' -or $global:SelectedBackupfolder -eq 'Select Folder')
 	{
 		$richtextbox1.AppendText("`n")
