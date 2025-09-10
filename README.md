@@ -1,5 +1,8 @@
 # CygateScript.ps1
 
+![DarkMode/LightMode.](https://github.com/DambergC/VismaScript/blob/main/ReadMEPictures/darklight.png)
+
+
 Ett skript för att underlätta arbetet med uppgradering av Visma´s produkt Personec P HRM.
 Skriptet har funktioner som underlättar och sparar tid samt gör att uppgraderingsstegen oavsett konsult blir standardiserade.
 
@@ -13,9 +16,9 @@ Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/downl
 
 ![Välj rätt i github.](https://github.com/DambergC/VismaScript/blob/fc34252a991c24617acf65b4885b48fc6f5ca5e3/ReadMEPictures/github.png)
 
-Är det första gången så behöver du lägga till lite värden, spara BIGRAM och sedan skapa en backupmapp.
+Är det första gången så behöver du skapa BIGRAM och skapa en backupkatalog. Är redan BIGRAM skapat så behöver du bara välja BIGRAM.
 
-![Ändra versionsnummer](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/edit_versions.png)
+![Ändra versionsnummer](https://github.com/DambergC/VismaScript/blob/main/ReadMEPictures/BIGRAM_BACKUP.png)
 
 
 | Parameter | Beskrivning|
@@ -23,14 +26,7 @@ Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/downl
 | VPBSVersion 1  | Används i sökvägen för att ladda ner VPBS från Visma |
 |  | (visma-pbs.s3.eu-central-1.amazonaws.com/<ins>**251**</ins>/VPBSDownload252.zip) |
 | VPBSVersion 2  | Används i sökvägen för att ladda ner VPBS från Visma |
-|  | (visma-pbs.s3.eu-central-1.amazonaws.com/251/VPBSDownload<ins>**252**</ins>.zip)  |
-| Release_Version  | Används i skapandet av SQL queries, pekar ut sökvägen till Vismas SQL skript.|
-| | ***Ska inte förväxlas med FDN Version som inte hanteras i skriptet***.|
-| PPP Version  | Används vid skapandet av SQL Queries  |
-| PUD Version  | Används vid skapandet av SQL Queries  |
-| PFH Version  | Används vid skapandet av SQL Queries  |
-
-![image](https://github.com/user-attachments/assets/93514f6c-e25f-42b1-a771-a7e2bfb8a0fa)
+|  | (visma-pbs.s3.eu-central-1.amazonaws.com/251/VPBSDownload<ins>**254**</ins>.zip)  |
 
 ## Uppstart av skript - Befintligt skript
 För att starta skriptet så starta ett eleverat Powershell fönster och sedan skriv sökvägen till skriptet
@@ -40,10 +36,15 @@ D:\visma\install\backup\CygateScript.ps1
 Skulle det finnas kund som har sin installation på annan enhet en den som är default (D:\) så hanteras det av skriptet och då är sökvägen självklart samma som ovan men med ändring av enhetsbokstaven som du får ändra manuellt.
 
 ![Hur man startar skriptet.](https://github.com/DambergC/VismaScript/blob/f3c6cc2df2366acbac5a6164e5042a71ea5b0712/ReadMEPictures/CMDstart.png)
-### Ny version
-Inlagt i nya verionen 2.0.0 så är de värden som innan skrevs in under BIGRAM and BACKUPFOLDER i en separat fil som ligger under mappen APPSETTNGS och heter Version.XML. Denna fil kan ni efter nedladdning editera antingen i notepad++ eller i vårt skript under BIGRAM and BACKUPFOLDER. Skriver ni värden och väljer spara BIGRAM så sparas värdena i version.XML
-
-Skulle ni sitta hos en kund som inte tillåter åtkomst till Github så får ni ladda ner den manuellt från vår Github.
+# Ny version - Vad är nytt!!!
+- DarkMode/LightMode - För de som vill så finns nu alternativet för Dark- och Lightmode i menyn under DisplayMode. När man väljer läge så sparas inställningen i registret så när du startar upp det eller någon annan konsult kör mot kund så visas programmet i senast valda läge.
+- Avsluta programmet, nu så när man antingen väljer att trycka "close" eller bara trycka på "krysset i högra hörnet" så får man valet att kryptera backupen/backuperna.
+- Versionsnummer för resp produkt, HRM och FDN plockas nu från vad som är nedladdat via VPBS. Har det inte laddats ner något så får man inte rätt värden i t.ex. kontroll av databas eller skapande av sql-script.
+- Gått ifrån knappar på huvudsidan till att ha menyer istället.
+- Flyttat inställningarna som behövs för att ladda ner och packa upp VPBS till under Tools menyn.
+- Ändrat versionsnumret till följande struktur "ÅR.Mån.löpnummer" ex. 25.09.001
+- Under inventeringen så plockas också ut värden för Bindings samt att en nosso-länk skapas som är klickbar i fönstret på huvudsidan.
+- Åtgärdat lite småfel i t.ex. skapande av queries för QRread.
 
 ## Visma Services Trusted Users
 För att få köra skriptet så är det samma krav som på Public Installer, du måste vara medlem i den lokala gruppen ”Visma Services Trusted Users” Hur du lägger till dig i gruppen går att göra det manuellt via Computer Management eller via powershell som du hittar i vårt uppgraderingsdokument.
@@ -56,8 +57,6 @@ Det BIGRAM AND BACKUPFOLDER du väljer kommer följa med dig under hela tiden s�
 Alla val man gör i skriptet skrivs i en logfil som ligger under d:\visma\install\backup. Logfilen används innan man valt BackupFolder och måste därför ligga under Visma\Backup och dessa logfiler får vid behov rensas manuellt. Det skapas en logfil för varje dag man kör skriptet.
 ## Funktioner
 De funktioner i skriptet är framtagna för att standardisera och effektivisera arbetet för konsult vid uppgradering och felsökning av Personec P installation hos kund.
-
-![Funktioner](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Funktioner.png)
 
 ### FileBackup 
 > [!IMPORTANT]
@@ -76,7 +75,7 @@ Backupen körs med hjälp av RoboCopy och loggarna för backupen sparas under Ba
 ## Inventering
 Inventering av systemet där följande saker inventeras:
 
-![Inventering](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Inventory.png)
+![Inventering](https://github.com/DambergC/VismaScript/blob/main/ReadMEPictures/bindings.png)
 
 ### System
 > [!NOTE]
@@ -187,7 +186,7 @@ De knappar som är öppna är Temp Asp.NET, Inetpub Logs och Install Catalog.
 
 Alla knappar under CleanUp är kopplade till vad i vårt dokument säger vi ska rensa.
 
-![CleanUP](https://github.com/DambergC/VismaScript/blob/224017569cb62235422ec55eeef3ff26406d34fe/ReadMEPictures/CleanUp.png)
+![CleanUP](https://github.com/DambergC/VismaScript/blob/main/ReadMEPictures/cleanup.png)
 
 ### Temp Asp.NET
 
@@ -220,7 +219,7 @@ Följande kataloger rensas
 
 Sista knappen på huvudsidan för vårt skript är en samling av verktyg som vi kan ha behov av under en felsökning eller en uppgradering.
 
-![Tools](https://github.com/DambergC/VismaScript/blob/224017569cb62235422ec55eeef3ff26406d34fe/ReadMEPictures/Tools.png)
+![Tools](https://github.com/DambergC/VismaScript/blob/main/ReadMEPictures/tools.png)
 
 ### Cert Permissions & Cert Thumbprint
 
@@ -273,7 +272,7 @@ Här väljer du vilken logfil du vill läsa och se vad som är gjort och invente
 
 ### Cloes And Encrypt
 
-När du är klar med uppgraderingen och vill avsluta skriptet på ett korrekt sätt så väljer du denna knapp. Då får du valet att kryptera backupfilernas web.config.
+När du vill avsluta programmet så får du upp valet att kryptera backupen.
 ## Authors
 
 - [@DambergC](https://www.github.com/DambergC)
