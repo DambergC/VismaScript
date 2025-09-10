@@ -1,5 +1,8 @@
 # CygateScript.ps1
 
+![DarkMode/LightMode.](https://github.com/DambergC/VismaScript/blob/main/ReadMEPictures/darklight.png)
+
+
 Ett skript för att underlätta arbetet med uppgradering av Visma´s produkt Personec P HRM.
 Skriptet har funktioner som underlättar och sparar tid samt gör att uppgraderingsstegen oavsett konsult blir standardiserade.
 
