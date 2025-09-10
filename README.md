@@ -15,7 +15,7 @@ Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/downl
 
 Är det första gången så behöver du skapa BIGRAM och skapa en backupkatalog. Är redan BIGRAM skapat så behöver du bara välja BIGRAM.
 
-![Ändra versionsnummer](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/edit_versions.png)
+![Ändra versionsnummer](https://github.com/DambergC/VismaScript/blob/main/ReadMEPictures/BIGRAM_BACKUP.png)
 
 
 | Parameter | Beskrivning|
