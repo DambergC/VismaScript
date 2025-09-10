@@ -24,12 +24,6 @@ Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/downl
 |  | (visma-pbs.s3.eu-central-1.amazonaws.com/<ins>**251**</ins>/VPBSDownload252.zip) |
 | VPBSVersion 2  | Används i sökvägen för att ladda ner VPBS från Visma |
 |  | (visma-pbs.s3.eu-central-1.amazonaws.com/251/VPBSDownload<ins>**254**</ins>.zip)  |
-| Release_Version  |Plockas nu från det som är nedladdat via VPBS|
-| PPP Version  | Plockas nu från det som är nedladdat via VPBS |
-| PUD Version  | Plockas nu från det som är nedladdat via VPBS  |
-| PFH Version  | Plockas nu från det som är nedladdat via VPBS  |
-
-![image](https://github.com/user-attachments/assets/93514f6c-e25f-42b1-a771-a7e2bfb8a0fa)
 
 ## Uppstart av skript - Befintligt skript
 För att starta skriptet så starta ett eleverat Powershell fönster och sedan skriv sökvägen till skriptet
@@ -39,10 +33,15 @@ D:\visma\install\backup\CygateScript.ps1
 Skulle det finnas kund som har sin installation på annan enhet en den som är default (D:\) så hanteras det av skriptet och då är sökvägen självklart samma som ovan men med ändring av enhetsbokstaven som du får ändra manuellt.
 
 ![Hur man startar skriptet.](https://github.com/DambergC/VismaScript/blob/f3c6cc2df2366acbac5a6164e5042a71ea5b0712/ReadMEPictures/CMDstart.png)
-### Ny version
-Inlagt i nya verionen 2.0.0 så är de värden som innan skrevs in under BIGRAM and BACKUPFOLDER i en separat fil som ligger under mappen APPSETTNGS och heter Version.XML. Denna fil kan ni efter nedladdning editera antingen i notepad++ eller i vårt skript under BIGRAM and BACKUPFOLDER. Skriver ni värden och väljer spara BIGRAM så sparas värdena i version.XML
-
-Skulle ni sitta hos en kund som inte tillåter åtkomst till Github så får ni ladda ner den manuellt från vår Github.
+# Ny version - Vad är nytt!!!
+- DarkMode/LightMode - För de som vill så finns nu alternativet för Dark- och Lightmode i menyn under DisplayMode. När man väljer läge så sparas inställningen i registret så när du startar upp det eller någon annan konsult kör mot kund så visas programmet i senast valda läge.
+- Avsluta programmet, nu så när man antingen väljer att trycka "close" eller bara trycka på "krysset i högra hörnet" så får man valet att kryptera backupen/backuperna.
+- Versionsnummer för resp produkt, HRM och FDN plockas nu från vad som är nedladdat via VPBS. Har det inte laddats ner något så får man inte rätt värden i t.ex. kontroll av databas eller skapande av sql-script.
+- Gått ifrån knappar på huvudsidan till att ha menyer istället.
+- Flyttat inställningarna som behövs för att ladda ner och packa upp VPBS till under Tools menyn.
+- Ändrat versionsnumret till följande struktur "ÅR.Mån.löpnummer" ex. 25.09.001
+- Under inventeringen så plockas också ut värden för Bindings samt att en nosso-länk skapas som är klickbar i fönstret på huvudsidan.
+- Åtgärdat lite småfel i t.ex. skapande av queries för QRread.
 
 ## Visma Services Trusted Users
 För att få köra skriptet så är det samma krav som på Public Installer, du måste vara medlem i den lokala gruppen ”Visma Services Trusted Users” Hur du lägger till dig i gruppen går att göra det manuellt via Computer Management eller via powershell som du hittar i vårt uppgraderingsdokument.
