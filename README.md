@@ -58,8 +58,6 @@ Alla val man gör i skriptet skrivs i en logfil som ligger under d:\visma\instal
 ## Funktioner
 De funktioner i skriptet är framtagna för att standardisera och effektivisera arbetet för konsult vid uppgradering och felsökning av Personec P installation hos kund.
 
-![Funktioner](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Funktioner.png)
-
 ### FileBackup 
 > [!IMPORTANT]
 > Kör ALLTID en backup innan uppgradering.
@@ -77,7 +75,7 @@ Backupen körs med hjälp av RoboCopy och loggarna för backupen sparas under Ba
 ## Inventering
 Inventering av systemet där följande saker inventeras:
 
-![Inventering](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/Inventory.png)
+![Inventering](https://github.com/DambergC/VismaScript/blob/main/ReadMEPictures/bindings.png)
 
 ### System
 > [!NOTE]
@@ -188,7 +186,7 @@ De knappar som är öppna är Temp Asp.NET, Inetpub Logs och Install Catalog.
 
 Alla knappar under CleanUp är kopplade till vad i vårt dokument säger vi ska rensa.
 
-![CleanUP](https://github.com/DambergC/VismaScript/blob/224017569cb62235422ec55eeef3ff26406d34fe/ReadMEPictures/CleanUp.png)
+![CleanUP](https://github.com/DambergC/VismaScript/blob/main/ReadMEPictures/cleanup.png)
 
 ### Temp Asp.NET
 
@@ -221,7 +219,7 @@ Följande kataloger rensas
 
 Sista knappen på huvudsidan för vårt skript är en samling av verktyg som vi kan ha behov av under en felsökning eller en uppgradering.
 
-![Tools](https://github.com/DambergC/VismaScript/blob/224017569cb62235422ec55eeef3ff26406d34fe/ReadMEPictures/Tools.png)
+![Tools](https://github.com/DambergC/VismaScript/blob/main/ReadMEPictures/tools.png)
 
 ### Cert Permissions & Cert Thumbprint
 
@@ -274,7 +272,7 @@ Här väljer du vilken logfil du vill läsa och se vad som är gjort och invente
 
 ### Cloes And Encrypt
 
-När du är klar med uppgraderingen och vill avsluta skriptet på ett korrekt sätt så väljer du denna knapp. Då får du valet att kryptera backupfilernas web.config.
+När du vill avsluta programmet så får du upp valet att kryptera backupen.
 ## Authors
 
 - [@DambergC](https://www.github.com/DambergC)
