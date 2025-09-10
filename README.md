@@ -13,7 +13,7 @@ Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/downl
 
 ![Välj rätt i github.](https://github.com/DambergC/VismaScript/blob/fc34252a991c24617acf65b4885b48fc6f5ca5e3/ReadMEPictures/github.png)
 
-Är det första gången så behöver du lägga till lite värden, spara BIGRAM och sedan skapa en backupmapp.
+Är det första gången så behöver du skapa BIGRAM och skapa en backupkatalog. Är redan BIGRAM skapat så behöver du bara välja BIGRAM.
 
 ![Ändra versionsnummer](https://github.com/DambergC/VismaScript/blob/d49564e9d1f41395cf79a763b86de1d6fb58c7e5/ReadMEPictures/edit_versions.png)
 
@@ -23,12 +23,11 @@ Invoke-WebRequest 'https://github.com/Dambergc/Vismascript/releases/latest/downl
 | VPBSVersion 1  | Används i sökvägen för att ladda ner VPBS från Visma |
 |  | (visma-pbs.s3.eu-central-1.amazonaws.com/<ins>**251**</ins>/VPBSDownload252.zip) |
 | VPBSVersion 2  | Används i sökvägen för att ladda ner VPBS från Visma |
-|  | (visma-pbs.s3.eu-central-1.amazonaws.com/251/VPBSDownload<ins>**252**</ins>.zip)  |
-| Release_Version  | Används i skapandet av SQL queries, pekar ut sökvägen till Vismas SQL skript.|
-| | ***Ska inte förväxlas med FDN Version som inte hanteras i skriptet***.|
-| PPP Version  | Används vid skapandet av SQL Queries  |
-| PUD Version  | Används vid skapandet av SQL Queries  |
-| PFH Version  | Används vid skapandet av SQL Queries  |
+|  | (visma-pbs.s3.eu-central-1.amazonaws.com/251/VPBSDownload<ins>**254**</ins>.zip)  |
+| Release_Version  |Plockas nu från det som är nedladdat via VPBS|
+| PPP Version  | Plockas nu från det som är nedladdat via VPBS |
+| PUD Version  | Plockas nu från det som är nedladdat via VPBS  |
+| PFH Version  | Plockas nu från det som är nedladdat via VPBS  |
 
 ![image](https://github.com/user-attachments/assets/93514f6c-e25f-42b1-a771-a7e2bfb8a0fa)
 
