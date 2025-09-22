@@ -501,7 +501,7 @@ function Update-ListBox
 function update-config
 {
 	# Exclude specific files (e.g., 'Test1', 'Test2') from bigrams
-	$excludedBigrams = @('Version.XML','VPBS.XML')
+	$excludedBigrams = @('Version.XML','VPBS.XML','BIGRAM.XML')
 	$bigrams = (Get-ChildItem -Path "$InstallDrive\Visma\install\backup\Appsettings\" -Exclude $excludedBigrams).BaseName
 	
 	$BigramListBox.Items.Clear()
