@@ -61,8 +61,8 @@ function Install-SqlServerModule()
 		# Module is installed, check if it's outdated
 		# Get the version of the newest module
 		$installedVersion = $installedModules[0].Version.ToString()
-		$latestVersion = "22.3.0"
-		if ($installedVersion -ne $latestVersion)
+		$latestVersion = "22.4.5.1"
+		if ($installedVersion -lt $latestVersion)
 		{
 			Write-Host "Updating $moduleName from version $installedVersion to $latestVersion" 
 			Update-Module -Name $moduleName -Force
