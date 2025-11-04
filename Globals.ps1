@@ -738,6 +738,21 @@ Function Write-Log
 	$Line = "$Stamp $Level $Message"
 	"$Stamp $Level $Message" | Out-File -Encoding utf8 $logfile -Append
 }
+Function Write-LogCleanup
+{
+	[CmdletBinding()]
+	Param (
+		[Parameter(Mandatory = $False)]
+		[ValidateSet("INFO", "WARN", "ERROR", "FATAL", "DEBUG")]
+		[String]$Level = "INFO",
+		[Parameter(Mandatory = $True)]
+		[string]$Message
+	)
+	
+	$Stamp = (Get-Date).toString("HH:mm:ss")
+	$Line = "$Stamp $Level $Message"
+	"$Stamp $Level $Message" | Out-File -Encoding utf8 $logfileCleanup -Append
+}
 function New-RandomPassword
 {
 	param (
@@ -890,13 +905,13 @@ function Remove-PersonecFolders
 	if (-not (Test-Path $Path))
 	{
 		$CleanupTextBox.AppendText("Folder does not exist: $Path`n")
-		Write-Log -Level INFO -Message "Folder does not exist: $Path"
+		Write-LogCleanup -Level INFO -Message "Folder does not exist: $Path"
 		$CleanupTextBox.ScrollToCaret()
 		return
 	}
 	
 	$CleanupTextBox.AppendText("Start cleanup:`n$Path`n")
-	Write-Log -Level INFO -Message "Start cleanup: $Path"
+	Write-LogCleanup -Level INFO -Message "Start cleanup: $Path"
 	$CleanupTextBox.ScrollToCaret()
 	
 	# Get excluded folders as full (resolved) paths
@@ -922,12 +937,12 @@ function Remove-PersonecFolders
 		{
 			Remove-Item -Path $item.FullName -Recurse -Force -ErrorAction Stop
 			$CleanupTextBox.AppendText("Removed: $($item.FullName)`n")
-			Write-Log -Level INFO -Message "Removed: $($item.FullName)"
+			Write-LogCleanup -Level INFO -Message "Removed: $($item.FullName)"
 		}
 		catch
 		{
 			$CleanupTextBox.AppendText("Failed to remove: $($item.FullName)`n")
-			Write-Log -Level ERROR -Message "Failed to remove: $($item.FullName). Error: $_"
+			Write-LogCleanup -Level ERROR -Message "Failed to remove: $($item.FullName). Error: $_"
 		}
 		$CleanUpProgress.PerformStep()
 		$CleanUpProgress.Refresh()
@@ -935,7 +950,7 @@ function Remove-PersonecFolders
 	}
 	
 	$CleanupTextBox.AppendText("CleanUp Finished`n")
-	Write-Log -Level INFO -Message "CleanUp Finished"
+	Write-LogCleanup -Level INFO -Message "CleanUp Finished"
 	$CleanupTextBox.ScrollToCaret()
 }
 function Remove-PersonecFoldersOLD2
@@ -1263,8 +1278,11 @@ foreach ($drive in $drives)
 $date = Get-Date -Format "yyyyMMdd"
 $Global:InstallDrive = $result
 $global:filename = "logfile_$date.log"
+$global:filenameCleanup = "logfileCleanup_$date.log"
 $global:filepath = "$InstallDrive\Visma\Install\backup\"
 $global:logfile = "$filepath\$filename"
+$global:logfileCleanup = "$filepath\$filenameCleanup"
+
 
 $SavePathExistAppsettings = Test-Path -Path "$global:InstallDrive\visma\install\backup\Appsettings"
 
