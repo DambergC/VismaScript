@@ -572,11 +572,11 @@ $buttonDBUpgradeScriptFile_Click = {
 	$QRReadPW = New-RandomPassword -length 14
 	
 	$SQL_queries = @"
-#------------------------------------------------#
-# SQL Query for update scripts
-#------------------------------------------------#
+------------------------------------------------
+-- SQL Query for update scripts
+------------------------------------------------
 
-##Personic P
+-- Personic P
 USE $DB_PPP
 SELECT DBVERSION, PROGVERSION FROM dbo.OA0P0997
 :r d:\visma\Install\HRM\PPP\DatabaseServer\Script\SW\$PPPXML\mRSPu$PPPXML.sql
@@ -590,8 +590,8 @@ GO
 GO
 SELECT DBVERSION, PROGVERSION FROM dbo.OA0P0997
 SELECT * FROM dbo.RMRUNSCRIPT order by RUNDATETIME1 desc
-#------------------------------------------------#
-#Personic U
+------------------------------------------------
+-- Personic U
 USE $DB_PUD
 SELECT * FROM dbo.PU_VERSIONSINFO
 :r d:\visma\Install\HRM\PUD\DatabaseServer\Script\SW\$PUDXML\mPSUu$PUDXML.sql
@@ -603,8 +603,8 @@ GO
 GO
 SELECT * FROM dbo.PU_VERSIONSINFO
 SELECT * FROM dbo.RMRUNSCRIPT order by RUNDATETIME1 desc
-#------------------------------------------------#
-##Personic PFH
+------------------------------------------------
+-- Personic PFH
 USE $DB_PFH
 SELECT DBVERSION, PROGVERSION FROM dbo.OF0P0997
 :r d:\visma\Install\HRM\PFH\DatabaseServer\Script\SW\$PFHXML\mPSFu$PFHXML.sql
@@ -617,7 +617,7 @@ GO
 GO
 SELECT DBVERSION, PROGVERSION FROM dbo.OF0P0997
 SELECT * FROM dbo.RMRUNSCRIPT order by RUNDATETIME1 desc
-#------------------------------------------------# 
+------------------------------------------------ 
 "@
 	
 	
@@ -698,8 +698,8 @@ $buttonQRReadScriptClipboar_Click = {
 	$QRReadPW = New-RandomPassword -length 14
 	
 	$QRRead_users = @"
-#------------------------------------------------#
-#SQL Query for QRread accounts
+------------------------------------------------
+-- SQL Query for QRread accounts
 USE [master]
 GO
 CREATE LOGIN [$QRRead] WITH PASSWORD=N'WRITE_NEW_PASSWORD_HERE', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
@@ -745,7 +745,7 @@ CREATE USER [$QRRead] FOR LOGIN [$QRRead]
 GO
 ALTER ROLE [db_datareader] ADD MEMBER [$QRRead]
 GO
-#------------------------------------------------#
+------------------------------------------------
 "@
 	
 	
@@ -782,9 +782,9 @@ $buttonChangePwdScriptClipb_Click = {
 	$newpassword = New-RandomPassword -length 14
 	
 	$SQL_queries = @"
-#------------------------------------------------#
-# SQL Query for Change password scripts
-#------------------------------------------------#
+------------------------------------------------
+-- SQL Query for Change password scripts
+------------------------------------------------
 
 USE master;
 GO
