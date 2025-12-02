@@ -23,7 +23,7 @@ function Install-NuGetPackage()
 	}
 	catch
 	{
-		Write-Host "Package $packageName not detected. Will continue to install. " 
+		Write-Host "Package $packageName not detected. Will continue to install. "
 	}
 	if ($installedPackage)
 	{
@@ -32,12 +32,12 @@ function Install-NuGetPackage()
 		$latestVersion = "2.8.5.201"
 		if ($installedVersion -lt $latestVersion)
 		{
-			Write-Host "Updating $packageName from version $installedVersion to $latestVersion" 
+			Write-Host "Updating $packageName from version $installedVersion to $latestVersion"
 			Update-PackageProvider -Name $packageName -Force
 		}
 		else
 		{
-			Write-Host "$packageName is already up-to-date (version $installedVersion)" 
+			Write-Host "$packageName is already up-to-date (version $installedVersion)"
 		}
 	}
 	else
@@ -51,7 +51,6 @@ function Install-NuGetPackage()
 	return $true;
 }
 function Install-SqlServerModule()
-
 {
 	$moduleName = "SqlServer";
 	# Check if the module is installed
@@ -64,7 +63,7 @@ function Install-SqlServerModule()
 		$latestVersion = "22.4.5.1"
 		if ($installedVersion -lt $latestVersion)
 		{
-			Write-Host "Updating $moduleName from version $installedVersion to $latestVersion" 
+			Write-Host "Updating $moduleName from version $installedVersion to $latestVersion"
 			Update-Module -Name $moduleName -Force
 		}
 		else
@@ -80,125 +79,8 @@ function Install-SqlServerModule()
 	}
 	# Import the module
 	Import-Module $moduleName
-
+	
 }
-
-function Install-SqlServerModule_TEST
-{
-	[CmdletBinding()]
-	param (
-		[string]$ModuleName = 'SqlServer',
-		[string]$Repository = 'PSGallery',
-		[switch]$TrustRepository,
-		[switch]$RemoveOldVersions,
-		[version]$MinimumVersion,
-		[switch]$AllUsersScope
-	)
-	
-	$ErrorActionPreference = 'Stop'
-	
-	# Ensure we're on Windows PowerShell 5.1
-	if (-not ($PSVersionTable.PSVersion.Major -eq 5 -and $PSVersionTable.PSVersion.Minor -eq 1))
-	{
-		throw "This function is intended for Windows PowerShell 5.1. Detected $($PSVersionTable.PSVersion)."
-	}
-	
-	# Prefer TLS 1.2 for PSGallery/NuGet
-	try
-	{
-		[Net.ServicePointManager]::SecurityProtocol = `
-		[Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-	}
-	catch { }
-	
-	# Keep PackageManagement/PowerShellGet healthy on 5.1
-	$pmMin = [version]'1.4.8.1'
-	$psgMin = [version]'2.2.5.1'
-	
-	$pm = Get-Module -ListAvailable -Name PackageManagement | Sort-Object Version -Descending | Select-Object -First 1
-	if (-not $pm -or [version]$pm.Version -lt $pmMin)
-	{
-		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
-		Install-Module -Name PackageManagement -MinimumVersion $pmMin -Scope CurrentUser -Force -AllowClobber
-		Write-Verbose "PackageManagement updated to at least $pmMin. You may need to restart the session."
-	}
-	
-	$psg = Get-Module -ListAvailable -Name PowerShellGet | Sort-Object Version -Descending | Select-Object -First 1
-	if (-not $psg -or [version]$psg.Version -lt $psgMin)
-	{
-		Install-Module -Name PowerShellGet -MinimumVersion $psgMin -Scope CurrentUser -Force -AllowClobber
-		Write-Verbose "PowerShellGet updated to at least $psgMin. You may need to restart the session."
-	}
-	
-	# Ensure NuGet provider (required by PowerShellGet)
-	if (-not (Get-PackageProvider -Name NuGet -ListAvailable -ErrorAction SilentlyContinue))
-	{
-		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
-	}
-	
-	# Ensure PSGallery exists and optionally trust it
-	$repo = Get-PSRepository -Name $Repository -ErrorAction SilentlyContinue
-	if (-not $repo)
-	{
-		Register-PSRepository -Default
-		$repo = Get-PSRepository -Name $Repository -ErrorAction Stop
-	}
-	if ($TrustRepository -and $repo.InstallationPolicy -ne 'Trusted')
-	{
-		Set-PSRepository -Name $Repository -InstallationPolicy Trusted
-	}
-	
-	$scope = if ($AllUsersScope) { 'AllUsers' }
-	else { 'CurrentUser' }
-	
-	# Determine target version (latest or meeting MinimumVersion)
-	$installed = Get-InstalledModule -Name $ModuleName -AllVersions -ErrorAction SilentlyContinue
-	$findParams = @{ Name = $ModuleName; Repository = $Repository }
-	if ($MinimumVersion) { $findParams['MinimumVersion'] = $MinimumVersion }
-	$latest = Find-Module @findParams -ErrorAction Stop
-	$targetVersion = [version]$latest.Version
-	
-	if (-not $installed)
-	{
-		Write-Verbose "Installing $ModuleName $targetVersion (Scope=$scope)..."
-		Install-Module -Name $ModuleName -RequiredVersion $targetVersion -Repository $Repository -Scope $scope -Force -AllowClobber
-	}
-	else
-	{
-		$currentMax = ($installed | Sort-Object Version -Descending | Select-Object -First 1).Version
-		if ([version]$currentMax -lt $targetVersion)
-		{
-			Write-Verbose "Installing newer $ModuleName $targetVersion (Scope=$scope)..."
-			Install-Module -Name $ModuleName -RequiredVersion $targetVersion -Repository $Repository -Scope $scope -Force -AllowClobber
-		}
-		else
-		{
-			Write-Verbose "$ModuleName is up to date ($currentMax)."
-		}
-		
-		if ($RemoveOldVersions)
-		{
-			foreach ($m in ($installed | Where-Object { $_.Version -lt $targetVersion }))
-			{
-				try
-				{
-					Uninstall-Module -Name $ModuleName -RequiredVersion $m.Version -Force -ErrorAction Stop
-				}
-				catch
-				{
-					Write-Verbose "Could not remove $ModuleName $($m.Version): $($_.Exception.Message)"
-				}
-			}
-		}
-	}
-	
-	# Load the intended version
-	if (Get-Module -Name $ModuleName) { Remove-Module -Name $ModuleName -Force }
-	Import-Module -Name $ModuleName -RequiredVersion $targetVersion -Force -ErrorAction Stop | Out-Null
-	
-	return (Get-Module -Name $ModuleName).Version
-}
-
 
 function Test-Elevation
 {
@@ -240,45 +122,6 @@ function Get-ScriptDirectory
 		Split-Path $script:MyInvocation.MyCommand.Path
 	}
 }
-
-function Get-HighestFolderNameOLD
-{
-	param (
-		[string]$Path = "D:\Visma\Install\FDN\pin",
-		[switch]$Recurse
-	)
-	
-	# Verify the path exists
-	if (-not (Test-Path -Path $Path))
-	{
-		Write-Error "The specified path does not exist: $Path"
-		return
-	}
-	
-	# Get all folders within the specified path, with optional recursion
-	if ($Recurse)
-	{
-		$folders = Get-ChildItem -Path $Path -Directory -Recurse
-	}
-	else
-	{
-		$folders = Get-ChildItem -Path $Path -Directory
-	}
-	
-	# Filter folders with purely numeric names, sort descending, select top 1 name
-	$highestFolderName = $folders |
-	Where-Object { $_.Name -match '^\d+$' } |
-	Sort-Object { [int]$_.Name } -Descending |
-	Select-Object -First 1 |
-	ForEach-Object { $_.Name }
-	
-	
-	
-}
-
-# Example usage:
-# Get-HighestFolderName
-# Get-HighestFolderName -Recurse
 
 
 function Get-HighestFolderName
@@ -501,7 +344,7 @@ function Update-ListBox
 function update-config
 {
 	# Exclude specific files (e.g., 'Test1', 'Test2') from bigrams
-	$excludedBigrams = @('Version.XML','VPBS.XML','BIGRAM.XML')
+	$excludedBigrams = @('Version.XML', 'VPBS.XML', 'BIGRAM.XML')
 	$bigrams = (Get-ChildItem -Path "$InstallDrive\Visma\install\backup\Appsettings\" -Exclude $excludedBigrams).BaseName
 	
 	$BigramListBox.Items.Clear()
@@ -553,12 +396,12 @@ function Copy-WithProgress
 	$StagingContent = Get-Content -Path $StagingLogPath
 	$TotalFileCount = $StagingContent.Count - 1
 	$FilebackupWindow.AppendText("`nTotal Files to be copied: {0}" -f $TotalFileCount)
-	Write-Log -Level INFO -Message "Total files to be copied: {0} $TotalFileCount" 
+	Write-Log -Level INFO -Message "Total files to be copied: {0} $TotalFileCount"
 	
 	$BytesTotal = 0
 	[RegEx]::Matches(($StagingContent -join "`n"), $RegexBytes) | ForEach-Object { $BytesTotal += $_.Value }
 	$FilebackupWindow.AppendText("`nTotal bytes to be copied: {0}" -f $BytesTotal)
-	Write-Log -Level INFO -Message "Total bytes to be copied: {0} $BytesTotal" 
+	Write-Log -Level INFO -Message "Total bytes to be copied: {0} $BytesTotal"
 	
 	$RobocopyLogPath = "$global:InstallDrive\Visma\install\Backup\$global:SelectedBackupfolder\RoboCopy.log"
 	$ArgumentList = '"{0}" "{1}" /LOG+:"{2}" /ipg:{3} {4}' -f $Source, $Destination, $RobocopyLogPath, $Gap, $CommonRobocopyParams
@@ -589,99 +432,7 @@ function Copy-WithProgress
 		FilesCopied = $CopiedFileCount
 	}
 }
-function Copy-WithProgressTEST
-{
-	[CmdletBinding()]
-	param (
-		[Parameter(Mandatory = $true)]
-		[string]$Source,
-		[Parameter(Mandatory = $true)]
-		[string]$Destination,
-		[Parameter(Mandatory = $true)]
-		[string]$Title,
-		[int]$Gap = 200,
-		[int]$ReportGap = 2000
-	)
-	
-	$RegexBytes = '(?<=\s+)\d+(?=\s+)'
-	
-	# Initialize the Progress Bar
-	$ProgressBarBackup.Maximum = 100
-	$ProgressBarBackup.Step = 1
-	$ProgressBarBackup.Value = 0
-	
-	$CommonRobocopyParams = '/MIR /NP /NDL /NC /BYTES /NJH /NJS /xf *.log'
-	
-	$FilebackupWindow.AppendText("`nAnalyzing robocopy job ...")
-	
-	# Base Log File Paths
-	$selectedBackupfolder = $BackupFolderListbox.SelectedItem
-	$BaseLogPath = "$global:InstallDrive\Visma\install\Backup\$global:SelectedBackupfolder\$Title" + "Robocopy.log"
-	
-	# Function to ensure unique log file
-	function Ensure-UniqueLogFile
-	{
-		param (
-			[string]$LogFilePath
-		)
-		if (Test-Path -Path $LogFilePath)
-		{
-			$Timestamp = (Get-Date).ToString("yyyyMMdd_HHmmss")
-			$NewLogFilePath = $LogFilePath -replace '\.log$', "_$Timestamp.log"
-			Rename-Item -Path $LogFilePath -NewName $NewLogFilePath
-			Write-Log -Level INFO -Message "Renamed existing log file to: $NewLogFilePath"
-		}
-	}
-	
-	# Ensure staging and robocopy logs are unique
-	$StagingLogPath = $BaseLogPath -replace 'Robocopy.log$', 'StagingRobocopy.log'
-	Ensure-UniqueLogFile -LogFilePath $StagingLogPath
-	
-	$RobocopyLogPath = $BaseLogPath
-	Ensure-UniqueLogFile -LogFilePath $RobocopyLogPath
-	
-	# Staging Analysis
-	$StagingArgumentList = '"{0}" "{1}" /LOG:"{2}" /L {3}' -f $Source, $Destination, $StagingLogPath, $CommonRobocopyParams
-	Start-Process -Wait -FilePath robocopy.exe -ArgumentList $StagingArgumentList -NoNewWindow
-	
-	$StagingContent = Get-Content -Path $StagingLogPath
-	$TotalFileCount = $StagingContent.Count - 1
-	$FilebackupWindow.AppendText("`nTotal Files to be copied: {0}" -f $TotalFileCount)
-	Write-Log -Level INFO -Message "Total files to be copied: {0} $TotalFileCount"
-	
-	$BytesTotal = 0
-	[RegEx]::Matches(($StagingContent -join "`n"), $RegexBytes) | ForEach-Object { $BytesTotal += $_.Value }
-	$FilebackupWindow.AppendText("`nTotal bytes to be copied: {0}" -f $BytesTotal)
-	Write-Log -Level INFO -Message "Total bytes to be copied: {0} $BytesTotal"
-	
-	# Robocopy Execution
-	$ArgumentList = '"{0}" "{1}" /LOG:"{2}" /ipg:{3} {4}' -f $Source, $Destination, $RobocopyLogPath, $Gap, $CommonRobocopyParams
-	$Robocopy = Start-Process -FilePath robocopy.exe -ArgumentList $ArgumentList -Verbose -PassThru -NoNewWindow
-	Start-Sleep -Milliseconds 100
-	
-	while (!$Robocopy.HasExited)
-	{
-		Start-Sleep -Milliseconds $ReportGap
-		$BytesCopied = 0
-		$LogContent = Get-Content -Path $RobocopyLogPath
-		[Regex]::Matches($LogContent -join "`n", $RegexBytes) | ForEach-Object { $BytesCopied += $_.Value }
-		$CopiedFileCount = $LogContent.Count - 1
-		
-		$Percentage = 0
-		if ($BytesCopied -gt 0)
-		{
-			$Percentage = (($BytesCopied / $BytesTotal) * 100)
-		}
-		
-		$ProgressBarBackup.Value = [math]::Min($Percentage, 100)
-		$ProgressBarBackup.Refresh()
-	}
-	
-	[PSCustomObject]@{
-		BytesCopied = $BytesCopied
-		FilesCopied = $CopiedFileCount
-	}
-}
+
 function Get-IniFile
 {
 	param (
@@ -1017,198 +768,6 @@ function Remove-PersonecFolders
 	$CleanupTextBox.ScrollToCaret()
 }
 
-
-
-function Remove-PersonecFolders_oldold
-{
-	param (
-		[string]$Path,
-		[string[]]$ExcludedFolders = @()
-	)
-	
-	if (-not (Test-Path $Path))
-	{
-		$CleanupTextBox.AppendText("Folder does not exist: $Path`n")
-		Write-LogCleanup -Level INFO -Message "Folder does not exist: $Path"
-		$CleanupTextBox.ScrollToCaret()
-		return
-	}
-	
-	$CleanupTextBox.AppendText("Start cleanup:`n$Path`n")
-	Write-LogCleanup -Level INFO -Message "Start cleanup: $Path"
-	$CleanupTextBox.ScrollToCaret()
-	
-	# Get excluded folders as full (resolved) paths
-	$ExcludedFoldersFullPaths = $ExcludedFolders | ForEach-Object {
-		[System.IO.Path]::GetFullPath((Join-Path -Path $Path -ChildPath $_))
-	}
-	
-	# Gather all items, filter out anything inside excluded folder(s)
-	$allItems = Get-ChildItem -Path $Path -Recurse -Force
-	
-	$itemsToRemove = $allItems | Where-Object {
-		$itemPath = [System.IO.Path]::GetFullPath($_.FullName)
-		-not ($ExcludedFoldersFullPaths | Where-Object { $itemPath -like "$_*" -or $itemPath.StartsWith("$_") })
-	}
-	
-	$CleanUpProgress.Maximum = $itemsToRemove.Count
-	$CleanUpProgress.Step = 1
-	$CleanUpProgress.Value = 0
-	
-	foreach ($item in $itemsToRemove)
-	{
-		try
-		{
-			Remove-Item -Path $item.FullName -Recurse -Force -ErrorAction Stop
-			$CleanupTextBox.AppendText("Removed: $($item.FullName)`n")
-			Write-LogCleanup -Level INFO -Message "Removed: $($item.FullName)"
-		}
-		catch
-		{
-			$CleanupTextBox.AppendText("Failed to remove: $($item.FullName)`n")
-			Write-LogCleanup -Level ERROR -Message "Failed to remove: $($item.FullName). Error: $_"
-		}
-		$CleanUpProgress.PerformStep()
-		$CleanUpProgress.Refresh()
-		$CleanupTextBox.ScrollToCaret()
-	}
-	
-	$CleanupTextBox.AppendText("CleanUp Finished`n")
-	Write-LogCleanup -Level INFO -Message "CleanUp Finished"
-	$CleanupTextBox.ScrollToCaret()
-}
-function Remove-PersonecFoldersOLD2
-{
-	param (
-		[string]$Path,
-		[string[]]$ExcludedFolders = @()
-	)
-	
-	$folderexist = (Test-Path $Path)
-	
-	if ($folderexist -eq $true)
-	{
-		$CleanupTextBox.AppendText("Start cleanup:")
-		Write-Log -Level INFO -Message "Start cleanup:"
-		$CleanupTextBox.AppendText("`n")
-		$CleanupTextBox.AppendText("$Path")
-		Write-Log -Level INFO -Message "$Path"
-		$CleanupTextBox.AppendText("`n")
-		$cleanupTextBox.ScrollToCaret()
-		
-		# Get the full paths of excluded folders for accurate comparison
-		$ExcludedFoldersFullPaths = $ExcludedFolders | ForEach-Object { Join-Path -Path $Path -ChildPath $_ }
-		
-		# Initialize the Progress Bar
-		$CleanUpProgress.Maximum = (Get-ChildItem -Path $Path -Recurse | Where-Object {
-				($ExcludedFoldersFullPaths -notcontains $_.FullName) -and ($ExcludedFoldersFullPaths -notcontains $_.Parent)
-			}).Count
-		$CleanUpProgress.Step = 1
-		$CleanUpProgress.Value = 0
-		
-		# Remove folders and files, excluding specified folders and their contents
-		foreach ($item in Get-ChildItem -Path $Path -Recurse)
-		{
-			# Skip if the item is under an excluded folder or is an excluded folder
-			if ($ExcludedFoldersFullPaths -contains $item.FullName -or ($ExcludedFoldersFullPaths | Where-Object { $item.FullName -like "$_*" }))
-			{
-				$CleanupTextBox.AppendText("Skipping excluded folder or its contents: $($item.FullName)")
-				Write-Log -Level INFO -Message "Skipping excluded folder or its contents: $($item.FullName)"
-				$CleanupTextBox.AppendText("`n")
-				$cleanupTextBox.ScrollToCaret()
-				continue
-			}
-			
-			try
-			{
-				Remove-Item -Path $item.FullName -Recurse -Force -ErrorAction Stop
-				$CleanUpProgress.PerformStep()
-				$CleanUpProgress.Refresh()
-			}
-			catch
-			{
-				$CleanupTextBox.AppendText("Removed file: $($item.FullName)")
-				Write-Log -Level INFO -Message "Removed file: $($item.FullName)"
-				$CleanupTextBox.AppendText("`n")
-				$cleanupTextBox.ScrollToCaret()
-			}
-		}
-	}
-	else
-	{
-		$CleanupTextBox.AppendText("Folder does not exist: $Path")
-		Write-Log -Level INFO -Message "Folder does not exist: $path"
-		$CleanupTextBox.AppendText("`n")
-		$cleanupTextBox.ScrollToCaret()
-	}
-	
-	$CleanupTextBox.AppendText("CleanUp Finished")
-	Write-Log -Level INFO -Message "CleanUp Finished"
-	$CleanupTextBox.AppendText("`n")
-	$cleanupTextBox.ScrollToCaret()
-}
-function Remove-PersonecFoldersOLD
-{
-	param (
-		[string]$Path,
-		[string[]]$ExcludedFolders = @()
-	)
-	
-	$folderexist = (Test-Path $Path)
-	
-	if ($folderexist -eq $true)
-	{
-		
-		$CleanupTextBox.AppendText("Start cleanup:")
-		Write-Log -Level INFO -Message "Start cleanup:"
-		$CleanupTextBox.AppendText("`n")
-		$CleanupTextBox.AppendText("$Path")
-		Write-Log -Level INFO -Message "$Path"
-		$CleanupTextBox.AppendText("`n")
-		$cleanupTextBox.ScrollToCaret()
-		
-		
-		# Remove folders and files, excluding specified folders
-		foreach ($item in Get-ChildItem -Path $Path)
-		{
-			if ($ExcludedFolders -contains $item.Name)
-			{
-				
-				$CleanupTextBox.AppendText("Skipping excluded folder: $($item.name)")
-				Write-Log -Level INFO -Message "Skipping excluded folder: $($item.name)"
-				$CleanupTextBox.AppendText("`n")
-				$cleanupTextBox.ScrollToCaret()
-				continue
-			}
-			
-			try
-			{
-				Remove-Item -Path $item.FullName -Recurse -Force -ErrorAction Stop
-			}
-			catch
-			{
-				$CleanupTextBox.AppendText("Failed to remove: $($item.name)")
-				Write-Log -Level INFO -Message "Failed to remove: $($item.name)"
-				$CleanupTextBox.AppendText("`n")
-				$cleanupTextBox.ScrollToCaret()
-			}
-	
-		}
-	}
-	Else
-	{
-		
-		$CleanupTextBox.AppendText("Folder does not exist: $Path")
-		Write-Log -Level INFO -Message "Folder does not exist: $path"
-		$CleanupTextBox.AppendText("`n")
-		$cleanupTextBox.ScrollToCaret()
-	}
-	
-	$CleanupTextBox.AppendText("CleanUp Finished")
-	Write-Log -Level INFO -Message "CleanUp Finished"
-	$CleanupTextBox.AppendText("`n")
-	$cleanupTextBox.ScrollToCaret()
-}
 function Is-ApplicationInstalled
 {
 	param (
@@ -1238,95 +797,7 @@ function Is-ApplicationInstalled
 	}
 	return $false
 }
-function Is-ApplicationInstalledOLD
-{
-	param (
-		[string]$AppName,
-		[string]$Manufacturer
-	)
-	
-	$paths = @(
-		"HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*",
-		"HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
-	)
-	
-	foreach ($path in $paths)
-	{
-		$installedApps = Get-ItemProperty -Path $path |
-		Where-Object { $_.PSObject.Properties['DisplayName'] -and $_.PSObject.Properties['Publisher'] } |
-		Select-Object DisplayName, Publisher
-		
-		foreach ($app in $installedApps)
-		{
-			if ($app.DisplayName -eq $AppName -and $app.Publisher -like "*$Manufacturer*")
-			{
-				return $true
-			}
-		}
-	}
-	
-	return $false
-}
-# Example usage:
-#$applicationName = "Chrome"
-#$manufacturerName = "Google"
-#$isInstalled = Is-ApplicationInstalled -AppName $applicationName -Manufacturer $manufacturerName
-#Write-Output $isInstalled
-function Check-FileSizeOLD
-{
-	param (
-		[string]$FilePath,
-		# Path to the file
-		[int]$MinSizeKB,
-		# Minimum acceptable size in KB
-		[string]$ErrorTitle,
-		# Title for the error dialog
-		[string]$ErrorText,
-		# Text for the error dialog
-		[string]$SuccessTitle,
-		# Title for the success dialog
-		[string]$SuccessText,
-		# Text for the success dialog
-		[string]$WarningTitle,
-		# Title for the warning dialog
-		[string]$WarningText # Text for the warning dialog
-	)
-	
-	# Check if the file exists
-	if (-Not (Test-Path $FilePath))
-	{
-		# Special handling for RoboCopy files
-		if ($FilePath -match "\\\\.*\\.*")
-		{
-			# This is a simplistic check for a UNC path or RoboCopy file
-			# Show warning dialog for RoboCopy files
-			Add-Type -AssemblyName PresentationFramework
-			[System.Windows.MessageBox]::Show($WarningText, $WarningTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Warning)
-		}
-		else
-		{
-			Write-Host "File not found at path: $FilePath" -ForegroundColor Red
-		}
-		return
-	}
-	
-	# Get the file size in KB
-	$FileSize = (Get-Item $FilePath).Length / 1KB
-	
-	# Compare the file size
-	if ($FileSize -lt $MinSizeKB)
-	{
-		# Show dialog with red text for error
-		Add-Type -AssemblyName PresentationFramework
-		[System.Windows.MessageBox]::Show("$ErrorText File size: $FileSize KB", $ErrorTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
-	}
-	else
-	{
-		# Show dialog with green text for success
-		Add-Type -AssemblyName PresentationFramework
-		[System.Windows.MessageBox]::Show("$SuccessText File size: $FileSize KB", $SuccessTitle, [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Information)
-	}
-}
+
 function Check-FileSize
 {
 	param (
@@ -1433,13 +904,16 @@ function Remove-LogFiles
 		{
 			Remove-Item -Path $file.FullName -Force
 			$CleanUpTextBox.AppendText("Deleted: $($file.FullName)`n")
+			$CleanUpTextBox.ScrollToCaret()
 		}
 		
 		$CleanUpTextBox.AppendText("All log files have been deleted.`n")
+		$CleanUpTextBox.ScrollToCaret()
 	}
 	else
 	{
 		$CleanUpTextBox.AppendText("The specified path does not exist: $logPath`n")
+		$CleanUpTextBox.ScrollToCaret()
 	}
 }
 function Is-ProcessRunning
@@ -1453,33 +927,7 @@ function Is-ProcessRunning
 }
 # Example usage:
 # Returns True if "notepad" is running, otherwise False
-function Get-LatestReleaseTagORG
-{
-	param (
-		[string]$repo
-	)
-	$releasesUrl = "https://api.github.com/repos/$repo/releases/latest"
-	#$releasesUrl = "https://github.com/$repo/releases/latest/download/$file"
-	try
-	{
-		$response = Invoke-RestMethod -Uri $releasesUrl -Method Get
-		if ($response -and $response.tag_name)
-		{
-			return $response.tag_name
-			$releaseFound = "New Version: $response.tag_name ready to download"
-		}
-		else
-		{
-			$releaseFound = "No release tag found"
-			Write-Log -Level INFO -Message "No release tag found."
-		}
-	}
-	catch
-	{
-		$releaseFound = "Could not check for latest release"
-		Write-Log -Level INFO -Message "Failed to retrieve the latest release. Please check the repository name and try again."
-	}
-}
+
 function Get-LatestReleaseTag
 {
 	param (
@@ -1532,7 +980,7 @@ function Get-LatestReleaseTag
 		}
 		
 		# Show GUI dialog with OK button
-			Write-Host "Failed"
+		Write-Host "Failed"
 		
 		return $false
 	}
@@ -1591,18 +1039,6 @@ function Test-DownloadAccess
 		return $false
 	}
 }
-function Download-LatestVersionVersionFile
-{
-	param (
-		[string]$repo,
-		[string]$file,
-		[string]$localPath,
-		[string]$latestTag
-	)
-	
-	$downloadUrlVersion = "https://github.com/$repo/releases/latest/download/$configFile"
-	Invoke-WebRequest -Uri $downloadUrlVersion -OutFile $localPathVersion -UseBasicParsing -Method Get
-}
 function Set-ControlTheme
 {
 	[CmdletBinding()]
@@ -1624,7 +1060,7 @@ function Set-ControlTheme
 		$WindowColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
 		$ContainerColor = [System.Drawing.Color]::FromArgb(45, 45, 45)
 		$BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
-		$richtextboxColorBG = [System.Drawing.Color]::FromArgb(0,0,0)
+		$richtextboxColorBG = [System.Drawing.Color]::FromArgb(0, 0, 0)
 		$ForeColor = [System.Drawing.Color]::LawnGreen
 		$BorderColor = [System.Drawing.Color]::White
 		$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
@@ -1636,9 +1072,9 @@ function Set-ControlTheme
 		$WindowColor = [System.Drawing.Color]::FromArgb(203, 216, 230)
 		$ContainerColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
 		$BackColor = [System.Drawing.Color]::FromArgb(225, 225, 225)
-		$richtextboxColorBG = [System.Drawing.Color]::FromArgb(250,250,250)
+		$richtextboxColorBG = [System.Drawing.Color]::FromArgb(250, 250, 250)
 		$ForeColor = [System.Drawing.Color]::Black
-		$BorderColor = [System.Drawing.Color]::FromArgb(173,173,173)
+		$BorderColor = [System.Drawing.Color]::FromArgb(173, 173, 173)
 		$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
 		$SelectionForeColor = [System.Drawing.Color]::White
 		$MenuSelectionColor = [System.Drawing.Color]::LightSteelBlue
@@ -1850,7 +1286,7 @@ namespace SAPIENTypes
 			
 			$target.BackColor = $ContainerColor
 			$target.Renderer = $render
-
+			
 			
 			foreach ($item in $target.Items)
 			{
@@ -1871,7 +1307,7 @@ namespace SAPIENTypes
 			$target -is [System.Windows.Forms.ListView] -or
 			$target -is [System.Windows.Forms.TreeView])
 		{
-			$target.BackColor = $richtextboxColorBG 
+			$target.BackColor = $richtextboxColorBG
 		}
 		else
 		{
@@ -1914,10 +1350,10 @@ function Get-IISBindingsWithCerts
 {
 	[CmdletBinding()]
 	param ()
-
+	
 	Import-Module WebAdministration
 	
-
+	
 	
 	$sites = Get-Website | Where-Object { $_.Name -ne "Default Web Site" }
 	
@@ -1940,7 +1376,7 @@ function Get-IISBindingsWithCerts
 	}
 	
 	$bindingsInfo | Format-Table -AutoSize
-
+	
 	
 	
 	function Get-FormattedUrl
@@ -1998,7 +1434,7 @@ function Get-IISBindingsWithCerts
 			}
 		}
 	}
-
+	
 	$httpsBindings
 }
 
