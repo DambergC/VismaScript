@@ -382,7 +382,7 @@ function Copy-WithProgress
 	$ProgressBarBackup.Step = 1
 	$ProgressBarBackup.Value = 0
 	
-	$CommonRobocopyParams = '/MIR /NP /MT:24 /NDL /NC /BYTES /NJH /NJS /xf *.log'
+	$CommonRobocopyParams = '/MT:2 /MIR /NP /NDL /NC /BYTES /NJH /NJS /xf *.log'
 	
 	$FilebackupWindow.AppendText("`nAnalyzing robocopy job ...")
 	
@@ -404,7 +404,8 @@ function Copy-WithProgress
 	Write-Log -Level INFO -Message "Total bytes to be copied: {0} $BytesTotal"
 	
 	$RobocopyLogPath = "$global:InstallDrive\Visma\install\Backup\$global:SelectedBackupfolder\RoboCopy.log"
-	$ArgumentList = '"{0}" "{1}" /LOG+:"{2}" /ipg:{3} {4}' -f $Source, $Destination, $RobocopyLogPath, $Gap, $CommonRobocopyParams
+	# /IPG removed here
+	$ArgumentList = '"{0}" "{1}" /LOG+:"{2}" {3}' -f $Source, $Destination, $RobocopyLogPath, $CommonRobocopyParams
 	
 	$Robocopy = Start-Process -FilePath robocopy.exe -ArgumentList $ArgumentList -Verbose -PassThru -NoNewWindow
 	Start-Sleep -Milliseconds 100
