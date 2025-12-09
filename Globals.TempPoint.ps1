@@ -382,7 +382,7 @@ function Copy-WithProgress
 	$ProgressBarBackup.Step = 1
 	$ProgressBarBackup.Value = 0
 	
-	$CommonRobocopyParams = '/MIR /NP /MT:24 /NDL /NC /BYTES /NJH /NJS /xf *.log'
+	$CommonRobocopyParams = '/MIR /NP /NDL /NC /BYTES /NJH /NJS /xf *.log'
 	
 	$FilebackupWindow.AppendText("`nAnalyzing robocopy job ...")
 	
