@@ -1372,6 +1372,7 @@ function Get-IISBindingsWithCerts
 				Protocol    = $binding.Protocol
 				BindingInfo = $binding.BindingInformation
 				BindingHost = $bindingHost
+				
 			}
 		}
 	}
@@ -1431,7 +1432,7 @@ function Get-IISBindingsWithCerts
 				URL		    = Get-FormattedUrl $bindingHost $site.Name
 				CertSubject = if ($certObj) { $certObj.Subject } else { "Not found" }
 				CertExpires = if ($certObj) { $certObj.NotAfter } else { "Not found" }
-				#CertThumbprint = if ($certObj) { $certObj.Thumbprint } else { $thumbprint }
+				CertThumbprint = if ($certObj) { $certObj.Thumbprint } else { "Not found" }
 			}
 		}
 	}
