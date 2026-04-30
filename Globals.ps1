@@ -4,14 +4,8 @@
 $global:SelectedBigram = 'Select Bigram'
 $global:CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 $global:SelectedBackupfolder = 'Select Folder'
-#$global:FDNVersion = 'Download'
-#$global:HRMVersion = 'Download'
-#$global:PPPVersion = 'Download'
-#$global:PUDVersion = 'Download'
-#$global:PFHVersion = 'Download'
+
 #requires -version 5.1
-#Sample function that provides the location of the script
-#Install-Module sqlserver -Force
 
 function Install-NuGetPackage()
 {
@@ -649,125 +643,125 @@ function Test-WebServer
 }
 
 
-function Remove-PersonecFolders
-{
-	[CmdletBinding()]
-	param (
-		[Parameter(Mandatory = $true)]
-		[string]$Path,
-		[string[]]$ExcludedFolders = @()
-	)
-	
-	if (-not (Test-Path -LiteralPath $Path))
+Function Remove-PersonecFolders
 	{
-		$CleanupTextBox.AppendText("Folder does not exist: $Path`n")
-		Write-LogCleanup -Level INFO -Message "Folder does not exist: $Path"
-		$CleanupTextBox.ScrollToCaret()
-		return
-	}
-	
-	$CleanupTextBox.AppendText("Start cleanup (B):`n$Path`n")
-	Write-LogCleanup -Level INFO -Message "Start cleanup (B): $Path"
-	$CleanupTextBox.ScrollToCaret()
-	
-	# Normalize base path
-	$basePath = [System.IO.Path]::GetFullPath($Path).TrimEnd('\')
-	
-	# Build full (resolved) excluded folder paths (relative to base)
-	$ExcludedFoldersFullPaths = $ExcludedFolders |
-	Where-Object { $_ -and $_.Trim() -ne '' } |
-	ForEach-Object {
-		[System.IO.Path]::GetFullPath(
-			(Join-Path -Path $basePath -ChildPath $_)
-		).TrimEnd('\')
-	}
-	
-	# Log excluded folders
-	if ($ExcludedFoldersFullPaths.Count -gt 0)
-	{
-		$CleanupTextBox.AppendText("Excluded folders (B):`n")
-		Write-LogCleanup -Level INFO -Message "Excluded folders (B):"
-		foreach ($excludedPath in $ExcludedFoldersFullPaths)
-		{
-			$CleanupTextBox.AppendText("  $excludedPath`n")
-			Write-LogCleanup -Level INFO -Message "  $excludedPath"
-		}
-		$CleanupTextBox.ScrollToCaret()
-	}
-	else
-	{
-		$CleanupTextBox.AppendText("No excluded folders (B)`n")
-		Write-LogCleanup -Level INFO -Message "No excluded folders (B)"
-		$CleanupTextBox.ScrollToCaret()
-	}
-	
-	# Get only direct children under base path
-	$topLevelItems = Get-ChildItem -LiteralPath $basePath -Force -ErrorAction SilentlyContinue
-	
-	# Filter out excluded folders (only when the item is a container and matches an excluded path)
-	$itemsToRemove = $topLevelItems | Where-Object {
-		$itemPath = [System.IO.Path]::GetFullPath($_.FullName).TrimEnd('\')
+		[CmdletBinding()]
+		param (
+			[Parameter(Mandatory = $true)]
+			[string]$Path,
+			[string[]]$ExcludedFolders = @()
+		)
 		
-		if ($_.PSIsContainer -and $ExcludedFoldersFullPaths.Count -gt 0)
+		if (-not (Test-Path -LiteralPath $Path))
 		{
-			$isExcluded = $false
-			foreach ($excluded in $ExcludedFoldersFullPaths)
+			$CleanupTextBox.AppendText("Folder does not exist: $Path`n")
+			Write-LogCleanup -Level INFO -Message "Folder does not exist: $Path"
+			$CleanupTextBox.ScrollToCaret()
+			return
+		}
+		
+		$CleanupTextBox.AppendText("Start cleanup (B):`n$Path`n")
+		Write-LogCleanup -Level INFO -Message "Start cleanup (B): $Path"
+		$CleanupTextBox.ScrollToCaret()
+		
+		# Normalize base path
+		$basePath = [System.IO.Path]::GetFullPath($Path).TrimEnd('\')
+		
+		# Build full (resolved) excluded folder paths (relative to base)
+		$ExcludedFoldersFullPaths = $ExcludedFolders |
+		Where-Object { $_ -and $_.Trim() -ne '' } |
+		ForEach-Object {
+			[System.IO.Path]::GetFullPath(
+				(Join-Path -Path $basePath -ChildPath $_)
+			).TrimEnd('\')
+		}
+		
+		# Log excluded folders
+		if ($ExcludedFoldersFullPaths.Count -gt 0)
+		{
+			$CleanupTextBox.AppendText("Excluded folders (B):`n")
+			Write-LogCleanup -Level INFO -Message "Excluded folders (B):"
+			foreach ($excludedPath in $ExcludedFoldersFullPaths)
 			{
-				if ($itemPath.Equals($excluded, [System.StringComparison]::OrdinalIgnoreCase))
+				$CleanupTextBox.AppendText("  $excludedPath`n")
+				Write-LogCleanup -Level INFO -Message "  $excludedPath"
+			}
+			$CleanupTextBox.ScrollToCaret()
+		}
+		else
+		{
+			$CleanupTextBox.AppendText("No excluded folders (B)`n")
+			Write-LogCleanup -Level INFO -Message "No excluded folders (B)"
+			$CleanupTextBox.ScrollToCaret()
+		}
+		
+		# Get only direct children under base path
+		$topLevelItems = Get-ChildItem -LiteralPath $basePath -Force -ErrorAction SilentlyContinue
+		
+		# Filter out excluded folders (only when the item is a container and matches an excluded path)
+		$itemsToRemove = $topLevelItems | Where-Object {
+			$itemPath = [System.IO.Path]::GetFullPath($_.FullName).TrimEnd('\')
+			
+			if ($_.PSIsContainer -and $ExcludedFoldersFullPaths.Count -gt 0)
+			{
+				$isExcluded = $false
+				foreach ($excluded in $ExcludedFoldersFullPaths)
 				{
-					$isExcluded = $true
-					break
+					if ($itemPath.Equals($excluded, [System.StringComparison]::OrdinalIgnoreCase))
+					{
+						$isExcluded = $true
+						break
+					}
 				}
-			}
-			return -not $isExcluded
-		}
-		
-		# Top-level files: always remove
-		return $true
-	}
-	
-	if (-not $itemsToRemove -or $itemsToRemove.Count -eq 0)
-	{
-		$CleanupTextBox.AppendText("Nothing to remove in: $Path`n")
-		Write-LogCleanup -Level INFO -Message "Nothing to remove in (B): $Path"
-		$CleanupTextBox.ScrollToCaret()
-		return
-	}
-	
-	$CleanUpProgress.Maximum = $itemsToRemove.Count
-	$CleanUpProgress.Step = 1
-	$CleanUpProgress.Value = 0
-	
-	foreach ($item in $itemsToRemove)
-	{
-		try
-		{
-			if ($item.PSIsContainer)
-			{
-				Remove-Item -LiteralPath $item.FullName -Recurse -Force -ErrorAction Stop
-			}
-			else
-			{
-				Remove-Item -LiteralPath $item.FullName -Force -ErrorAction Stop
+				return -not $isExcluded
 			}
 			
-			$CleanupTextBox.AppendText("Removed top-level item: $($item.FullName)`n")
-			Write-LogCleanup -Level INFO -Message "Removed top-level item: $($item.FullName)"
+			# Top-level files: always remove
+			return $true
 		}
-		catch
+		
+		if (-not $itemsToRemove -or $itemsToRemove.Count -eq 0)
 		{
-			$CleanupTextBox.AppendText("Failed to remove: $($item.FullName)`n")
-			Write-LogCleanup -Level ERROR -Message "Failed to remove: $($item.FullName). Error: $_"
+			$CleanupTextBox.AppendText("Nothing to remove in: $Path`n")
+			Write-LogCleanup -Level INFO -Message "Nothing to remove in (B): $Path"
+			$CleanupTextBox.ScrollToCaret()
+			return
 		}
-		$CleanUpProgress.PerformStep()
-		$CleanUpProgress.Refresh()
+		
+		$CleanUpProgress.Maximum = $itemsToRemove.Count
+		$CleanUpProgress.Step = 1
+		$CleanUpProgress.Value = 0
+		
+		foreach ($item in $itemsToRemove)
+		{
+			try
+			{
+				if ($item.PSIsContainer)
+				{
+					Remove-Item -LiteralPath $item.FullName -Recurse -Force -ErrorAction Stop
+				}
+				else
+				{
+					Remove-Item -LiteralPath $item.FullName -Force -ErrorAction Stop
+				}
+				
+				$CleanupTextBox.AppendText("Removed top-level item: $($item.FullName)`n")
+				Write-LogCleanup -Level INFO -Message "Removed top-level item: $($item.FullName)"
+			}
+			catch
+			{
+				$CleanupTextBox.AppendText("Failed to remove: $($item.FullName)`n")
+				Write-LogCleanup -Level ERROR -Message "Failed to remove: $($item.FullName). Error: $_"
+			}
+			$CleanUpProgress.PerformStep()
+			$CleanUpProgress.Refresh()
+			$CleanupTextBox.ScrollToCaret()
+		}
+		
+		$CleanupTextBox.AppendText("CleanUp Finished (B)`n")
+		Write-LogCleanup -Level INFO -Message "CleanUp Finished (B)"
 		$CleanupTextBox.ScrollToCaret()
 	}
-	
-	$CleanupTextBox.AppendText("CleanUp Finished (B)`n")
-	Write-LogCleanup -Level INFO -Message "CleanUp Finished (B)"
-	$CleanupTextBox.ScrollToCaret()
-}
 
 function Is-ApplicationInstalled
 {
@@ -1070,7 +1064,7 @@ function Set-ControlTheme
 	}
 	else
 	{
-		$WindowColor = [System.Drawing.Color]::FromArgb(203, 216, 230)
+		$WindowColor = [System.Drawing.Color]::FromArgb(203, 180, 230)
 		$ContainerColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
 		$BackColor = [System.Drawing.Color]::FromArgb(225, 225, 225)
 		$richtextboxColorBG = [System.Drawing.Color]::FromArgb(250, 250, 250)
