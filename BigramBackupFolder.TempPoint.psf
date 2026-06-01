@@ -943,7 +943,7 @@ $BigramBackupFolder_Load={
 	if (Test-Path "$global:InstallDrive\Visma\install\FDN\PIN\Client\Base\SW")
 	{
 		
-		$global:FDNversion = Get-HighestFolderName -Path "$InstallDrive\Visma\install\FDN\PIN\Client\Base\SW" -Recurse
+		$global:FDNversion = Get-HighestFolderName -Path "$InstallDrive\Visma\install\FDN" -Recurse
 	}
 	else
 	{

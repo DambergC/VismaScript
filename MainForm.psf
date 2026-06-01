@@ -982,7 +982,7 @@ R92vjX8ieu0Ijo7fVPUvp2+DtDkKef8WkvweiN/G/p0vPPuTOrwLzH+0/X9PTnrln/QqibMieuWn
 V3565adXfnoiP/2FGs+ykftoikIxvnw3yDtp6i8n9cNM9e3t/V//BmCInPbvQgEA</Form>
   <Code><![CDATA[#requires -version 5.1
 
-$currentVersion = "26.06.001" # Replace with your current version
+$currentVersion = "26.06.002" # Replace with your current version
 #$currentVersion = "v2.0.3" # Replace with your current version
 $updateDate = "2026-06-01" # Replace with date
 
