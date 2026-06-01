@@ -26,18 +26,18 @@ function Install-NuGetPackage()
 		$latestVersion = "2.8.5.201"
 		if ($installedVersion -lt $latestVersion)
 		{
-			Write-Host "Updating $packageName from version $installedVersion to $latestVersion"
+			Write-Host "Updating $packageName from version $installedVersion to $latestVersion" -ForegroundColor Yellow
 			Update-PackageProvider -Name $packageName -Force
 		}
 		else
 		{
-			Write-Host "$packageName is already up-to-date (version $installedVersion)"
+			Write-Host "$packageName is already up-to-date (version $installedVersion)" -ForegroundColor Green
 		}
 	}
 	else
 	{
 		# Module is not installed, install it
-		Write-Host "Installing $packageName"
+		Write-Host "Installing $packageName" -ForegroundColor Green
 		Install-PackageProvider -Name $packageName -Force
 	}
 	# Import the package
@@ -57,18 +57,18 @@ function Install-SqlServerModule()
 		$latestVersion = "22.4.5.1"
 		if ($installedVersion -lt $latestVersion)
 		{
-			Write-Host "Updating $moduleName from version $installedVersion to $latestVersion"
+			Write-Host "Updating $moduleName from version $installedVersion to $latestVersion" -ForegroundColor Yellow
 			Update-Module -Name $moduleName -Force
 		}
 		else
 		{
-			Write-Host "$moduleName is already up-to-date (version $installedVersion)"
+			Write-Host "$moduleName is already up-to-date (version $installedVersion)" -ForegroundColor Green
 		}
 	}
 	else
 	{
 		# Module is not installed, install it
-		Write-Host "Installing $moduleName"
+		Write-Host "Installing $moduleName" -ForegroundColor Green
 		Install-Module -Name $moduleName -Force -AllowClobber
 	}
 	# Import the module
@@ -617,7 +617,6 @@ $global:SelectedBigram = 'Select Bigram'
 $global:CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 $global:SelectedBackupfolder = 'Select Folder'
 
-
 function Refresh-StatusBar
 {
 	$StatusBar.Text = 'Bigram:' + $global:SelectedBigram + ' Folder:' + $global:SelectedBackupfolder
@@ -641,8 +640,6 @@ function Test-WebServer
 		return $false
 	}
 }
-
-
 Function Remove-PersonecFolders
 	{
 		[CmdletBinding()]
@@ -762,7 +759,6 @@ Function Remove-PersonecFolders
 		Write-LogCleanup -Level INFO -Message "CleanUp Finished (B)"
 		$CleanupTextBox.ScrollToCaret()
 	}
-
 function Is-ApplicationInstalled
 {
 	param (
@@ -792,7 +788,6 @@ function Is-ApplicationInstalled
 	}
 	return $false
 }
-
 function Check-FileSize
 {
 	param (
