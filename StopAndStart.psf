@@ -462,7 +462,7 @@ $buttonStopIIS_Click = {
 		else
 		{
 			Write-Log -Level INFO -Message "Stop $global:SelectedBigram Site"
-			
+			Write-Host "Stopping website $global:SelectedBigram" -ForegroundColor Yellow
 			Stop-IISSite -Name $global:SelectedBigram -Confirm:$false
 			$StartStopRichTextBox.AppendText("`n")
 			
@@ -473,6 +473,8 @@ $buttonStopIIS_Click = {
 			$richtextbox1.AppendText("`n")
 			$richtextbox1.AppendText("$global:SelectedBigram site Stopped")
 			$richtextbox1.ScrollToCaret()
+			Write-Host "Done stopping website $global:SelectedBigram" -ForegroundColor Green
+			
 		}
 
 	}
@@ -481,6 +483,7 @@ $buttonStopIIS_Click = {
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.AppendText("This is not a webserver")
 		$richtextbox1.ScrollToCaret()
+		Write-Host "This is not a webserver..." -ForegroundColor Yellow	
 	}
 	
 	
