@@ -943,7 +943,8 @@ $BigramBackupFolder_Load={
 	if (Test-Path "$global:InstallDrive\Visma\install\FDN\PIN\Client\Base\SW")
 	{
 		
-		$global:FDNversion = Get-HighestFolderName -Path "$InstallDrive\Visma\install\FDN\PIN\Client\Base\SW" -Recurse
+		$global:FDNversion = Get-HighestFolderName -Path "$InstallDrive\Visma\install\FDN\" -Recurse
+		$global:PINVersion = Get-HighestFolderName -Path "$InstallDrive\Visma\install\FDN\PIN\Client\Base\SW" -Recurse
 	}
 	else
 	{
@@ -1164,6 +1165,8 @@ $BigramBackupFolder.add_Closing(
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.AppendText("FDN version on server: $global:FDNversion")
 		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("PIN version on server: $global:PINversion")
+		$richtextbox1.AppendText("`n")
 		$richtextbox1.AppendText("HRM version on server: $global:HRMversion")
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.AppendText("PPP version on server: $global:PPPversion")
@@ -1216,6 +1219,7 @@ $buttonCreateFolder_Click={
 	#TODO: Place custom script here
 	$foldername = $TB_BackupfolderName.Text
 	$InstallDrive = $global:InstallDrive
+	$richtextbox1.AppendText("`n")
 	$richtextbox1.AppendText("New Backupfolder created: $foldername")
 	$richtextbox1.AppendText("`n")
 	$richtextbox1.ScrollToCaret()
@@ -1235,6 +1239,7 @@ $BackupFolderListbox_SelectedIndexChanged={
 	$Backupfolder = $BackupFolderListbox.SelectedItem
 	$richtextbox1.AppendText("`n")
 	$richtextbox1.AppendText("Selected backupfolder: $Backupfolder")
+	$richtextbox1.AppendText("`n")
 	Write-Log -Level INFO -Message "Selected backupfolder: $Backupfolder"
 	$richtextbox1.ScrollToCaret()
 
@@ -1260,6 +1265,7 @@ $buttonDeleteBigram_Click={
 	{
 		
 		$source = "$InstallDrive\visma\install\backup\appsettings\$selectedBigram.XML"
+		$richtextbox1.AppendText("`n")
 		$richtextbox1.AppendText("Deleting: $source")
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.ScrollToCaret()

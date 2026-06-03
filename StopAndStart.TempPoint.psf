@@ -312,15 +312,15 @@ H/r1V4gnnle9/bKj7nueZf721x1KbIZ6yMmePFRdz3JUTTfUn733eImVYC3kE8RM4SaHZ60XQP0o
 pT90IMUOp1cfVULffKSYLslK21yq4dVt4eV7kh/ln3qWS9xqpXNr7KoT3fVlI37DUpcX24ZlWM7V
 reT4r66/5FADs7b9CSz/iSd8Ryc48ekPZVdjrS62NQ0rb2yvHHn5z7hVZt7JrRfmfyuz0nh3Ylbs
 V06mjuXSe/Zx5HqBy/upVRPbTbwptlX3CxpeOarr1mVnEKiOIUfIEuugOqO1ahionv5St56oVfrC
-5L8UytU07DJ9w7i6FHSqrhf2/gmd2HwpNZ1es52aSyRfQfK+fBH8UzLlX/abP7zUDct9Z3nXzMWa
+5L8UyqU07DJ9w7i6FHSqrhf2/gmd2HwpNZ1es52aSyRfQfK+fBH8UzLlX/abP7zUDct9Z3nXzMWa
 8rdu4Qa7m9xQX61f9tlX3n7Lvqu6E9nQl0k+W7LhpikhTpcNa4WaiqFiGcrmQjVSLHsiTqVYROYU
 39vkYnBSE6ZSejdfmFRaFYvPv+Sd/e+0DqHmNKydjdErhkrXD1U06Ojm6sey8/tkizr9MV0QC9rz
 aRX/9up4tPSrWoW22XKaU8ujVJ3spdcn+gckrwjOT/lWTc23Hzv0hyvaSfRVJ9AXqvtryta3zDQl
 Qoti5Vi+uWzv5JUqyJHle+d7lnfpE21sTCmNGFzK07NI33dGeidt0gjnI20cL/cOp/4oqXqG6Cc8
 uNOzzmekfqrbu+fUfwr0tzK//A7mW/YnJv4Tnp+S91i37fboE3G+lIaIL9QeY/ytdE9zb3Up9On8
 +cOofsLxU9Lcsj8Xy5niLwj77yZ5Gp8uNP1TcjxG8WMoPtQXaxpQ3Qr/F7ddpyc2F0bfR3f6h/hI
-V8t0LUNG16p2mmcTF6xl6N//v+vG7YXH6R8Z5Fm8hyOpjteP/E31iCGm789v3S4G51/d2/8CyzjD
-peMxAAA=</Form>
+V8t0LUNG16p2mmcTF6xl6N//v+vG7YXH6R8Z5Fm8hyOpjteP/E31iCGm789v3S4G51/d2/8CcoWB
+SuMxAAA=</Form>
   <Code><![CDATA[
 $formStopAndStart_Load = {
 	#TODO: Initialize Form Controls here
@@ -447,7 +447,12 @@ $buttonStopServices_Click = {
 $buttonStopIIS_Click = {
 	#TODO: Place custom script here
 	
-
+	
+	$StartStopRichTextBox.AppendText("`n")
+	$StartStopRichTextBox.AppendText("Stop $global:SelectedBigram site")
+	$StartStopRichTextBox.ScrollToCaret()
+	
+	
 	if ((Get-WindowsFeature -Name Web-Server).Installed)
 	{
 		$checksite = Get-IISSite -Name $global:SelectedBigram
@@ -461,20 +466,19 @@ $buttonStopIIS_Click = {
 		
 		else
 		{
+			
+			
 			Write-Log -Level INFO -Message "Stop $global:SelectedBigram Site"
 			
 			Stop-IISSite -Name $global:SelectedBigram -Confirm:$false
 			$StartStopRichTextBox.AppendText("`n")
-			
 			$StartStopRichTextBox.AppendText("$global:SelectedBigram site Stopped ")
 			$StartStopRichTextBox.ScrollToCaret()
-			
-			Write-Log -Level INFO -Message "$global:SelectedBigram site Stopped"
-			$richtextbox1.AppendText("`n")
-			$richtextbox1.AppendText("$global:SelectedBigram site Stopped")
-			$richtextbox1.ScrollToCaret()
 		}
-
+		Write-Log -Level INFO -Message "$global:SelectedBigram site Stopped"
+		$richtextbox1.AppendText("`n")
+		$richtextbox1.AppendText("$global:SelectedBigram site Stopped")
+		$richtextbox1.ScrollToCaret()
 	}
 	else
 	{
@@ -701,6 +705,6 @@ $buttonCheckAfterUpgrade_Click = {
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>1</Mode>
+  <Mode>0</Mode>
   <Assemblies />
 </File>
