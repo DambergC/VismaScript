@@ -1,0 +1,697 @@
+﻿<File version="3.2">
+  <FileID>1675b376-67a2-4c14-9366-a4f84698131d</FileID>
+  <Preview>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
+AQCyqtKRoKXTAAAAAElFTkSuQmCC</Preview>
+  <Form>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</Form>
+  <Code><![CDATA[#requires -version 5.1
+
+$formInventory_Load = {
+	if ($global:SelectedBigram -eq 'Select Bigram' -or $global:SelectedBackupfolder -eq 'Select Folder')
+	{
+		$InventoryTextBox.AppendText("`n")
+		$InventoryTextBox.AppendText("You Need to select BIGRAM and BackupFolder")
+		$InventoryTextBox.ScrollToCaret()
+		$formInventory.Close()
+	}
+	
+	#TODO: Initialize Form Controls here
+	Refresh-StatusBar
+	
+	$DisplayMode = Get-RegValue -RegPath 'HKLM:\SOFTWARE\Wow6432Node\Visma\TeliaCygate' -RegName DisplayModeScript
+	
+	if ($DisplayMode -eq 'Light')
+	{
+		Set-ControlTheme -Control $formInventory -Theme Light
+	}
+	
+	elseif ($DisplayMode -eq 'Dark')
+	{
+		Set-ControlTheme -Control $formInventory -Theme Dark
+	}
+	
+	if ($global:SelectedBackupfolder -eq 'Select Folder' -or $global:SelectedBigram -eq 'Select Bigram')
+	{
+		$buttonSystem.Enabled = $false
+		$buttonSettings.Enabled = $false
+		$buttonPassword.Enabled = $false
+	}
+	
+	else
+	{
+		$buttonSystem.Enabled = $true
+		$buttonSettings.Enabled = $true
+		$buttonPassword.Enabled = $true
+	}
+	
+	#Requires -Version 5.1
+}
+
+$buttonSystem_Click = {
+	#TODO: Place custom script here
+	
+	$InventoryTextBox.DetectUrls = $true
+	
+	$InventoryTextBox.add_LinkClicked({
+			param ($sender,
+				$e)
+			Start-Process $e.LinkText
+		})
+	
+	$services = "PBSScheduler_$global:SelectedBigram", "Scheduler", "Ciceron Server Manager", "NeptuneMB_$global:SelectedBigram", "PersonecPBatchManager$global:SelectedBigram", "PersonecPUtdataExportImportService$global:SelectedBigram", "RSPFlexService$global:SelectedBigram", "Visma.P-Background-Service - $global:SelectedBigram", "Visma.PersonecP.PufIa.WinSvc - $global:SelectedBigram"
+	
+	
+	###################################
+	# INVENTORY OF SERVICES
+	###################################
+	
+	$data = @()
+	
+	foreach ($Service in $Services)
+	{
+		$InfoOnService = Get-CimInstance win32_service | Where-Object Name -eq $Service | Select-Object name, startname, state, Startmode -ErrorAction SilentlyContinue
+		
+		if ($InfoOnService -ne $null)
+		{
+			$object = New-Object -TypeName PSObject
+			$object | Add-Member -MemberType NoteProperty -Name 'Service' -Value $InfoOnService.name
+			$object | Add-Member -MemberType NoteProperty -Name 'Konto' -Value $InfoOnService.Startname
+			$object | Add-Member -MemberType NoteProperty -Name 'Status' -Value $InfoOnService.state
+			$object | Add-Member -MemberType NoteProperty -Name 'StartMode' -Value $InfoOnService.startmode
+			
+			$data += $object
+		}
+		
+		else
+		{
+			$object = New-Object -TypeName PSObject
+			$object | Add-Member -MemberType NoteProperty -Name 'Service' -Value $Service
+			$object | Add-Member -MemberType NoteProperty -Name 'Konto' -Value "--"
+			$object | Add-Member -MemberType NoteProperty -Name 'Status' -Value "Does not exist"
+			$object | Add-Member -MemberType NoteProperty -Name 'StartMode' -Value "--"
+			
+			$data += $object
+		}
+		
+	}
+	
+	$result = $data | Out-String
+	$InventoryTextBox.Clear()
+	$InventoryTextBox.AppendText("`n")
+	$InventoryTextBox.AppendText("Services Installed:")
+	$InventoryTextBox.AppendText("`n")
+	$InventoryTextBox.AppendText($result)
+	$InventoryTextBox.ScrollToCaret()
+	Write-Log -Level INFO -Message "Services Installed:"
+	Write-Log -Level INFO -Message $result
+	
+	###################################
+	# INVENTORY OF APPLICATIONS
+	###################################	
+	
+	$data2 = @()
+	
+	$installed = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
+								  'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*',
+								  'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
+								  'HKCU:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*' -ErrorAction Ignore | Where-Object publisher -eq 'Visma' | Select-Object -Property DisplayName, DisplayVersion, Publisher | Sort-Object -Property DisplayName
+	
+	
+	if ($installed -ne $null)
+	{
+		foreach ($inst in $installed)
+		{
+			
+			
+			$object = New-Object -TypeName PSObject
+			$object | Add-Member -MemberType NoteProperty -Name 'Applikation' -Value $inst.displayname
+			$object | Add-Member -MemberType NoteProperty -Name 'Version' -Value $inst.displayversion
+			$object | Add-Member -MemberType NoteProperty -Name 'Utgivare' -Value $inst.publisher
+			
+			$data2 += $object
+		}
+		
+		$result = $data2 | Out-String
+		$InventoryTextBox.AppendText("`n")
+		$InventoryTextBox.AppendText("Applications installed:")
+		$InventoryTextBox.AppendText("`n")
+		$InventoryTextBox.AppendText($result)
+		$InventoryTextBox.ScrollToCaret()
+		Write-Log -Level INFO -Message " Applications Installed:"
+		Write-Log -Level INFO -Message $result
+		
+	}
+	
+	
+	else
+	{
+		$InventoryTextBox.AppendText("`n")
+		
+		$InventoryTextBox.AppendText("NO Applications installed:")
+		$InventoryTextBox.AppendText("`n")
+		
+		Write-Log -Level INFO -Message "No Applications from Visma installed"
+		
+	}
+	
+	###################################
+	# INVENTORY OF APPLICATIONPOOLS
+	###################################	
+	
+	$ISWebserver = Test-WebServer
+	
+	
+	if ($ISWebServer -eq $true)
+	{
+		
+		$appPools = Get-WebConfiguration -Filter '/system.applicationHost/applicationPools/add'
+		$appPoolResultat = [System.Collections.ArrayList]::new()
+		
+		if ($appPools.count -ge '2')
+		{
+			
+			Write-Host 'Inventory Applications Pools' -ForegroundColor Green
+			foreach ($appPool in $appPools)
+			{
+				
+				[void]$appPoolResultat.add([PSCustomObject]@{
+						Name = $appPool.name
+						User = $appPool.ProcessModel.UserName
+						#Password = $appPool.ProcessModel.Password
+					})
+				
+			}
+			
+			$result = $appPoolResultat | Out-String
+			
+			
+			$InventoryTextBox.AppendText("`n")
+			$InventoryTextBox.AppendText("Applications Pools:")
+			$InventoryTextBox.AppendText("`n")
+			$InventoryTextBox.AppendText($result)
+			$InventoryTextBox.ScrollToCaret()
+			Write-Log -Level INFO -Message " Application Pools:"
+			Write-Log -Level INFO -Message $result
+		}
+		
+		else
+		{
+			$InventoryTextBox.AppendText("`n")
+			
+			$InventoryTextBox.AppendText("No Applications Pools present   ")
+			$InventoryTextBox.AppendText("`n")
+			
+			$InventoryTextBox.ScrollToCaret()
+			Write-Log -Level INFO -Message "NO Application Pools"
+			
+		}
+		
+		$CertAndBindings = Get-IISBindingsWithCerts
+		
+		$InventoryTextBox.DetectUrls = $true
+		
+		$InventoryTextBox.add_LinkClicked({
+				param ($sender,
+					$e)
+				Start-Process $e.LinkText
+			})
+		
+		
+		$resultCertAndBindings = $CertAndBindings | Out-String
+		
+		$InventoryTextBox.AppendText("Cert and Bindings:`n")
+		$InventoryTextBox.AppendText($resultCertAndBindings)
+		$InventoryTextBox.ScrollToCaret()
+		Write-Log -Level INFO -Message " Cert and Bindings:"
+		Write-Log -Level INFO -Message $resultCertAndBindings
+		
+	}
+	
+	else
+	{
+		$InventoryTextBox.AppendText("No Webserver, no applicationpools.")
+		$InventoryTextBox.AppendText("`n")
+		$InventoryTextBox.ScrollToCaret()
+		Write-Log -Level INFO -Message "No Webserver, no applicationpools."
+		
+		
+	}
+	
+	
+}
+
+$buttonPassword_Click = {
+	#TODO: Place custom script here
+	$global:SelectedBackupfolder = $global:SelectedBackupfolder
+	
+	
+	###################################
+	# Check backupfolder if encrypted
+	###################################	
+	
+	Write-Host 'Checking if backupfolder is encrypted' -ForegroundColor Yellow
+	
+	
+	if (Test-Path "$global:InstallDrive\Visma\Install\Backup\$global:SelectedBackupfolder\wwwroot")
+	{
+		
+		
+		$AppPaths = (Get-ChildItem -Path "$global:InstallDrive\Visma\Install\Backup\$global:SelectedBackupfolder\wwwroot" -Recurse -Filter web.config).DirectoryName
+		
+		
+		foreach ($AppPath in $AppPaths)
+		{
+			
+			#[XML]$CheckElementXML = Get-Content -Path "$global:InstallDrive\Visma\Install\Backup\$global:SelectedBackupfolder\wwwroot\$global:SelectedBigram\PPP\Personec_P_web\Lon\web.config"
+			[XML]$CheckElementXML = Get-Content -Path "$AppPath\web.config"
+			
+		}
+		
+		if ($CheckElementXML.configuration.appSettings.EncryptedData -ne $null)
+		{
+			
+			$InventoryTextBox.AppendText("`n")
+			$InventoryTextBox.AppendText("Backupfolder is encrypted!!!")
+			
+			$InventoryTextBox.ScrollToCaret()
+			Write-Host 'Backupfolder encrypted, please decrypt before reading data' -ForegroundColor DarkYellow
+		}
+		else
+		{
+			
+			$data5 = @()
+			
+			Write-Host 'Backupfolder decrypted, reading data' -ForegroundColor Green
+			
+			$pstid = Get-IniFile "$global:InstallDrive\Visma\install\backup\$global:SelectedBackupfolder\programs\$global:SelectedBigram\ppp\Personec_p\pstid.ini" -ErrorAction SilentlyContinue
+			[xml]$Batch = Get-Content "$global:InstallDrive\Visma\install\backup\$global:SelectedBackupfolder\Programs\$global:SelectedBigram\PPP\Personec_P\batch.config" -ErrorAction SilentlyContinue
+			[XML]$PIA = Get-Content "$global:InstallDrive\Visma\install\backup\$global:SelectedBackupfolder\Wwwroot\$global:SelectedBigram\PIA\PUF_IA Module\web.config" -ErrorAction SilentlyContinue
+			
+			$object = New-Object -TypeName PSObject
+			$object | Add-Member -MemberType NoteProperty -Name 'NeptuneUser' -Value $PSTID.styr.NeptuneUser
+			$object | Add-Member -MemberType NoteProperty -Name 'NeptunePassword' -Value $PSTID.styr.NeptuneUser
+			$object | Add-Member -MemberType NoteProperty -Name 'Batchuser' -Value $Batch.configuration.appsettings.add.where{ $_.key -eq 'sysuser' }.value
+			$object | Add-Member -MemberType NoteProperty -Name 'BatchPassword' -Value $Batch.configuration.appsettings.add.where{ $_.key -eq 'SysPassword' }.value
+			
+			$object | Add-Member -MemberType NoteProperty -Name 'PPP Username' -Value $PIA.configuration.appsettings.add.where{ $_.key -eq 'P.Database.User' }.value
+			$object | Add-Member -MemberType NoteProperty -Name 'PPP Password' -Value $PIA.configuration.appsettings.add.where{ $_.key -eq 'P.Database.Password' }.value
+			
+			$object | Add-Member -MemberType NoteProperty -Name 'PUD Username' -Value $PIA.configuration.appsettings.add.where{ $_.key -eq 'U.Database.User' }.value
+			$object | Add-Member -MemberType NoteProperty -Name 'PUD Password' -Value $PIA.configuration.appsettings.add.where{ $_.key -eq 'U.Database.Password' }.value
+			
+			$object | Add-Member -MemberType NoteProperty -Name 'PFH Username' -Value $PIA.configuration.appsettings.add.where{ $_.key -eq 'F.Database.User' }.value
+			$object | Add-Member -MemberType NoteProperty -Name 'PFH Password' -Value $PIA.configuration.appsettings.add.where{ $_.key -eq 'F.Database.Password' }.value
+			
+			$object | Add-Member -MemberType NoteProperty -Name 'Service Username' -Value $PIA.configuration.appsettings.add.where{ $_.key -eq 'ServiceUser.Login' }.value
+			$object | Add-Member -MemberType NoteProperty -Name 'Service Password' -Value $PIA.configuration.appsettings.add.where{ $_.key -eq 'serviceUser.Secret' }.value
+			$data5 += $object
+			
+			$result = $data5 | Out-String
+			
+			$InventoryTextBox.AppendText("`n")
+			$InventoryTextBox.AppendText("Settings from backup:")
+			$InventoryTextBox.AppendText("`n")
+			$InventoryTextBox.AppendText("$result")
+			$InventoryTextBox.ScrollToCaret()
+		}
+		
+	}
+	
+}
+
+
+$buttonSettings_Click = {
+	#TODO: Place custom script here
+	###################################
+	# Check backupfolder if encrypted
+	###################################	
+	
+	Write-Host 'Checking if backupfolder is encrypted' -ForegroundColor Yellow
+	
+	if (Test-Path "$global:InstallDrive\Visma\Install\Backup\$global:SelectedBackupfolder\wwwroot")
+	{
+		
+		
+		$AppPaths = (Get-ChildItem -Path "$global:InstallDrive\Visma\Install\Backup\$global:SelectedBackupfolder\wwwroot" -Recurse -Filter web.config).DirectoryName
+		
+		
+		foreach ($AppPath in $AppPaths)
+		{
+			
+			#[XML]$CheckElementXML = Get-Content -Path "$global:InstallDrive\Visma\Install\Backup\$global:SelectedBackupfolder\wwwroot\$global:SelectedBigram\PPP\Personec_P_web\Lon\web.config"
+			[XML]$CheckElementXML = Get-Content -Path "$AppPath\web.config"
+			
+		}
+		
+		if ($CheckElementXML.configuration.appSettings.EncryptedData -ne $null)
+		{
+			
+			$InventoryTextBox.AppendText("`n")
+			$InventoryTextBox.AppendText("Backupfolder is encrypted!!!")
+			
+			$InventoryTextBox.ScrollToCaret()
+			Write-Host 'Backupfolder encrypted, please decrypt before reading data' -ForegroundColor DarkYellow
+		}
+		else
+		{
+			
+			###################################
+			# INVENTORY settings
+			###################################	
+			
+			Write-Host 'Backupfolder decrypted, reading data' -ForegroundColor Green
+			$UseSSOBackup = (Test-path -Path "$global:InstallDrive\Visma\install\backup\$global:SelectedBackupfolder\Wwwroot\$global:SelectedBigram\$global:SelectedBigram\Login\Web.config")
+			
+			if ($UseSSOBackup -eq $true)
+			{
+				
+				[XML]$UseSSO = Get-Content "$global:InstallDrive\Visma\install\backup\$global:SelectedBackupfolder\Wwwroot\$global:SelectedBigram\$global:SelectedBigram\Login\Web.config" -ErrorAction SilentlyContinue
+				
+				
+				$useSSOValue = $usesso.configuration.appsettings.add.where{ $_.key -eq 'UseSSo' }.value
+				$SingleSignOnMethodValue = $usesso.configuration.appsettings.add.where{ $_.key -eq 'SingleSignOnMethod' }.value
+				$MultitenantModeValue = $usesso.configuration.appsettings.add.where{ $_.key -eq 'MultitenantMode' }.value
+				
+				
+				$data3 += $object
+				
+				$result = $data3 | Out-String
+				
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("INVENTORY SETTINGS LOGIN")
+				
+				
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("UseSSO = $useSSOValue ")
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("SingleSignOnMethod = $SingleSignOnMethodValue")
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("MultitenantMode = $MultitenantModeValue")
+				$InventoryTextBox.ScrollToCaret()
+				
+				Write-Log -Level INFO -Message " INVENTORY SETTINGS LOGIN "
+				Write-Log -Level INFO -Message " UseSSO   value = $useSSOValue "
+				Write-Log -Level INFO -Message " SingleSignOnMethod   value = $SingleSignOnMethodValue "
+				Write-Log -Level INFO -Message " MultitenantMode   value = $MultitenantModeValue "
+				
+			}
+			
+			else
+			{
+				
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("Use SSO ")
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("No web.config present  ")
+				$InventoryTextBox.ScrollToCaret()
+				Write-Log -Level INFO -Message " INVENTORY SETTINGS ------------"
+				Write-Log -Level INFO -Message "No web.config present for login component"
+			}
+			
+			###################################
+			# INVENTORY for license.lic
+			###################################	
+			
+			$haveLicensJSON = (Test-path -Path "$global:InstallDrive\Visma\install\backup\$global:SelectedBackupfolder\Wwwroot\$global:SelectedBigram\PIP\IntegrationApi\license.lic")
+			
+			if ($haveLicensJSON -eq $true)
+			{
+				
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("INVENTORY SETTINGS API         ")
+				
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("Integration API ")
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("license.lic exist")
+				$InventoryTextBox.ScrollToCaret()
+				
+				Write-Log -Level INFO -Message " Integration API   ---------------"
+				Write-Log -Level INFO -Message "Settings from backup: license.lic exist"
+				
+			}
+			
+			else
+			{
+				
+				
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("INVENTORY SETTINGS API         ")
+				
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("Integration API")
+				$InventoryTextBox.AppendText("`n")
+				$InventoryTextBox.AppendText("No License.lic... ")
+				$InventoryTextBox.ScrollToCaret()
+				
+				Write-Log -Level INFO -Message " Integration API    ---------------"
+				Write-Log -Level INFO -Message "No License.lic..."
+				
+			}
+		}
+		
+	}
+	
+	else
+	{
+		Write-Host "No www-backup" -ForegroundColor Yellow
+		Write-Log -Level INFO -Message "No backup of WWW in $SelectedBackupfolder"
+		$InventoryTextBox.AppendText("`n")
+		$InventoryTextBox.AppendText("Found no www-folder in $SelectedBackupfolder")
+	}
+}
+
+
+]]></Code>
+  <TV>0</TV>
+  <Bookmarks />
+  <BreakPoints>
+    <Line Disabled="False">186</Line>
+  </BreakPoints>
+  <TracePoints />
+  <Mode>1</Mode>
+  <Assemblies />
+</File>
