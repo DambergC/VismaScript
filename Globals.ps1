@@ -651,15 +651,15 @@ Function Remove-PersonecFolders
 		
 		if (-not (Test-Path -LiteralPath $Path))
 		{
-			$CleanupTextBox.AppendText("Folder does not exist: $Path`n")
-			Write-LogCleanup -Level INFO -Message "Folder does not exist: $Path"
-			$CleanupTextBox.ScrollToCaret()
+		$richtextbox1.AppendText("Folder does not exist: $Path`n")
+		Write-LogCleanup -Level INFO -Message "Folder does not exist: $Path"
+		$richtextbox1.ScrollToCaret()
 			return
 		}
-		
-		$CleanupTextBox.AppendText("Start cleanup (B):`n$Path`n")
+	
+		$richtextbox1.AppendText("Start cleanup (B):`n$Path`n")
 		Write-LogCleanup -Level INFO -Message "Start cleanup (B): $Path"
-		$CleanupTextBox.ScrollToCaret()
+		$richtextbox1.ScrollToCaret()
 		
 		# Normalize base path
 		$basePath = [System.IO.Path]::GetFullPath($Path).TrimEnd('\')
@@ -676,20 +676,20 @@ Function Remove-PersonecFolders
 		# Log excluded folders
 		if ($ExcludedFoldersFullPaths.Count -gt 0)
 		{
-			$CleanupTextBox.AppendText("Excluded folders (B):`n")
+		$richtextbox1.AppendText("Excluded folders (B):`n")
 			Write-LogCleanup -Level INFO -Message "Excluded folders (B):"
 			foreach ($excludedPath in $ExcludedFoldersFullPaths)
 			{
-				$CleanupTextBox.AppendText("  $excludedPath`n")
+			$richtextbox1.AppendText("  $excludedPath`n")
 				Write-LogCleanup -Level INFO -Message "  $excludedPath"
 			}
-			$CleanupTextBox.ScrollToCaret()
+		$richtextbox1.ScrollToCaret()
 		}
 		else
 		{
-			$CleanupTextBox.AppendText("No excluded folders (B)`n")
+		$richtextbox1.AppendText("No excluded folders (B)`n")
 			Write-LogCleanup -Level INFO -Message "No excluded folders (B)"
-			$CleanupTextBox.ScrollToCaret()
+		$richtextbox1.ScrollToCaret()
 		}
 		
 		# Get only direct children under base path
@@ -719,9 +719,9 @@ Function Remove-PersonecFolders
 		
 		if (-not $itemsToRemove -or $itemsToRemove.Count -eq 0)
 		{
-			$CleanupTextBox.AppendText("Nothing to remove in: $Path`n")
+			$richtextbox1.AppendText("Nothing to remove in: $Path`n")
 			Write-LogCleanup -Level INFO -Message "Nothing to remove in (B): $Path"
-			$CleanupTextBox.ScrollToCaret()
+			$richtextbox1.ScrollToCaret()
 			return
 		}
 		
@@ -742,22 +742,22 @@ Function Remove-PersonecFolders
 					Remove-Item -LiteralPath $item.FullName -Force -ErrorAction Stop
 				}
 				
-				$CleanupTextBox.AppendText("Removed top-level item: $($item.FullName)`n")
+				$richtextbox1.AppendText("Removed top-level item: $($item.FullName)`n")
 				Write-LogCleanup -Level INFO -Message "Removed top-level item: $($item.FullName)"
 			}
 			catch
 			{
-				$CleanupTextBox.AppendText("Failed to remove: $($item.FullName)`n")
+				$richtextbox1.AppendText("Failed to remove: $($item.FullName)`n")
 				Write-LogCleanup -Level ERROR -Message "Failed to remove: $($item.FullName). Error: $_"
 			}
 			$CleanUpProgress.PerformStep()
 			$CleanUpProgress.Refresh()
-			$CleanupTextBox.ScrollToCaret()
+			$richtextbox1.ScrollToCaret()
 		}
 		
-		$CleanupTextBox.AppendText("CleanUp Finished (B)`n")
+		$richtextbox1.AppendText("CleanUp Finished (B)`n")
 		Write-LogCleanup -Level INFO -Message "CleanUp Finished (B)"
-		$CleanupTextBox.ScrollToCaret()
+		$richtextbox1.ScrollToCaret()
 	}
 function Is-ApplicationInstalled
 {
@@ -893,17 +893,17 @@ function Remove-LogFiles
 		foreach ($file in $logFiles)
 		{
 			Remove-Item -Path $file.FullName -Force
-			$CleanUpTextBox.AppendText("Deleted: $($file.FullName)`n")
-			$CleanUpTextBox.ScrollToCaret()
+			$richtextbox1.AppendText("Deleted: $($file.FullName)`n")
+			$richtextbox1.ScrollToCaret()
 		}
 		
-		$CleanUpTextBox.AppendText("All log files have been deleted.`n")
-		$CleanUpTextBox.ScrollToCaret()
+		$richtextbox1.AppendText("All log files have been deleted.`n")
+		$richtextbox1.ScrollToCaret()
 	}
 	else
 	{
-		$CleanUpTextBox.AppendText("The specified path does not exist: $logPath`n")
-		$CleanUpTextBox.ScrollToCaret()
+		$richtextbox1.AppendText("The specified path does not exist: $logPath`n")
+		$richtextbox1.ScrollToCaret()
 	}
 }
 function Is-ProcessRunning
