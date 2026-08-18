@@ -1169,6 +1169,14 @@ $BigramBackupFolder.add_Closing(
 		$richtextbox1.AppendText("PFH version on server: $Global:PFHversion")
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.ScrollToCaret()
+		
+		$FDNversionbox.appendtext($global:FDNversion)
+		$PINversionbox.appendtext($global:PINVersion)
+		$HRMversionbox.appendtext($global:HRMversion)
+		$PPPversionbox.appendtext($global:PPPversion)
+		$PUDversionbox.appendtext($global:PUDversion)
+		$PFHversionbox.appendtext($global:PFHversion)
+
 	}
 )
 
@@ -1282,6 +1290,6 @@ $TB_Bigram_TextChanged={
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>

@@ -1162,15 +1162,15 @@ TQ92P3K9/1V8l/mrvpslSZB9wXeZD/XdRNXLc999rtSX8d0TTf/Ed7PFJIi9h+8mt/tbfPd5Mvnk
 tVwVVZXm3lJZ2brp/tkO4cjqX9khPBL+kfuD7POg+uL+AJ+kT9LqHTcHjwD5glsDugBRtZe6s/uH
 cX/Ep0zy8H5U+mmESlRuPRAqCdcPCHWaWu/LqAPZX5BSktCvzlVc0WmlhTmZU8A6lnliYZF9C/P2
 Sn4o5ZLkvPhIS+ink+qDXKtayxUuXzFUOrynojyMP7PEZdn70XWP4+k8LYuNWkfC3843lDezVcep
-yHYXKytDDpFy1ka1+3PVMNJ915vq1gNP89+YzLdsMRFVTc8w7gsgegwYC3j7GQjSgE3OtkOZibmW
-zSCns6dVsEe6f/I4UTMndrhyKfu81R8lnnySYuHQ+x+J/tAQkGTnuQsBsU7pxEq9nxM/guMLZhxO
-fS8mMUnsdcikR6I/lElJ9kE7JsU6pZW/z6RHcHxBJvVUR3VHo5E44ERR5GRX/ptVzKnke67thzIw
-+ZVNpFgaNUujaoC6QULlPlVt8xzeL8XoytPrq65pnFj3/BmdT7iAPKrrR5KZSX5T9Oj+MaFen4TH
-R2H9UiSON8WG5ahvo27FwgmWl+mePpsnORuqyp6jOkPZ0Kcxl+uy4SQxGKfLhjXDoIFLRdbI5kRN
-clN94DQ5urkoJkn0jw5RKDjJb1XzJ28tmOSB/z/ycvXfpAp9Eic5QPF9XKPvyq5HN7Mf7h33kt5a
-9NJbOJL8aP5eXvKtLP0fsMl2QQ98S36R+rJCnzyicdbGNCx5Sm86/mJOzrKnRpdDRU87wDg1Iye/
-gtvrlE6o1KcKNIeAfsFULAl9JttTZ5oe/M1aMpc8SD3T80PryJPOeJlsOrFKn4q0B2h+Qc7uXa7R
-6Ffp8YT1F5l78tnkM2U/lL6JKsHHQfcUxT4ViZ8h+yqVDxr7n87P/wH0o2YtHkUAAA==</Form>
+yHYXKytDDpFy1ka1+3PVMNJ915vq1gNP89+YzLdsMZuEqqZnGPcFED0GjAW8/QwEacAmZ9uhzMRc
+y2aQ09nTKtgj3T95nKiZEztcuZR93uqPEk8+SbFw6P2PRH9oCEiy89yFgFindGKl3s+JH8HxBTMO
+p74Xk5gk9jpk0iPRH8qkJPugHZNindLK32fSIzi+IJN6qqO6o9FIHHCiKHKyK//NKuZU8j3X9kMZ
+mPzKJlIsjZqlUTVA3SChcp+qtnkO75didOXp9VXXNE6se/6MzidcQB7V9SPJzCS/KXp0/5hQr0/C
+46OwfikSx5tiw3LUt1G3YuEEy8t0T5/Nk5wNVWXPUZ2hbOjTmMt12XCSGIzTZcOaYdDApSJrZHOi
+JrmpPnCaHN1cFJMk+keHKBSc5Leq+ZO3FkzywP8febn6b1KFPomTHKD4Pq7Rd2XXo5vZD/eOe0lv
+LXrpLRxJfjR/Ly/5Vpb+D9hku6AHviW/SH1ZoU8e0ThrYxqWPKU3HX8xJ2fZU6PLoaKnHWCcmpGT
+X8HtdUonVOpTBZpDQL9gKpaEPpPtqTNND/5mLZlLHqSe6fmhdeRJZ7xMNp1YpU9F2gM0vyBn9y7X
+aPSr9HjC+ovMPfls8pmyH0rfRJXg46B7imKfisTPkH2VygeN/U/n5/8Awr+aex5FAAA=</Form>
   <Code><![CDATA[
 $QuickFixTools_Load={
 	#TODO: Initialize Form Controls here
@@ -1609,11 +1609,6 @@ $buttonCopyClientsTotal_Click={
 }
 ]]></Code>
   <TV>0</TV>
-  <Bookmarks />
-  <BreakPoints>
-    <Line Disabled="False">114</Line>
-  </BreakPoints>
-  <TracePoints />
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies />
 </File>
