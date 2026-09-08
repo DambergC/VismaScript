@@ -775,8 +775,8 @@ $buttonStopServices_Click = {
 	$StartStopProgressBar.Step = 1
 	$StartStopProgressBar.Value = 0
 	
-	$Richtextbox1.AppendText("`n")
-	$Richtextbox1.AppendText("Stopping Services ")
+	$StartStopRichTextBox.AppendText("`n")
+	$StartStopRichTextBox.AppendText("Stopping Services ")
 	
 	foreach ($service in $services)
 	{
@@ -796,8 +796,8 @@ $buttonStopServices_Click = {
 	if ($xml_exist -eq $false)
 	{
 		$xmlData.Save("$global:InstallDrive\Visma\Install\backup\$global:SelectedBackupfolder\$restorefile")
-		$Richtextbox1.AppendText("`n")
-		$Richtextbox1.AppendText("$restorefile Service Restore File created in backupfolder ")
+		$StartStopRichTextBox.AppendText("`n")
+		$StartStopRichTextBox.AppendText("$restorefile Service Restore File created in backupfolder ")
 	}
 	
 	
@@ -809,26 +809,26 @@ $buttonStopServices_Click = {
 		
 		if ($checkservice -eq $null)
 		{
-			$Richtextbox1.AppendText("`n")
-			$Richtextbox1.AppendText("$service does not exist")
+			$StartStopRichTextBox.AppendText("`n")
+			$StartStopRichTextBox.AppendText("$service does not exist")
 			Write-Log -Level INFO -Message "$service does not exist"
-			$Richtextbox1.ScrollToCaret()
+			$StartStopRichTextBox.ScrollToCaret()
 			$StartStopProgressBar.PerformStep()
 		}
 		else
 		{
 			Stop-Service -Name $service -Force -ErrorAction SilentlyContinue -Verbose
-			$Richtextbox1.AppendText("`n")
-			$Richtextbox1.AppendText("$service Stopped ")
-			$Richtextbox1.ScrollToCaret()
+			$StartStopRichTextBox.AppendText("`n")
+			$StartStopRichTextBox.AppendText("$service Stopped ")
+			$StartStopRichTextBox.ScrollToCaret()
 			$StartStopProgressBar.PerformStep()
 			Write-Log -Level INFO -Message "$service Stopped!"
 		}
 	}
 	
-	$Richtextbox1.AppendText("`n")
-	$Richtextbox1.AppendText("Services Stopped")
-	$Richtextbox1.ScrollToCaret()
+	$StartStopRichTextBox.AppendText("`n")
+	$StartStopRichTextBox.AppendText("Services Stopped")
+	$StartStopRichTextBox.ScrollToCaret()
 	$richtextbox1.AppendText("`n")
 	$richtextbox1.AppendText("Services Stopped")
 	$richtextbox1.ScrollToCaret()
@@ -844,9 +844,9 @@ $buttonStopIIS_Click = {
 		
 		if ($checksite -eq $null)
 		{
-			$Richtextbox1.AppendText("`n")
-			$Richtextbox1.AppendText("$global:SelectedBigram site does not exist ")
-			$Richtextbox1.ScrollToCaret()
+			$StartStopRichTextBox.AppendText("`n")
+			$StartStopRichTextBox.AppendText("$global:SelectedBigram site does not exist ")
+			$StartStopRichTextBox.ScrollToCaret()
 		}
 		
 		else
@@ -854,10 +854,10 @@ $buttonStopIIS_Click = {
 			Write-Log -Level INFO -Message "Stop $global:SelectedBigram Site"
 			Write-Host "Stopping website $global:SelectedBigram" -ForegroundColor Yellow
 			Stop-IISSite -Name $global:SelectedBigram -Confirm:$false
-			$Richtextbox1.AppendText("`n")
+			$StartStopRichTextBox.AppendText("`n")
 			
-			$Richtextbox1.AppendText("$global:SelectedBigram site Stopped ")
-			$Richtextbox1.ScrollToCaret()
+			$StartStopRichTextBox.AppendText("$global:SelectedBigram site Stopped ")
+			$StartStopRichTextBox.ScrollToCaret()
 			
 			Write-Log -Level INFO -Message "$global:SelectedBigram site Stopped"
 			$richtextbox1.AppendText("`n")
@@ -887,9 +887,9 @@ $buttonStartIIS_Click = {
 	
 	if ($checksite -eq $null)
 	{
-		$Richtextbox1.AppendText("`n")
-		$Richtextbox1.AppendText("$global:SelectedBigram site does not exist ")
-		$Richtextbox1.ScrollToCaret()
+		$StartStopRichTextBox.AppendText("`n")
+		$StartStopRichTextBox.AppendText("$global:SelectedBigram site does not exist ")
+		$StartStopRichTextBox.ScrollToCaret()
 	}
 	
 	else
@@ -900,9 +900,9 @@ $buttonStartIIS_Click = {
 		
 		Start-IISSite -Name $selectedBigram
 		
-		$Richtextbox1.AppendText("`n")
-		$Richtextbox1.AppendText("$global:SelectedBigram site Started ")
-		$Richtextbox1.ScrollToCaret()
+		$StartStopRichTextBox.AppendText("`n")
+		$StartStopRichTextBox.AppendText("$global:SelectedBigram site Started ")
+		$StartStopRichTextBox.ScrollToCaret()
 		Write-Log -Level INFO -Message "$global:SelectedBigram site Started"
 		
 		$richtextbox1.AppendText("`n")
@@ -924,9 +924,9 @@ $buttonStartServices_Click = {
 	
 	if ($Result -eq [System.Windows.MessageBoxResult]::Yes)
 	{
-		$Richtextbox1.AppendText("`n")
-		$Richtextbox1.AppendText("Starting Service to original mode and status ")
-		$Richtextbox1.ScrollToCaret()
+		$StartStopRichTextBox.AppendText("`n")
+		$StartStopRichTextBox.AppendText("Starting Service to original mode and status ")
+		$StartStopRichTextBox.ScrollToCaret()
 		
 		# Load the XML data from the file
 		$restorefile = "$global:SelectedBigram" + "ServicesRestorePoint.xml"
@@ -949,24 +949,24 @@ $buttonStartServices_Click = {
 			if ($ServiceStartType -eq 'Auto')
 			{
 				Set-Service -Name $serviceName -StartupType Automatic
-				$Richtextbox1.AppendText("`n")
-				$Richtextbox1.AppendText("$serviceName set to AUTOMATIC ")
+				$StartStopRichTextBox.AppendText("`n")
+				$StartStopRichTextBox.AppendText("$serviceName set to AUTOMATIC ")
 				Write-Log -Level INFO -Message "$serviceName set to AUTOMATIC "
 			}
 			
 			if ($ServiceStartType -eq 'Manual')
 			{
 				Set-Service -Name $serviceName -StartupType Manual
-				$Richtextbox1.AppendText("`n")
-				$Richtextbox1.AppendText("$serviceName set to MANUAL ")
+				$StartStopRichTextBox.AppendText("`n")
+				$StartStopRichTextBox.AppendText("$serviceName set to MANUAL ")
 				Write-Log -Level INFO -Message "$serviceName set to MANUAL "
 			}
 			
 			if ($ServiceStartType -eq 'Disabled')
 			{
 				Set-Service -Name $serviceName -StartupType Disabled
-				$Richtextbox1.AppendText("`n")
-				$Richtextbox1.AppendText("$serviceName set to DISABLED ")
+				$StartStopRichTextBox.AppendText("`n")
+				$StartStopRichTextBox.AppendText("$serviceName set to DISABLED ")
 				Write-Log -Level INFO -Message "$serviceName set to DISABLED "
 			}
 			
@@ -976,14 +976,14 @@ $buttonStartServices_Click = {
 				{
 					Start-Service -Name $serviceName -ErrorAction Stop
 					$StartStopProgressBar.PerformStep()
-					$Richtextbox1.AppendText("`n")
-					$Richtextbox1.AppendText("$serviceName set to STARTED ")
+					$StartStopRichTextBox.AppendText("`n")
+					$StartStopRichTextBox.AppendText("$serviceName set to STARTED ")
 					Write-Log -Level INFO -Message "Service $serviceName started successfully."
 				}
 				catch
 				{
-					$Richtextbox1.AppendText("`n")
-					$Richtextbox1.AppendText("$serviceName ERROR ERROR ERROR ")
+					$StartStopRichTextBox.AppendText("`n")
+					$StartStopRichTextBox.AppendText("$serviceName ERROR ERROR ERROR ")
 					Write-Log -Level ERROR -Message "Failed to start the service: $serviceName. Error: $_"
 				}
 			}
@@ -991,19 +991,19 @@ $buttonStartServices_Click = {
 			if ($serviceStartName -ne 'Localsystem')
 			{
 				Write-Host "$serviceName is running with $serviceStartName"
-				$Richtextbox1.AppendText("`n")
-				$Richtextbox1.AppendText("$serviceName running with Account ")
-				$Richtextbox1.AppendText("`n")
-				$Richtextbox1.AppendText("Notify customer ")
+				$StartStopRichTextBox.AppendText("`n")
+				$StartStopRichTextBox.AppendText("$serviceName running with Account ")
+				$StartStopRichTextBox.AppendText("`n")
+				$StartStopRichTextBox.AppendText("Notify customer ")
 				Write-Log -Level INFO -Message "$serviceName running with $serviceStartName "
 			}
 			
 			$StartStopProgressBar.PerformStep()
 		}
 		
-		$Richtextbox1.AppendText("`n")
-		$Richtextbox1.AppendText("Done with starting services")
-		$Richtextbox1.ScrollToCaret()
+		$StartStopRichTextBox.AppendText("`n")
+		$StartStopRichTextBox.AppendText("Done with starting services")
+		$StartStopRichTextBox.ScrollToCaret()
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.AppendText("Services Started")
 		$richtextbox1.ScrollToCaret()
@@ -1018,25 +1018,7 @@ $buttonLoadDataRestorefile_Click = {
 	
 	$data = @()
 	$restorefile = "$global:SelectedBigram" + "ServicesRestorePoint.xml"
-	
-	if (Test-Path -path "$InstallDrive\Visma\Install\backup\$selectedBackupfolder\$restorefile")
-	{
-		[XML]$xmlData = Get-Content "$InstallDrive\Visma\Install\backup\$selectedBackupfolder\$restorefile"
-		$Richtextbox1.AppendText("`n")
-		$Richtextbox1.AppendText("Reading Restorefile")
-		$Richtextbox1.AppendText("`n")
-		$Richtextbox1.ScrollToCaret()
-	}
-	else
-	{
-		$Richtextbox1.AppendText("`n")
-		$Richtextbox1.AppendText("No restorfile in $SelectedBackupfolder")
-		$Richtextbox1.AppendText("`n")
-		$Richtextbox1.ScrollToCaret()
-	}
-	
-	
-	
+	[XML]$xmlData = Get-Content "$InstallDrive\Visma\Install\backup\$selectedBackupfolder\$restorefile"
 	
 	
 	foreach ($service in $xmlData.Objects.Object)
@@ -1051,11 +1033,11 @@ $buttonLoadDataRestorefile_Click = {
 	}
 	
 	$result = $data | Out-String
-	$Richtextbox1.AppendText("`n")
-	$Richtextbox1.AppendText("====STATUS BEFORE UPGRADE====")
-	$Richtextbox1.AppendText("`n")
-	$Richtextbox1.AppendText("$result")
-	$Richtextbox1.ScrollToCaret()
+	$StartStopRichTextBox.AppendText("`n")
+	$StartStopRichTextBox.AppendText("====STATUS BEFORE UPGRADE====")
+	$StartStopRichTextBox.AppendText("`n")
+	$StartStopRichTextBox.AppendText("$result")
+	$StartStopRichTextBox.ScrollToCaret()
 }
 
 $buttonCheckAfterUpgrade_Click = {
@@ -1071,9 +1053,9 @@ $buttonCheckAfterUpgrade_Click = {
 		
 		if ($checkservice -eq $null)
 		{
-			$Richtextbox1.AppendText("`n")
-			$Richtextbox1.AppendText("$service does not exist on this server")
-			$Richtextbox1.ScrollToCaret()
+			$StartStopRichTextBox.AppendText("`n")
+			$StartStopRichTextBox.AppendText("$service does not exist on this server")
+			$StartStopRichTextBox.ScrollToCaret()
 		}
 		
 		else
@@ -1103,15 +1085,15 @@ $buttonCheckAfterUpgrade_Click = {
 	
 	
 	$utresult = $utdata | Out-String
-	$Richtextbox1.AppendText("`n")
-	$Richtextbox1.AppendText("====STATUS LIVE====")
-	$Richtextbox1.AppendText("`n")
-	$Richtextbox1.AppendText("$result")
-	$Richtextbox1.ScrollToCaret()
+	$StartStopRichTextBox.AppendText("`n")
+	$StartStopRichTextBox.AppendText("====STATUS LIVE====")
+	$StartStopRichTextBox.AppendText("`n")
+	$StartStopRichTextBox.AppendText("$result")
+	$StartStopRichTextBox.ScrollToCaret()
 	
 }
 ]]></Code>
   <TV>0</TV>
-  <Mode>1</Mode>
+  <Mode>0</Mode>
   <Assemblies />
 </File>
