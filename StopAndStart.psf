@@ -897,14 +897,14 @@ $buttonStartIIS_Click = {
 		
 		
 		Write-Log -Level INFO -Message "Start $global:SelectedBigram Site --------------"
-		
+		Write-Host "Start $global:SelectedBigram Site --------------" -ForegroundColor Yellow
 		Start-IISSite -Name $selectedBigram
 		
 		$Richtextbox1.AppendText("`n")
 		$Richtextbox1.AppendText("$global:SelectedBigram site Started ")
 		$Richtextbox1.ScrollToCaret()
 		Write-Log -Level INFO -Message "$global:SelectedBigram site Started"
-		
+		Write-Host "$global:SelectedBigram site Started" -ForegroundColor Green
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.AppendText("$global:SelectedBigram site Started")
 		$richtextbox1.ScrollToCaret()
@@ -952,6 +952,7 @@ $buttonStartServices_Click = {
 				$Richtextbox1.AppendText("`n")
 				$Richtextbox1.AppendText("$serviceName set to AUTOMATIC ")
 				Write-Log -Level INFO -Message "$serviceName set to AUTOMATIC "
+				Write-Host "$serviceName set to AUTOMATIC " -ForegroundColor Green
 			}
 			
 			if ($ServiceStartType -eq 'Manual')
@@ -960,6 +961,7 @@ $buttonStartServices_Click = {
 				$Richtextbox1.AppendText("`n")
 				$Richtextbox1.AppendText("$serviceName set to MANUAL ")
 				Write-Log -Level INFO -Message "$serviceName set to MANUAL "
+				Write-Host "$serviceName set to MANUAL " -ForegroundColor Green
 			}
 			
 			if ($ServiceStartType -eq 'Disabled')
@@ -968,6 +970,7 @@ $buttonStartServices_Click = {
 				$Richtextbox1.AppendText("`n")
 				$Richtextbox1.AppendText("$serviceName set to DISABLED ")
 				Write-Log -Level INFO -Message "$serviceName set to DISABLED "
+				Write-Host "$serviceName set to DISABLED " -ForegroundColor Green
 			}
 			
 			if ($serviceStatus -eq 'Running')
@@ -979,12 +982,14 @@ $buttonStartServices_Click = {
 					$Richtextbox1.AppendText("`n")
 					$Richtextbox1.AppendText("$serviceName set to STARTED ")
 					Write-Log -Level INFO -Message "Service $serviceName started successfully."
+					Write-Host "Service $serviceName started successfully." -ForegroundColor Green
 				}
 				catch
 				{
 					$Richtextbox1.AppendText("`n")
 					$Richtextbox1.AppendText("$serviceName ERROR ERROR ERROR ")
 					Write-Log -Level ERROR -Message "Failed to start the service: $serviceName. Error: $_"
+					Write-Host "Failed to start the service: $serviceName. Error: $_" -ForegroundColor Red
 				}
 			}
 			
@@ -996,6 +1001,7 @@ $buttonStartServices_Click = {
 				$Richtextbox1.AppendText("`n")
 				$Richtextbox1.AppendText("Notify customer ")
 				Write-Log -Level INFO -Message "$serviceName running with $serviceStartName "
+				Write-Host Write-Log -Level INFO -Message "$serviceName running with $serviceStartName " -ForegroundColor Green
 			}
 			
 			$StartStopProgressBar.PerformStep()
