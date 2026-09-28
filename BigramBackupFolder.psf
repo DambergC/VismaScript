@@ -1170,11 +1170,17 @@ $BigramBackupFolder.add_Closing(
 		$richtextbox1.AppendText("`n")
 		$richtextbox1.ScrollToCaret()
 		
+		$FDNVersionBOX.Clear()
 		$FDNversionbox.appendtext($global:FDNversion)
+		$PINversionbox.Clear()
 		$PINversionbox.appendtext($global:PINVersion)
+		$HRMversionbox.Clear()
 		$HRMversionbox.appendtext($global:HRMversion)
+		$PPPversionbox.Clear()
 		$PPPversionbox.appendtext($global:PPPversion)
+		$PUDversionbox.Clear()
 		$PUDversionbox.appendtext($global:PUDversion)
+		$PFHversionbox.Clear()
 		$PFHversionbox.appendtext($global:PFHversion)
 
 	}

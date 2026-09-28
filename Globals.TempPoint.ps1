@@ -375,7 +375,7 @@ function Copy-WithProgress
 	$ProgressBarBackup.Maximum = 100
 	$ProgressBarBackup.Step = 1
 	$ProgressBarBackup.Value = 0
-		
+	
 	$CommonRobocopyParams = '/MT:2 /MIR /NP /NDL /NC /BYTES /NJH /NJS /xf *.log *.svclog'
 	
 	$richtextbox1.AppendText("`nAnalyzing robocopy job ...")
