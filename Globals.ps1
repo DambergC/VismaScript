@@ -419,6 +419,7 @@ function Copy-WithProgress
 		}
 		
 		$ProgressBarBackup.Value = [math]::Min($Percentage, 100)
+		$progresbarBackup.
 		$ProgressBarBackup.Refresh()
 	}
 	
